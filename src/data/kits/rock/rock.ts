@@ -1,0 +1,31 @@
+export const kit = [
+    { name: "kick", buttonName: "Kick", sampleUrl: "@/data/kits/rock/mp3/kick.mp3" },
+    { name: "snare", buttonName: "Snare", sampleUrl: "@/data/kits/rock/mp3/snare.mp3" },
+    { name: "hihat_closed", buttonName: "Hi-Hat (closed)", sampleUrl: "@/data/kits/rock/mp3/hihat_closed.mp3" },
+    { name: "hihat_open", buttonName: "Hi-Hat (open)", sampleUrl: "@/data/kits/rock/mp3/hihat_open.mp3" },
+    { name: "ride", buttonName: "Ride", sampleUrl: "@/data/kits/rock/mp3/ride.mp3" },
+    { name: "ride_bell", buttonName: "Ride (bell)", sampleUrl: "@/data/kits/rock/mp3/ride_bell.mp3" },
+    { name: "crash1", buttonName: "Crash #1", sampleUrl: "@/data/kits/rock/mp3/crash1.mp3" },
+    { name: "crash2", buttonName: "Crash #2", sampleUrl: "@/data/kits/rock/mp3/crash2.mp3" },
+    { name: "splash", buttonName: "Splash", sampleUrl: "@/data/kits/rock/mp3/splash.mp3" },
+    { name: "tom1", buttonName: "Tom #1", sampleUrl: "@/data/kits/rock/mp3/tom1.mp3" },
+    { name: "tom2", buttonName: "Tom #2", sampleUrl: "@/data/kits/rock/mp3/tom2.mp3" },
+    { name: "tom3", buttonName: "Tom #3", sampleUrl: "@/data/kits/rock/mp3/tom3.mp3" },
+    { name: "tom4", buttonName: "Tom #4", sampleUrl: "@/data/kits/rock/mp3/tom4.mp3" },
+];
+
+export const kitPreloader = {
+    kick: require("@/data/kits/rock/mp3/kick.mp3"),
+    snare: require("@/data/kits/rock/mp3/snare.mp3"),
+    hihat_closed: require("@/data/kits/rock/mp3/hihat_closed.mp3"),
+    hihat_open: require("@/data/kits/rock/mp3/hihat_open.mp3"),
+    ride: require("@/data/kits/rock/mp3/ride.mp3"),
+    ride_bell: require("@/data/kits/rock/mp3/ride_bell.mp3"),
+    crash1: require("@/data/kits/rock/mp3/crash1.mp3"),
+    crash2: require("@/data/kits/rock/mp3/crash2.mp3"),
+    splash: require("@/data/kits/rock/mp3/splash.mp3"),
+    tom1: require("@/data/kits/rock/mp3/tom1.mp3"),
+    tom2: require("@/data/kits/rock/mp3/tom2.mp3"),
+    tom3: require("@/data/kits/rock/mp3/tom3.mp3"),
+    tom4: require("@/data/kits/rock/mp3/tom4.mp3"),
+};

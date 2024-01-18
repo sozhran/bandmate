@@ -74,3 +74,115 @@
     @apply bg-background text-foreground;
   }
 }
+
+:root,
+    :root.wednesday {
+        --bg-color: #615545;
+        --text-color: #121112;
+        --button-color: #9B773D;
+        --color1: #646263;
+        --color2: #444243;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    text-align: center;
+}
+
+.sequencer-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center
+}
+
+.element-title {
+    border-radius: 5px;
+    height: 2,5em;
+    max-height: 2,5em;
+    width: 8em;
+    max-width: 8em;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    margin: 2px;
+    outline: none;
+}
+
+.note {
+    border-radius: 5px;
+    height: 30px;
+    max-height: 30px;
+    width: 30px;
+    max-width: 30px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    margin: 2px;
+    outline: none;
+}
+
+button {
+    background-color: var(--button-color);
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+}
+
+.inactive {
+    /* background-color: var(--color1); */
+    background-color: grey;
+    transition: background-color 0.1s;
+}
+
+.active {
+    /* background-color: var(--color2); */
+    background-color: green;
+    transition: background-color 0.1s;
+}
+
+
+/* @import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/violet.css'; */
+
+.Slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 200px;
+  height: 20px;
+}
+
+.SliderTrack {
+  background-color: var(--black-a10);
+  position: relative;
+  flex-grow: 1;
+  border-radius: 9999px;
+  height: 3px;
+}
+
+.SliderRange {
+  position: absolute;
+  background-color: white;
+  border-radius: 9999px;
+  height: 100%;
+}
+
+.SliderThumb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  box-shadow: 0 2px 10px var(--black-a7);
+  border-radius: 10px;
+}
+.SliderThumb:hover {
+  background-color: var(--violet-3);
+}
+.SliderThumb:focus {
+  outline: none;
+  box-shadow: 0 0 0 5px var(--black-a8);
+}

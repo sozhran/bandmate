@@ -33,6 +33,13 @@
     --ring: 222.2 84% 4.9%;
  
     --radius: 0.5rem;
+
+    /* temporary colors until I apply Tailwind */
+    --wed-bg-color: #615545;
+    --wed-text-color: #121112;
+    --wed-button-color: #9B773D;
+    --wed-color1: #646263;
+    --wed-color2: #444243;
   }
  
   .dark {
@@ -63,9 +70,17 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* temporary colors until I apply Tailwind */
+    --wed-bg-color: #615545;
+    --wed-text-color: #121112;
+    --wed-button-color: #9B773D;
+    --wed-color1: #646263;
+    --wed-color2: #444243;
   }
 }
- 
+
+
 @layer base {
   * {
     @apply border-border;
@@ -73,15 +88,6 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-:root,
-    :root.wednesday {
-        --bg-color: #615545;
-        --text-color: #121112;
-        --button-color: #9B773D;
-        --color1: #646263;
-        --color2: #444243;
 }
 
 body {
@@ -94,13 +100,13 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center
+    align-items: center;
 }
 
 .element-title {
     border-radius: 5px;
-    height: 2,5em;
-    max-height: 2,5em;
+    height: 30px;
+    max-height: 30px;
     width: 8em;
     max-width: 8em;
     border-style: solid;
@@ -122,6 +128,10 @@ body {
     margin: 2px;
     outline: none;
 }
+
+.note:nth-child(4n) {
+  margin-right: 10px;
+  }
 
 button {
     background-color: var(--button-color);
@@ -147,12 +157,12 @@ button {
 @import '@radix-ui/colors/violet.css'; */
 
 .Slider {
-  position: relative;
   display: flex;
   align-items: center;
   user-select: none;
   touch-action: none;
   width: 200px;
+  max-width: 200px;
   height: 20px;
 }
 

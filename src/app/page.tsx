@@ -1,14 +1,16 @@
 "use client";
-import Image from "next/image";
+// import Image from "next/image";
 import * as React from "react";
-import * as Tone from "tone";
-import { number, z } from "zod";
-import { default_BPM, default_Steps } from "@/defaults";
-import createGrid from "@/components/createGrid";
-// import createSequence from "@/components/createSequence";
-// import savePattern from "@/components/savePattern";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import * as Tone from "tone";
+import { z } from "zod";
+import { default_BPM, default_Steps } from "@/components/global-defaults";
+import createEmptyGrid from "@/components/create-empty-grid";
 import { kit, kitPreloader } from "@/data/kits/rock/rock";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const BPMValidator = z
     .number()
@@ -62,7 +64,7 @@ export default function Home() {
         }
     }, []);
 
-    // load default kit
+    // preload default kit
     React.useEffect(() => {
         setDrumkit(kit);
     }, []);
@@ -77,7 +79,7 @@ export default function Home() {
 
     // create an empty sequencer grid
     React.useEffect(() => {
-        const emptyGrid = createGrid(drumkit, numberOfSteps);
+        const emptyGrid = createEmptyGrid(drumkit, numberOfSteps);
         if (emptyGrid) {
             setGrid(emptyGrid);
         }
@@ -97,6 +99,8 @@ export default function Home() {
         }
     };
 
+    // taking the grid and preparing the sequence for playback
+    // renews every time the grid is changed
     React.useEffect(() => {
         if (!grid || !player) {
             return;
@@ -120,6 +124,7 @@ export default function Home() {
         sequenceRef.current.start(0);
     }, [numberOfSteps, grid, player]);
 
+    // play/stop functions
     const handlePlayButton = async () => {
         if (!isPlaying) {
             await Tone.start();
@@ -132,37 +137,52 @@ export default function Home() {
         }
     };
 
-    const handleBPMChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const zodSaysHello = BPMValidator.safeParse(Math.round(parseInt(e.target.value)));
-        if (!zodSaysHello.success) {
-            return;
-        } else {
-            Tone.Transport.bpm.value = zodSaysHello.data;
-            setBpm(zodSaysHello.data);
-        }
+    // changing the tempo via page slider
+    const handleBPMChange = (values: number[]) => {
+        setBpm(values[0]);
+        Tone.Transport.bpm.value = values[0];
+        // const zodSaysHello = BPMValidator.safeParse(Math.round(parseInt(e.target.value)));
+        // if (!zodSaysHello.success) {
+        //     return;
+        // } else {
+        //     Tone.Transport.bpm.value = zodSaysHello.data;
+        //     setBpm(zodSaysHello.data);
+        // }
     };
 
+    // clearing the gird
+    const clearGrid = () => {
+        const emptyGrid = createEmptyGrid(drumkit, numberOfSteps);
+        if (emptyGrid) {
+            setGrid(structuredClone(emptyGrid));
+        }
+    };
+    // finally, RENDERING
     return (
         <>
             <h1>BEATER</h1>
-            <h4>Your favourite non-working drum machine app!</h4>
+            <h4>
+                Your favourite <s>non-</s>working drum machine app!
+            </h4>
             {grid ? (
                 grid.map((x, indexOf) => {
                     return (
-                        <div className="sequencer-row>">
+                        <div className="sequencer-row">
                             <button className="element-title" onClick={() => player?.player(x.rowName).start()}>
                                 {x.rowName}
                             </button>
-                            {[...Array(numberOfSteps)].map((_, i) => {
-                                return (
-                                    <button
-                                        key={i}
-                                        data-isactive={x.rowSteps[i] ? true : false}
-                                        className={x.rowSteps[i] ? "note active" : "note inactive"}
-                                        onClick={() => toggleNote(i, indexOf)}
-                                    ></button>
-                                );
-                            })}
+                            <span className="flex align-center">
+                                {[...Array(numberOfSteps)].map((_, i) => {
+                                    return (
+                                        <button
+                                            key={i}
+                                            data-isactive={x.rowSteps[i] ? true : false}
+                                            className={x.rowSteps[i] ? "note active" : "note inactive"}
+                                            onClick={() => toggleNote(i, indexOf)}
+                                        ></button>
+                                    );
+                                })}
+                            </span>
                         </div>
                     );
                 })
@@ -171,7 +191,15 @@ export default function Home() {
             )}
             <div className="controls">
                 <div className="bpm-slider">
-                    <Slider defaultValue={[120]} min={30} max={300} step={1} onChange={handleBPMChange} />
+                    <Slider
+                        className="w-300 md:w-auto"
+                        value={[bpm]}
+                        defaultValue={[120]}
+                        min={30}
+                        max={300}
+                        step={1}
+                        onValueChange={handleBPMChange}
+                    />
                     <label htmlFor="BPM">BPM: {bpm ? bpm : <></>}</label>
                 </div>
                 <div className="play-button">
@@ -181,7 +209,7 @@ export default function Home() {
                 </div>
             </div>
             <p>
-                <button className="element-title" onClick={() => setPattern1(grid)}>
+                <button className="element-title" onClick={() => setPattern1(structuredClone(grid))}>
                     Save Pattern 1
                 </button>
                 <button className="element-title" onClick={() => Pattern1 && setGrid(Pattern1)}>
@@ -189,7 +217,7 @@ export default function Home() {
                 </button>
             </p>
             <p>
-                <button className="element-title" onClick={() => setPattern2(grid)}>
+                <button className="element-title" onClick={() => setPattern2(structuredClone(grid))}>
                     Save Pattern 2
                 </button>
                 <button className="element-title" onClick={() => Pattern2 && setGrid(Pattern2)}>
@@ -197,7 +225,7 @@ export default function Home() {
                 </button>
             </p>
             <p>
-                <button className="element-title" onClick={() => setPattern3(grid)}>
+                <button className="element-title" onClick={() => setPattern3(structuredClone(grid))}>
                     Save Pattern 3
                 </button>
                 <button className="element-title" onClick={() => Pattern3 && setGrid(Pattern3)}>
@@ -205,13 +233,17 @@ export default function Home() {
                 </button>
             </p>
             <p>
-                <button className="element-title" onClick={() => setPattern4(grid)}>
+                <button className="element-title" onClick={() => setPattern4(structuredClone(grid))}>
                     Save Pattern 4
                 </button>
                 <button className="element-title" onClick={() => Pattern4 && setGrid(Pattern4)}>
                     Load Pattern 4
                 </button>
             </p>
+            <button className="element-title" onClick={clearGrid}>
+                CLEAR
+            </button>
+            <ModeToggle />
         </>
     );
 }

@@ -167,7 +167,7 @@ export default function Home() {
             {grid ? (
                 grid.map((x, indexOf) => {
                     return (
-                        <div className="sequencer-row">
+                        <div key="sequencer" className="sequencer-row">
                             <button className="element-title" onClick={() => player?.player(x.rowName).start()}>
                                 {x.rowName}
                             </button>

@@ -206,8 +206,15 @@ export default function Home() {
                 <span className="logo">
                     <Image src="/icon.png" width={35} height={35} alt="Drummer"></Image>
                     <h1 className="text-3xl font-bold">BEATER</h1>
+                    <Button
+                        variant="ghost"
+                        className="w-[4rem] h-[4rem] opacity-0 hover:opacity-100 bg-opacity-90 line-through"
+                    >
+                        <Image src="https://i.imgur.com/mgifSOk.png" width={50} height={50} alt=""></Image>
+                    </Button>
                 </span>
-                <span>
+                <span className="logo">
+                    <button className="button main-button line-through">DEMO</button>
                     <ModeToggle />
                 </span>
             </div>

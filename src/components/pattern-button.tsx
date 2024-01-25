@@ -6,14 +6,18 @@ export interface PatternProps {
 }
 const PatternButton = ({ id }: PatternProps) => {
     return (
-        <p>
-            <button className="button savepattern" onClick={() => handleSavePattern}>
-                Save <b>({id})</b>
-            </button>
-            <button className="button savepattern" onClick={() => handleLoadPattern}>
-                Load <b>({id})</b>
-            </button>
-        </p>
+        <div>
+            <p>
+                <button className="button savepattern" onClick={() => handleSavePattern}>
+                    Save <b>({id})</b>
+                </button>
+            </p>
+            <p>
+                <button className="button savepattern" onClick={() => handleLoadPattern}>
+                    Load <b>({id})</b>
+                </button>
+            </p>
+        </div>
     );
 };
 

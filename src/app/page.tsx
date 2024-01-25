@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import * as Tone from "tone";
 import { z } from "zod";
-import { default_BPM, default_Steps } from "@/components/global-defaults";
+import { default_BPM, default_Steps, default_Patterns } from "@/components/global-defaults";
 import createEmptyGrid from "@/components/create-empty-grid";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
 import { ModeToggle } from "@/components/mode-toggle";
-import PatternButton from "@/components/pattern-button";
+// import { PatternButton } from "@/components/pattern-button";
 
 const BPMValidator = z
     .number()
@@ -29,6 +29,19 @@ export interface Drumkit {
     name: string;
     buttonName: string;
     sampleUrl: string;
+}
+
+export interface PatternProps {
+    key: number;
+    id: number;
+}
+
+export interface SavePatternProps {
+    id: string;
+    numberOfSteps: string;
+    meter: "triple" | "quadruple";
+    bpm: string;
+    grid: Grid;
 }
 
 export default function Home() {
@@ -215,12 +228,55 @@ export default function Home() {
         }
     };
 
-    const handleSavePattern = (id: string) => {
-        return id;
+    const handleSavePattern = (id: number) => {
+        if (!grid) return;
+        const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
+        const patternId = id.toString();
+        const patternSteps = numberOfSteps.toString();
+        const patternMeter = meter.toString();
+        const patternBPM = bpm.toString();
+        const patternGrid = JSON.stringify(grid);
+        const patternValue = {
+            id: patternId,
+            steps: patternSteps,
+            meter: patternMeter,
+            bpm: patternBPM,
+            grid: patternGrid,
+        };
+
+        localStorage.setItem(patternKey, JSON.stringify(patternValue));
     };
 
-    const handleLoadPattern = (id: string) => {
-        return id;
+    const handleLoadPattern = (id: number) => {
+        const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
+        const storageItem = localStorage.getItem(patternKey);
+        if (storageItem) {
+            try {
+                const item = JSON.parse(storageItem);
+
+                if ("steps" && "meter" && "bpm" && "grid" in item) {
+                    try {
+                        setNumberOfSteps(parseInt(item.steps));
+                        setMeter(item.meter);
+                        setBpm(parseInt(item.bpm));
+                        setGrid(JSON.parse(item.grid));
+                    } catch (e) {
+                        console.log("NOPE SORRY");
+                    }
+                } else {
+                    console.log("Failed to find the 4 in item");
+                }
+            } catch (e) {
+                console.log("item is false");
+            }
+        }
+    };
+
+    const nuclearPurge = () => {
+        default_Patterns.map((x) => {
+            const storageKey: string = "BeateRRR_" + "Pattern" + x.toString();
+            localStorage.removeItem(storageKey);
+        });
     };
 
     // finally, RENDERING
@@ -233,6 +289,7 @@ export default function Home() {
                     <Button
                         variant="ghost"
                         className="w-[4rem] h-[4rem] opacity-0 hover:opacity-100 bg-opacity-90 line-through"
+                        onClick={nuclearPurge}
                     >
                         <Image src="https://i.imgur.com/mgifSOk.png" width={50} height={50} alt=""></Image>
                     </Button>
@@ -245,7 +302,7 @@ export default function Home() {
             {grid ? (
                 grid.map((x, indexOf) => {
                     return (
-                        <div key="sequencer" className="sequencer-row">
+                        <div key={"sequencer-row-" + `${indexOf}`} className="sequencer-row">
                             <button
                                 className="button cell-size w-[8rem] min-w-[7rem]"
                                 onClick={() => player?.player(x.rowName).start()}
@@ -332,8 +389,21 @@ export default function Home() {
                 </label>
             </div>
             <div className="saved-patterns">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => {
-                    return <PatternButton key={x} id={x} />;
+                {default_Patterns.map((x) => {
+                    return (
+                        <div key={"pattern-row-" + `${x}`}>
+                            <p>
+                                <button className="button savepattern" onClick={() => handleSavePattern(x)}>
+                                    Save <b>({x})</b>
+                                </button>
+                            </p>
+                            <p>
+                                <button className="button savepattern" onClick={() => handleLoadPattern(x)}>
+                                    Load <b>({x})</b>
+                                </button>
+                            </p>
+                        </div>
+                    );
                 })}
             </div>
         </>
@@ -343,3 +413,5 @@ export default function Home() {
 // onClick={() => setPattern6(structuredClone(grid))
 
 // onClick={() => Pattern4 && setGrid(Pattern4)}
+
+// return <PatternButton key={x} id={x} />;

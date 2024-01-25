@@ -223,7 +223,7 @@ export default function Home() {
         <>
             <div className="header">
                 <span className="logo">
-                    <Image src="/icon.png" width={35} height={35} alt="Drummer"></Image>
+                    <Image src="/icons/icon.png" width={35} height={35} alt="Drummer"></Image>
                     <h1 className="text-3xl font-bold">BEATER</h1>
                     <Button
                         variant="ghost"
@@ -280,10 +280,16 @@ export default function Home() {
                 <button className="button main-button" onClick={clearGrid}>
                     CLEAR
                 </button>
-                <button className="button main-button" onClick={() => setChosenKit("default")}>
+                <button
+                    className={"button main-button mr-0" + (chosenKit === "default" ? " text-amber-600" : "")}
+                    onClick={() => setChosenKit("default")}
+                >
                     Default Kit
                 </button>
-                <button className="button main-button" onClick={() => setChosenKit("green")}>
+                <button
+                    className={"button main-button" + (chosenKit === "green" ? " text-amber-600" : "")}
+                    onClick={() => setChosenKit("green")}
+                >
                     Green Kit
                 </button>
                 <Slider

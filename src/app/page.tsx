@@ -31,19 +31,6 @@ export interface Drumkit {
     sampleUrl: string;
 }
 
-export interface PatternProps {
-    key: number;
-    id: number;
-}
-
-export interface SavePatternProps {
-    id: string;
-    numberOfSteps: string;
-    meter: "triple" | "quadruple";
-    bpm: string;
-    grid: Grid;
-}
-
 export default function Home() {
     const [player, setPlayer] = React.useState<Tone.Players | null>(null);
     const [drumkit, setDrumkit] = React.useState<Drumkit[] | null>(null);
@@ -55,15 +42,6 @@ export default function Home() {
     const [meter, setMeter] = React.useState<"triple" | "quadruple">("quadruple");
 
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
-
-    const [Pattern1, setPattern1] = React.useState<Grid | null>(null);
-    const [Pattern2, setPattern2] = React.useState<Grid | null>(null);
-    const [Pattern3, setPattern3] = React.useState<Grid | null>(null);
-    const [Pattern4, setPattern4] = React.useState<Grid | null>(null);
-    const [Pattern5, setPattern5] = React.useState<Grid | null>(null);
-    const [Pattern6, setPattern6] = React.useState<Grid | null>(null);
-    const [Pattern7, setPattern7] = React.useState<Grid | null>(null);
-    const [Pattern8, setPattern8] = React.useState<Grid | null>(null);
 
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
 
@@ -228,6 +206,7 @@ export default function Home() {
         }
     };
 
+    // save current grid to localstorage
     const handleSavePattern = (id: number) => {
         if (!grid) return;
         const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
@@ -247,6 +226,7 @@ export default function Home() {
         localStorage.setItem(patternKey, JSON.stringify(patternValue));
     };
 
+    // load saved pattern from local storage
     const handleLoadPattern = (id: number) => {
         const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
         const storageItem = localStorage.getItem(patternKey);
@@ -272,6 +252,7 @@ export default function Home() {
         }
     };
 
+    // delete all saved patterns in local storage
     const nuclearPurge = () => {
         default_Patterns.map((x) => {
             const storageKey: string = "BeateRRR_" + "Pattern" + x.toString();

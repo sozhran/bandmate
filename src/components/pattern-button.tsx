@@ -1,25 +1,17 @@
 import { Grid } from "@/app/page";
 
-// export interface PatternProps {
-//     key: number;
-//     id: number;
-// }
+interface PatternProps {
+    key: number;
+    id: number;
+}
 
-// export interface SavePatternProps {
-//     id: number;
-//     numberOfSteps: number;
-//     meter: "triple" | "quadruple";
-//     bpm: number;
-//     grid: Grid | null;
-// }
-
-// Storage.prototype.setObj = function (key: string, obj: Object) {
-//     return this.setItem(key, JSON.stringify(obj));
-// };
-
-// Storage.prototype.getObj = function (key: string | null) {
-//     if (key) return JSON.parse(this.getItem(key));
-// };
+interface SavePatternProps {
+    id: string;
+    numberOfSteps: string;
+    meter: "triple" | "quadruple";
+    bpm: string;
+    grid: Grid;
+}
 
 // const handleSavePattern = ({ id, numberOfSteps, meter, bpm, grid }: SavePatternProps) => {
 //     if (!grid) return;

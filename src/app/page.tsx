@@ -44,6 +44,7 @@ export default function Home() {
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
 
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
+    const [lamps, setLamps] = React.useState<number | null>(null);
 
     // set initial BPM, with validation
     // I might want to store personal BPM default for users later, hence this logic.
@@ -61,11 +62,6 @@ export default function Home() {
         }
     }, []);
 
-    // preload default kit
-    // React.useEffect(() => {
-    //     setDrumkit(kit);
-    // }, []);
-
     // when user switches kits, load his kit of choice
     React.useEffect(() => {
         if (!kitPreloader_default || !kitPreloader_green) return;
@@ -82,14 +78,6 @@ export default function Home() {
             setPlayer(preloadSamples);
         }
     }, [chosenKit]);
-
-    // preload MP3 Samples
-    // React.useEffect(() => {
-    //     if (!kitPreloader) return;
-
-    //     const preloadSamples = new Tone.Players(kitPreloader).toDestination();
-    //     setPlayer(preloadSamples);
-    // }, [drumkit]);
 
     // create an empty sequencer grid
     React.useEffect(() => {
@@ -121,11 +109,13 @@ export default function Home() {
         }
 
         const steps = [...new Array(numberOfSteps)].map((_, index) => index);
+        setLamps(null);
 
         sequenceRef.current?.dispose();
 
         sequenceRef.current = new Tone.Sequence(
             (time, step) => {
+                setLamps(step);
                 grid.forEach((kitElement) => {
                     if (kitElement.rowSteps[step]) {
                         player.player(kitElement.rowName).start(time);
@@ -148,6 +138,7 @@ export default function Home() {
         if (isPlaying) {
             Tone.Transport.toggle();
             setIsPlaying(false);
+            setLamps(null);
         }
     };
 
@@ -316,6 +307,27 @@ export default function Home() {
             ) : (
                 <p>Loading...</p>
             )}
+            <div className="sequencer-row">
+                <span className="m-[1px] mr-[10px] cell-size w-[8rem] min-w-[7rem]"></span>
+                <span className="m-[1px] mr-[10px] cell-size w-[2rem] min-w-[1.5rem]"></span>
+                <span>
+                    {[...Array(numberOfSteps)].map((_, i) => {
+                        return (
+                            <button
+                                key={"lamp-" + { i }}
+                                data-step={i}
+                                className={
+                                    "w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] justify-center items-center " +
+                                    " " +
+                                    `${meter}`
+                                }
+                            >
+                                <button className={"lamp" + " " + (lamps === i ? "red" : "")}></button>
+                            </button>
+                        );
+                    })}
+                </span>
+            </div>
             <div className="controls">
                 <button
                     className={"button main-button font-bold min-w-[3.5rem]" + (isPlaying ? " text-amber-600" : "")}

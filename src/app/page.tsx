@@ -1,8 +1,6 @@
 "use client";
 import Image from "next/image";
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import * as Tone from "tone";
@@ -49,6 +47,10 @@ export default function Home() {
     const [Pattern2, setPattern2] = React.useState<Grid | null>(null);
     const [Pattern3, setPattern3] = React.useState<Grid | null>(null);
     const [Pattern4, setPattern4] = React.useState<Grid | null>(null);
+    const [Pattern5, setPattern5] = React.useState<Grid | null>(null);
+    const [Pattern6, setPattern6] = React.useState<Grid | null>(null);
+    const [Pattern7, setPattern7] = React.useState<Grid | null>(null);
+    const [Pattern8, setPattern8] = React.useState<Grid | null>(null);
 
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
 
@@ -175,12 +177,15 @@ export default function Home() {
         setNumberOfSteps(values[0]);
     };
 
+    // switch between 4/4 and 3/4 (cosmetic only)
     const handleMeterChange = () => {
         if (meter === "quadruple") {
             setMeter("triple");
+            setNumberOfSteps(24);
         }
         if (meter === "triple") {
             setMeter("quadruple");
+            setNumberOfSteps(32);
         }
     };
 
@@ -242,12 +247,15 @@ export default function Home() {
                     return (
                         <div key="sequencer" className="sequencer-row">
                             <button
-                                className="button cell-size w-[8rem]"
+                                className="button cell-size w-[8rem] min-w-[7rem]"
                                 onClick={() => player?.player(x.rowName).start()}
                             >
                                 {x.rowButtonName}
                             </button>
-                            <button className="button cell-size w-[2rem]" onClick={() => clearRow(indexOf)}>
+                            <button
+                                className="button cell-size w-[2rem] min-w-[1.5rem]"
+                                onClick={() => clearRow(indexOf)}
+                            >
                                 X
                             </button>
                             <span className="flex align-center">
@@ -271,29 +279,34 @@ export default function Home() {
                 <p>Loading...</p>
             )}
             <div className="controls">
-                <button className="button main-button" onClick={handlePlayButton}>
+                <button
+                    className={"button main-button font-bold min-w-[3.5rem]" + (isPlaying ? " text-amber-600" : "")}
+                    onClick={handlePlayButton}
+                >
                     {isPlaying ? "STOP" : "PLAY"}
                 </button>
-                <button className="button main-button" onClick={handleMeterChange}>
+                <button className="button main-button min-w-[3.5rem]" onClick={handleMeterChange}>
                     {meter === "quadruple" ? "4/4" : "3/4"}
                 </button>
-                <button className="button main-button" onClick={clearGrid}>
+                <button className="button main-button min-w-[3.5rem]" onClick={clearGrid}>
                     CLEAR
                 </button>
                 <button
-                    className={"button main-button mr-0" + (chosenKit === "default" ? " text-amber-600" : "")}
+                    className={
+                        "button main-button mr-0 min-w-[5rem]" + (chosenKit === "default" ? " text-amber-600" : "")
+                    }
                     onClick={() => setChosenKit("default")}
                 >
                     Default Kit
                 </button>
                 <button
-                    className={"button main-button" + (chosenKit === "green" ? " text-amber-600" : "")}
+                    className={"button main-button min-w-[5rem]" + (chosenKit === "green" ? " text-amber-600" : "")}
                     onClick={() => setChosenKit("green")}
                 >
                     Green Kit
                 </button>
                 <Slider
-                    className="w-[300px] bg-slate-700 ml-[10px] mr-[10px]"
+                    className="w-[300px] min-w-[120px] bg-slate-700 ml-[10px] mr-[10px]"
                     value={[bpm]}
                     defaultValue={[120]}
                     min={30}
@@ -306,7 +319,7 @@ export default function Home() {
                     BPM: {bpm ? bpm : <></>}
                 </label>
                 <Slider
-                    className="w-[150px] bg-slate-700 ml-[10px] mr-[10px]"
+                    className="w-[150px] min-w-[60px] bg-slate-700 ml-[10px] mr-[10px]"
                     value={[numberOfSteps]}
                     defaultValue={[16]}
                     min={4}

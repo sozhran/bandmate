@@ -10,6 +10,7 @@ import createEmptyGrid from "@/components/create-empty-grid";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
 import { ModeToggle } from "@/components/mode-toggle";
+import Header from "@/components/header";
 // import { PatternButton } from "@/components/pattern-button";
 
 const BPMValidator = z
@@ -243,34 +244,10 @@ export default function Home() {
         }
     };
 
-    // delete all saved patterns in local storage
-    const nuclearPurge = () => {
-        default_Patterns.map((x) => {
-            const storageKey: string = "BeateRRR_" + "Pattern" + x.toString();
-            localStorage.removeItem(storageKey);
-        });
-    };
-
     // finally, RENDERING
     return (
         <>
-            <div className="header">
-                <span className="logo">
-                    <Image src="/icons/icon.png" width={35} height={35} alt="Drummer"></Image>
-                    <h1 className="text-3xl font-bold">BEATER</h1>
-                    <Button
-                        variant="ghost"
-                        className="w-[4rem] h-[4rem] opacity-0 hover:opacity-100 bg-opacity-90 line-through"
-                        onClick={nuclearPurge}
-                    >
-                        <Image src="https://i.imgur.com/mgifSOk.png" width={50} height={50} alt=""></Image>
-                    </Button>
-                </span>
-                <span className="logo">
-                    <button className="button main-button line-through">DEMO</button>
-                    <ModeToggle />
-                </span>
-            </div>
+            <Header />
             {grid ? (
                 grid.map((x, indexOf) => {
                     return (
@@ -317,7 +294,7 @@ export default function Home() {
                                 key={"lamp-" + { i }}
                                 data-step={i}
                                 className={
-                                    "w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] justify-center items-center " +
+                                    "w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] bg-gray-500 justify-center items-center " +
                                     " " +
                                     `${meter}`
                                 }

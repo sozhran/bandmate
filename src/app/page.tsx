@@ -1,5 +1,5 @@
 "use client";
-// import Image from "next/image";
+import Image from "next/image";
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -11,6 +11,7 @@ import { default_BPM, default_Steps } from "@/components/global-defaults";
 import createEmptyGrid from "@/components/create-empty-grid";
 import { kit, kitPreloader } from "@/data/kits/rock/rock";
 import { ModeToggle } from "@/components/mode-toggle";
+import PatternButton from "@/components/pattern-button";
 
 const BPMValidator = z
     .number()
@@ -23,7 +24,7 @@ const StepValidator = z.number().int().positive();
 export type BPM = z.infer<typeof BPMValidator>;
 export type Step = z.infer<typeof StepValidator>;
 
-export type Grid = { rowName: string; rowSteps: boolean[] }[];
+export type Grid = { rowName: string; rowButtonName: string; rowSteps: boolean[] }[];
 
 export interface Drumkit {
     name: string;
@@ -38,6 +39,7 @@ export default function Home() {
 
     const [numberOfSteps, setNumberOfSteps] = React.useState<Step>(default_Steps);
     const [grid, setGrid] = React.useState<Grid | null>(null);
+    const [meter, setMeter] = React.useState<"triple" | "quadruple">("quadruple");
 
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
 
@@ -150,6 +152,19 @@ export default function Home() {
         // }
     };
 
+    const handleNumberOfStepsChange = (values: number[]) => {
+        setNumberOfSteps(values[0]);
+    };
+
+    const handleMeterChange = () => {
+        if (meter === "quadruple") {
+            setMeter("triple");
+        }
+        if (meter === "triple") {
+            setMeter("quadruple");
+        }
+    };
+
     // clearing the gird
     const clearGrid = () => {
         const emptyGrid = createEmptyGrid(drumkit, numberOfSteps);
@@ -157,19 +172,57 @@ export default function Home() {
             setGrid(structuredClone(emptyGrid));
         }
     };
+
+    // clear a single row (reset all notes in this row)
+    const clearRow = (y: number) => {
+        if (grid) {
+            const changedGrid = [...grid];
+
+            const setOfFalses: boolean[] = [];
+            for (let i = 0; i < numberOfSteps; i++) {
+                setOfFalses.push(false);
+            }
+            changedGrid.map((row, index) => {
+                if (index === y) {
+                    row.rowSteps = setOfFalses;
+                }
+                setGrid(changedGrid);
+            });
+        }
+    };
+
+    const handleSavePattern = (id: string) => {
+        return id;
+    };
+
+    const handleLoadPattern = (id: string) => {
+        return id;
+    };
+
     // finally, RENDERING
     return (
         <>
-            <h1>BEATER</h1>
-            <h4>
-                Your favourite <s>non-</s>working drum machine app!
-            </h4>
+            <div className="header">
+                <span className="logo">
+                    <Image src="/icon.png" width={35} height={35} alt="Drummer"></Image>
+                    <h1 className="text-3xl font-bold">BEATER</h1>
+                </span>
+                <span>
+                    <ModeToggle />
+                </span>
+            </div>
             {grid ? (
                 grid.map((x, indexOf) => {
                     return (
                         <div key="sequencer" className="sequencer-row">
-                            <button className="element-title" onClick={() => player?.player(x.rowName).start()}>
-                                {x.rowName}
+                            <button
+                                className="button cell-size w-[8rem]"
+                                onClick={() => player?.player(x.rowName).start()}
+                            >
+                                {x.rowButtonName}
+                            </button>
+                            <button className="button cell-size w-[2rem]" onClick={() => clearRow(indexOf)}>
+                                X
                             </button>
                             <span className="flex align-center">
                                 {[...Array(numberOfSteps)].map((_, i) => {
@@ -177,7 +230,9 @@ export default function Home() {
                                         <button
                                             key={i}
                                             data-isactive={x.rowSteps[i] ? true : false}
-                                            className={x.rowSteps[i] ? "note active" : "note inactive"}
+                                            className={
+                                                (x.rowSteps[i] ? "note active" : "note inactive") + " " + `${meter}`
+                                            }
                                             onClick={() => toggleNote(i, indexOf)}
                                         ></button>
                                     );
@@ -190,60 +245,50 @@ export default function Home() {
                 <p>Loading...</p>
             )}
             <div className="controls">
-                <div className="bpm-slider">
-                    <Slider
-                        className="w-300 md:w-auto"
-                        value={[bpm]}
-                        defaultValue={[120]}
-                        min={30}
-                        max={300}
-                        step={1}
-                        onValueChange={handleBPMChange}
-                    />
-                    <label htmlFor="BPM">BPM: {bpm ? bpm : <></>}</label>
-                </div>
-                <div className="play-button">
-                    <button className="element-title" onClick={handlePlayButton}>
-                        {isPlaying ? "STOP" : "PLAY"}
-                    </button>
-                </div>
+                <button className="button main-button" onClick={handlePlayButton}>
+                    {isPlaying ? "STOP" : "PLAY"}
+                </button>
+                <button className="button main-button" onClick={handleMeterChange}>
+                    {meter === "quadruple" ? "4/4" : "3/4"}
+                </button>
+                <button className="button main-button" onClick={clearGrid}>
+                    CLEAR
+                </button>
+                <Slider
+                    className="w-[300px] bg-slate-700 ml-[10px] mr-[10px]"
+                    value={[bpm]}
+                    defaultValue={[120]}
+                    min={30}
+                    max={300}
+                    step={1}
+                    onValueChange={handleBPMChange}
+                />
+
+                <label className="ml-[10px] mr-[10px]" htmlFor="BPM">
+                    BPM: {bpm ? bpm : <></>}
+                </label>
+                <Slider
+                    className="w-[150px] bg-slate-700 ml-[10px] mr-[10px]"
+                    value={[numberOfSteps]}
+                    defaultValue={[16]}
+                    min={4}
+                    max={32}
+                    step={1}
+                    onValueChange={handleNumberOfStepsChange}
+                />
+                <label className="ml-[10px] mr-[10px]" htmlFor="BPM">
+                    Steps: {numberOfSteps ? numberOfSteps : <></>}
+                </label>
             </div>
-            <p>
-                <button className="element-title" onClick={() => setPattern1(structuredClone(grid))}>
-                    Save Pattern 1
-                </button>
-                <button className="element-title" onClick={() => Pattern1 && setGrid(Pattern1)}>
-                    Load Pattern 1
-                </button>
-            </p>
-            <p>
-                <button className="element-title" onClick={() => setPattern2(structuredClone(grid))}>
-                    Save Pattern 2
-                </button>
-                <button className="element-title" onClick={() => Pattern2 && setGrid(Pattern2)}>
-                    Load Pattern 2
-                </button>
-            </p>
-            <p>
-                <button className="element-title" onClick={() => setPattern3(structuredClone(grid))}>
-                    Save Pattern 3
-                </button>
-                <button className="element-title" onClick={() => Pattern3 && setGrid(Pattern3)}>
-                    Load Pattern 3
-                </button>
-            </p>
-            <p>
-                <button className="element-title" onClick={() => setPattern4(structuredClone(grid))}>
-                    Save Pattern 4
-                </button>
-                <button className="element-title" onClick={() => Pattern4 && setGrid(Pattern4)}>
-                    Load Pattern 4
-                </button>
-            </p>
-            <button className="element-title" onClick={clearGrid}>
-                CLEAR
-            </button>
-            <ModeToggle />
+            <div className="saved-patterns">
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => {
+                    return <PatternButton key={x} id={x} />;
+                })}
+            </div>
         </>
     );
 }
+
+// onClick={() => setPattern6(structuredClone(grid))
+
+// onClick={() => Pattern4 && setGrid(Pattern4)}

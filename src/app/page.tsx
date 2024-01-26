@@ -43,7 +43,7 @@ export default function Home() {
     const [meter, setMeter] = React.useState<"triple" | "quadruple">("quadruple");
     const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
 
-    const [initialize, setInitialize] = React.useState<boolean>(false);
+    // const [initialize, setInitialize] = React.useState<boolean>(false);
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
 
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
@@ -82,9 +82,9 @@ export default function Home() {
         }
     }, [chosenKit]);
 
-    React.useEffect(() => {
-        setInitialize(true);
-    }, [drumkit, numberOfSteps]);
+    // React.useEffect(() => {
+    //     setInitialize(true);
+    // }, [drumkit, numberOfSteps]);
 
     // create an empty sequencer grid
     React.useEffect(() => {
@@ -95,7 +95,7 @@ export default function Home() {
                 setGrid(emptyGrid);
             }
         }
-    }, [initialize]);
+    }, [drumkit]);
 
     // function to program the beat
     const toggleNote = (x: number, y: number) => {

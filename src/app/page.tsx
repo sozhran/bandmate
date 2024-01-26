@@ -29,7 +29,6 @@ export type Grid = { rowName: string; rowButtonName: string; rowSteps: ("1" | "2
 export interface Drumkit {
     name: string;
     buttonName: string;
-    sampleUrl: string;
 }
 
 export default function Home() {
@@ -107,7 +106,11 @@ export default function Home() {
                     if (row.rowSteps[x] === null) {
                         row.rowSteps[x] = dynamics;
                     } else {
-                        row.rowSteps[x] = null;
+                        if (row.rowSteps[x] !== dynamics) {
+                            row.rowSteps[x] = dynamics;
+                        } else {
+                            row.rowSteps[x] = null;
+                        }
                     }
                 }
                 setGrid(changedGrid);
@@ -132,7 +135,9 @@ export default function Home() {
                 setLamps(step);
                 grid.forEach((kitElement) => {
                     if (kitElement.rowSteps[step] !== null) {
-                        player.player(kitElement.rowName).start(time);
+                        // const regex = `${kitElement.rowName}`;
+                        // player.player(/regex_/).stop();
+                        player.player(`${kitElement.rowName}` + "_" + `${kitElement.rowSteps[step]}`).start(time);
                     }
                 });
             },

@@ -3,14 +3,14 @@ import { Drumkit, Step } from "@/app/page";
 const createGrid = (drumkit: Drumkit[] | null, measures: Step) => {
     if (!drumkit || !measures) return;
 
-    const rows: { rowName: string; rowButtonName: string; rowSteps: boolean[] }[] = [];
+    const rows: { rowName: string; rowButtonName: string; rowSteps: ("1" | "2" | "3" | null)[] }[] = [];
 
     const mapper = drumkit.map((element: Drumkit) => {
-        const setOfFalses = [];
+        const setOfNulls = [];
         for (let i = 0; i < measures; i++) {
-            setOfFalses.push(false);
+            setOfNulls.push(null);
         }
-        const key = { rowName: element.name, rowButtonName: element.buttonName, rowSteps: setOfFalses };
+        const key = { rowName: element.name, rowButtonName: element.buttonName, rowSteps: setOfNulls };
         rows.push(key);
     });
     return rows;

@@ -24,7 +24,7 @@ const StepValidator = z.number().int().positive();
 export type BPM = z.infer<typeof BPMValidator>;
 export type Step = z.infer<typeof StepValidator>;
 
-export type Grid = { rowName: string; rowButtonName: string; rowSteps: boolean[] }[];
+export type Grid = { rowName: string; rowButtonName: string; rowSteps: ("1" | "2" | "3" | null)[] }[];
 
 export interface Drumkit {
     name: string;
@@ -41,7 +41,9 @@ export default function Home() {
     const [numberOfSteps, setNumberOfSteps] = React.useState<Step>(default_Steps);
     const [grid, setGrid] = React.useState<Grid | null>(null);
     const [meter, setMeter] = React.useState<"triple" | "quadruple">("quadruple");
+    const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
 
+    const [initialize, setInitialize] = React.useState<boolean>(false);
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
 
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
@@ -80,13 +82,20 @@ export default function Home() {
         }
     }, [chosenKit]);
 
+    React.useEffect(() => {
+        setInitialize(true);
+    }, [drumkit, numberOfSteps]);
+
     // create an empty sequencer grid
     React.useEffect(() => {
-        const emptyGrid = createEmptyGrid(drumkit, numberOfSteps);
-        if (emptyGrid) {
-            setGrid(emptyGrid);
+        if (drumkit) {
+            const emptyGrid = createEmptyGrid(drumkit, 32);
+
+            if (emptyGrid) {
+                setGrid(emptyGrid);
+            }
         }
-    }, [drumkit, numberOfSteps]);
+    }, [initialize]);
 
     // function to program the beat
     const toggleNote = (x: number, y: number) => {
@@ -95,7 +104,11 @@ export default function Home() {
 
             changedGrid.map((row, index) => {
                 if (index === y) {
-                    row.rowSteps[x] = !row.rowSteps[x];
+                    if (row.rowSteps[x] === null) {
+                        row.rowSteps[x] = dynamics;
+                    } else {
+                        row.rowSteps[x] = null;
+                    }
                 }
                 setGrid(changedGrid);
             });
@@ -118,7 +131,7 @@ export default function Home() {
             (time, step) => {
                 setLamps(step);
                 grid.forEach((kitElement) => {
-                    if (kitElement.rowSteps[step]) {
+                    if (kitElement.rowSteps[step] !== null) {
                         player.player(kitElement.rowName).start(time);
                     }
                 });
@@ -185,13 +198,13 @@ export default function Home() {
         if (grid) {
             const changedGrid = [...grid];
 
-            const setOfFalses: boolean[] = [];
+            const setOfNulls: ("1" | "2" | "3" | null)[] = [];
             for (let i = 0; i < numberOfSteps; i++) {
-                setOfFalses.push(false);
+                setOfNulls.push(null);
             }
             changedGrid.map((row, index) => {
                 if (index === y) {
-                    row.rowSteps = setOfFalses;
+                    row.rowSteps = setOfNulls;
                 }
                 setGrid(changedGrid);
             });
@@ -269,12 +282,16 @@ export default function Home() {
                                     return (
                                         <button
                                             key={i}
-                                            data-isactive={x.rowSteps[i] ? true : false}
+                                            // data-isactive={x.rowSteps[i] !== null ? true : false}
                                             className={
-                                                (x.rowSteps[i] ? "note active" : "note inactive") + " " + `${meter}`
+                                                (x.rowSteps[i] !== null ? "note active" : "note inactive") +
+                                                " " +
+                                                `${meter}`
                                             }
                                             onClick={() => toggleNote(i, indexOf)}
-                                        ></button>
+                                        >
+                                            {x.rowSteps[i] ? x.rowSteps[i] : ""}
+                                        </button>
                                     );
                                 })}
                             </span>
@@ -294,7 +311,7 @@ export default function Home() {
                                 key={"lamp-" + { i }}
                                 data-step={i}
                                 className={
-                                    "w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] bg-gray-500 justify-center items-center " +
+                                    "w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] justify-center items-center " +
                                     " " +
                                     `${meter}`
                                 }
@@ -331,6 +348,24 @@ export default function Home() {
                     onClick={() => setChosenKit("green")}
                 >
                     Green Kit
+                </button>
+                <button
+                    className={"button main-button min-w-[2rem] w-[2rem]" + (dynamics === "1" ? " text-amber-600" : "")}
+                    onClick={() => setDynamics("1")}
+                >
+                    1
+                </button>
+                <button
+                    className={"button main-button min-w-[2rem] w-[2rem]" + (dynamics === "2" ? " text-amber-600" : "")}
+                    onClick={() => setDynamics("2")}
+                >
+                    2
+                </button>
+                <button
+                    className={"button main-button min-w-[2rem] w-[2rem]" + (dynamics === "3" ? " text-amber-600" : "")}
+                    onClick={() => setDynamics("3")}
+                >
+                    3
                 </button>
                 <Slider
                     className="w-[300px] min-w-[120px] bg-slate-700 ml-[10px] mr-[10px]"

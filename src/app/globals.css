@@ -4,8 +4,8 @@
 
 @layer base {
     :root {
-        --font-size: 0.85em;
-        --cell-size: 25px;
+        --font-size: 0.9em;
+        --cell-size: 30px;
         --button-color: #1f2937;
         --orange: #d97706;
         --margin-general: 20px;

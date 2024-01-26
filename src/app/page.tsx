@@ -135,8 +135,10 @@ export default function Home() {
                 setLamps(step);
                 grid.forEach((kitElement) => {
                     if (kitElement.rowSteps[step] !== null) {
-                        // const regex = `${kitElement.rowName}`;
-                        // player.player(/regex_/).stop();
+                        // replace with regexp
+                        // player.player(`${kitElement.rowName}` + "_1").stop(1);
+                        // player.player(`${kitElement.rowName}` + "_2").stop(1);
+                        // player.player(`${kitElement.rowName}` + "_3").stop(1);
                         player.player(`${kitElement.rowName}` + "_" + `${kitElement.rowSteps[step]}`).start(time);
                     }
                 });
@@ -340,7 +342,7 @@ export default function Home() {
                 <button className="button main-button min-w-[3.5rem]" onClick={clearGrid}>
                     CLEAR
                 </button>
-                <button
+                {/* <button
                     className={
                         "button main-button mr-0 min-w-[5rem]" + (chosenKit === "default" ? " text-amber-600" : "")
                     }
@@ -353,7 +355,7 @@ export default function Home() {
                     onClick={() => setChosenKit("green")}
                 >
                     Green Kit
-                </button>
+                </button> */}
                 <button
                     className={"button main-button min-w-[2rem] w-[2rem]" + (dynamics === "1" ? " text-amber-600" : "")}
                     onClick={() => setDynamics("1")}

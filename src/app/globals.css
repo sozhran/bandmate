@@ -7,7 +7,7 @@
         --font-size: 0.9em;
         --cell-size: 30px;
         --button-color: #1f2937;
-        --orange: #d97706;
+        --orange: bg-amber-700;
         --margin-general: 20px;
 
         /* temporary colors until I apply Tailwind */
@@ -83,6 +83,16 @@ body {
     outline: none;
 }
 
+.button-dynamic {
+    background-color: var(--button-color);
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+
+    outline: none;
+}
+
 .main-button {
     width: 6rem;
     height: 2.5rem;
@@ -148,10 +158,30 @@ body {
     transition: background-color 0.1s;
 }
 
-.active {
+.active-1 {
     /* background-color: var(--color2); */
-    background-color: var(--orange);
+    background-color: #451a03;
     transition: background-color 0.1s;
+}
+
+.active-2 {
+    /* background-color: var(--color2); */
+    background-color: #d97706;
+    transition: background-color 0.1s;
+}
+
+.active-3 {
+    /* background-color: var(--color2); */
+    background-color: #b91c1c;
+    transition: background-color 0.1s;
+}
+
+.note-controls {
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
 .controls {

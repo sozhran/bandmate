@@ -274,7 +274,7 @@ export default function Home() {
                         <div key={"sequencer-row-" + `${indexOf}`} className="sequencer-row">
                             <button
                                 className="button cell-size w-[8rem] min-w-[7rem]"
-                                onClick={() => player?.player(x.rowName).start()}
+                                onClick={() => player?.player(`${x.rowName}` + "_" + `${dynamics}`).start()}
                             >
                                 {x.rowButtonName}
                             </button>
@@ -289,15 +289,16 @@ export default function Home() {
                                     return (
                                         <button
                                             key={i}
-                                            // data-isactive={x.rowSteps[i] !== null ? true : false}
                                             className={
-                                                (x.rowSteps[i] !== null ? "note active" : "note inactive") +
+                                                (x.rowSteps[i] !== null
+                                                    ? "note active-" + `${x.rowSteps[i]}`
+                                                    : "note inactive") +
                                                 " " +
                                                 `${meter}`
                                             }
                                             onClick={() => toggleNote(i, indexOf)}
                                         >
-                                            {x.rowSteps[i] ? x.rowSteps[i] : ""}
+                                            <span className="opacity-50">{x.rowSteps[i] ? x.rowSteps[i] : ""}</span>
                                         </button>
                                     );
                                 })}
@@ -356,24 +357,35 @@ export default function Home() {
                 >
                     Green Kit
                 </button> */}
-                <button
-                    className={"button main-button min-w-[2rem] w-[2rem]" + (dynamics === "1" ? " text-amber-600" : "")}
-                    onClick={() => setDynamics("1")}
-                >
-                    1
-                </button>
-                <button
-                    className={"button main-button min-w-[2rem] w-[2rem]" + (dynamics === "2" ? " text-amber-600" : "")}
-                    onClick={() => setDynamics("2")}
-                >
-                    2
-                </button>
-                <button
-                    className={"button main-button min-w-[2rem] w-[2rem]" + (dynamics === "3" ? " text-amber-600" : "")}
-                    onClick={() => setDynamics("3")}
-                >
-                    3
-                </button>
+                <span className="note-controls">
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem]" +
+                            (dynamics === "1" ? " text-amber-950 font-bold" : "")
+                        }
+                        onClick={() => setDynamics("1")}
+                    >
+                        1
+                    </button>
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem]" +
+                            (dynamics === "2" ? " text-amber-600 font-bold" : "")
+                        }
+                        onClick={() => setDynamics("2")}
+                    >
+                        2
+                    </button>
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem]" +
+                            (dynamics === "3" ? " text-red-700 font-bold" : "")
+                        }
+                        onClick={() => setDynamics("3")}
+                    >
+                        3
+                    </button>
+                </span>
                 <Slider
                     className="w-[300px] min-w-[120px] bg-slate-700 ml-[10px] mr-[10px]"
                     value={[bpm]}

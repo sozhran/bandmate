@@ -32,7 +32,7 @@ export default function Header() {
                 </Button>
             </span>
             <span className="logo">
-                <button className="button main-button line-through">DEMO</button>
+                {/* <button className="button main-button line-through">DEMO</button> */}
                 {/* {location === "about" ? (
                     <></>
                 ) : (
@@ -40,7 +40,7 @@ export default function Header() {
                         <button className="button main-button">About</button>
                     </Link>
                 )} */}
-                <ModeToggle />
+                {/* <ModeToggle /> */}
             </span>
         </div>
     );

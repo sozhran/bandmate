@@ -1,9 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { ModeToggle } from "./mode-toggle";
 import { default_Patterns } from "./global-defaults";
-import { Link } from "lucide-react";
 
 // delete all saved patterns in local storage
 const nuclearPurge = () => {

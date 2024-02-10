@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import * as React from "react";
-import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import * as Tone from "tone";
 import { z } from "zod";
@@ -9,9 +8,7 @@ import { default_BPM, default_Steps, default_Patterns } from "@/components/globa
 import createEmptyGrid from "@/components/create-empty-grid";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
-import { ModeToggle } from "@/components/mode-toggle";
 import Header from "@/components/header";
-// import { PatternButton } from "@/components/pattern-button";
 
 const BPMValidator = z
     .number()

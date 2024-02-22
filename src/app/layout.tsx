@@ -10,7 +10,7 @@ const fontSans = Inter({
 });
 
 export const metadata: Metadata = {
-    title: "Beater",
+    title: "Bandmate",
     description: "It's a drum machine - and it works in your browser!",
 };
 

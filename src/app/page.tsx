@@ -1,14 +1,20 @@
 "use client";
-import Image from "next/image";
 import * as React from "react";
 import { Slider } from "@/components/ui/slider";
 import * as Tone from "tone";
 import { z } from "zod";
 import { default_BPM, default_Steps, default_Patterns } from "@/components/global-defaults";
 import createEmptyGrid from "@/components/create-empty-grid";
+import loadDemoPattern from "@/components/load-demo";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
 import Header from "@/components/header";
+import * as demo1 from "@/data/demo/pattern1.json";
+import * as demo2 from "@/data/demo/pattern2.json";
+import * as demo3 from "@/data/demo/pattern3.json";
+import * as demo4 from "@/data/demo/pattern4.json";
+import * as demo5 from "@/data/demo/pattern5.json";
+import * as demo6 from "@/data/demo/pattern6.json";
 
 const BPMValidator = z
     .number()
@@ -22,6 +28,13 @@ export type BPM = z.infer<typeof BPMValidator>;
 export type Step = z.infer<typeof StepValidator>;
 
 export type Grid = { rowName: string; rowButtonName: string; rowSteps: ("1" | "2" | "3" | null)[] }[];
+
+export interface Pattern {
+    steps: string;
+    meter: string;
+    bpm: string;
+    grid: string;
+}
 
 export interface Drumkit {
     name: string;
@@ -219,13 +232,13 @@ export default function Home() {
     const handleSavePattern = (id: number) => {
         if (!grid) return;
         const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
-        const patternId = id.toString();
+        // const patternId = id.toString();
         const patternSteps = numberOfSteps.toString();
         const patternMeter = meter.toString();
         const patternBPM = bpm.toString();
         const patternGrid = JSON.stringify(grid);
         const patternValue = {
-            id: patternId,
+            // id: patternId,
             steps: patternSteps,
             meter: patternMeter,
             bpm: patternBPM,
@@ -260,6 +273,16 @@ export default function Home() {
             }
         }
     };
+
+    // const handleDemo = () => {
+    //     loadDemoPattern(demo1, 1);
+    //     loadDemoPattern(demo2, 2);
+    //     loadDemoPattern(demo3, 3);
+    //     loadDemoPattern(demo4, 4);
+    //     loadDemoPattern(demo5, 5);
+    //     loadDemoPattern(demo6, 6);
+    //     handleLoadPattern(1);
+    // };
 
     // finally, RENDERING
     return (

@@ -2,6 +2,15 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { default_Patterns } from "./global-defaults";
+import Link from "next/link";
+import loadDemoPattern from "./load-demo";
+import * as Tone from "tone";
+import * as demo1 from "@/data/demo/pattern1.json";
+import * as demo2 from "@/data/demo/pattern2.json";
+import * as demo3 from "@/data/demo/pattern3.json";
+import * as demo4 from "@/data/demo/pattern4.json";
+import * as demo5 from "@/data/demo/pattern5.json";
+import * as demo6 from "@/data/demo/pattern6.json";
 
 // delete all saved patterns in local storage
 const nuclearPurge = () => {
@@ -14,6 +23,16 @@ const nuclearPurge = () => {
 // interface HeaderProps {
 //     location: string;
 // }
+
+// const handleDemo = () => {
+//     loadDemoPattern(demo1, 1);
+//     loadDemoPattern(demo2, 2);
+//     loadDemoPattern(demo3, 3);
+//     loadDemoPattern(demo4, 4);
+//     loadDemoPattern(demo5, 5);
+//     loadDemoPattern(demo6, 6);
+//     handleLoadPattern(1);
+// };
 
 export default function Header() {
     return (
@@ -30,15 +49,19 @@ export default function Header() {
                 </Button>
             </span>
             <span className="logo">
-                {/* <button className="button main-button line-through">DEMO</button> */}
-                {/* {location === "about" ? (
+                {window.location.pathname === "/about" ? (
                     <></>
                 ) : (
                     <Link href="/about">
                         <button className="button main-button">About</button>
                     </Link>
-                )} */}
-                {/* <ModeToggle /> */}
+                )}
+                <button
+                    className="button main-button"
+                    // onClick={handleDemo}
+                >
+                    DEMO
+                </button>
             </span>
         </div>
     );

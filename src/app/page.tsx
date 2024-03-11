@@ -313,13 +313,13 @@ export default function Home() {
                     </Button>
                 </span>
                 <span className="logo">
-                    {window.location.pathname === "/about" ? (
+                    {/* {window.location.pathname === "/about" ? (
                         <></>
                     ) : (
                         <Link href="/about">
                             <button className="button main-button">About</button>
                         </Link>
-                    )}
+                    )} */}
                     <button className="button main-button" onClick={handleDemo}>
                         DEMO
                     </button>

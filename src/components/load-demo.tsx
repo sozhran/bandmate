@@ -6,7 +6,7 @@ export default function loadDemoPattern(pattern: Pattern, number: number) {
     const patternSteps = parseInt(pattern.steps);
     const patternMeter = pattern.meter;
     const patternBPM = parseInt(pattern.bpm);
-    const patternGrid = JSON.parse(pattern.grid);
+    const patternGrid = pattern.grid;
     const patternValue = {
         steps: patternSteps,
         meter: patternMeter,

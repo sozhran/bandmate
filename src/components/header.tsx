@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { default_Patterns } from "./global-defaults";
 import Link from "next/link";
 import loadDemoPattern from "./load-demo";
+import { Grid } from "@/app/page";
 import * as Tone from "tone";
 import * as demo1 from "@/data/demo/pattern1.json";
 import * as demo2 from "@/data/demo/pattern2.json";
@@ -24,15 +25,15 @@ const nuclearPurge = () => {
 //     location: string;
 // }
 
-// const handleDemo = () => {
-//     loadDemoPattern(demo1, 1);
-//     loadDemoPattern(demo2, 2);
-//     loadDemoPattern(demo3, 3);
-//     loadDemoPattern(demo4, 4);
-//     loadDemoPattern(demo5, 5);
-//     loadDemoPattern(demo6, 6);
-//     handleLoadPattern(1);
-// };
+const handleDemo = () => {
+    loadDemoPattern(demo1, 1);
+    loadDemoPattern(demo2, 2);
+    loadDemoPattern(demo3, 3);
+    loadDemoPattern(demo4, 4);
+    loadDemoPattern(demo5, 5);
+    loadDemoPattern(demo6, 6);
+    // setGrid(demo1);
+};
 
 export default function Header() {
     return (
@@ -56,10 +57,7 @@ export default function Header() {
                         <button className="button main-button">About</button>
                     </Link>
                 )}
-                <button
-                    className="button main-button"
-                    // onClick={handleDemo}
-                >
+                <button className="button main-button" onClick={handleDemo}>
                     DEMO
                 </button>
             </span>

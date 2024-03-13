@@ -60,7 +60,8 @@ export default function Demo() {
         loadPatternIntoLocalStorage(demo6, 6);
         loadActivePattern(1);
         await Tone.start();
-        Tone.Transport.toggle();
+        Tone.Transport.stop();
+        Tone.Transport.start();
         setIsPlaying(true);
     };
     return (

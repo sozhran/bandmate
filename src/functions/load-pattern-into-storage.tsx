@@ -1,6 +1,6 @@
 import { Pattern } from "@/data/interfaces";
 
-export default function loadDemoPattern(pattern: Pattern, number: number) {
+export default function loadPatternIntoLocalStorage(pattern: Pattern, number: number) {
     if (!pattern) return;
     const patternKey: string = "BeateRRR_" + "Pattern" + number.toString();
     const patternSteps = parseInt(pattern.steps);

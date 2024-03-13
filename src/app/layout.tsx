@@ -4,8 +4,7 @@ import "./reset.css";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
-import React, { useState } from "react";
-import { Grid } from "@/data/interfaces";
+import React from "react";
 
 const fontSans = Inter({
     subsets: ["latin"],
@@ -18,8 +17,6 @@ const fontSans = Inter({
 // };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-    const [grid, setGrid] = useState<Grid | null>(null);
-
     return (
         <html
             lang="en"

@@ -1,4 +1,4 @@
-import { Drumkit, Step } from "@/app/page";
+import { Drumkit, Step } from "@/data/interfaces";
 
 const createGrid = (drumkit: Drumkit[] | null, measures: Step) => {
     if (!drumkit || !measures) return;

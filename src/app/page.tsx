@@ -4,8 +4,8 @@ import { Slider } from "@/components/ui/slider";
 import * as Tone from "tone";
 import { default_Patterns } from "@/data/global-defaults";
 import createEmptyGrid from "@/functions/create-empty-grid";
-// import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
-// import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
+import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
+import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
 import {
     useNumberOfStepsStore,
     useMeterStore,
@@ -18,7 +18,7 @@ import Header from "@/components/header";
 
 export default function Home() {
     const [player, setPlayer] = React.useState<Tone.Players | null>(null);
-    // const [chosenKit, setChosenKit] = React.useState<"default" | "green">("default");
+    const [chosenKit, setChosenKit] = React.useState<"default" | "green">("default");
     const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
     const [lamps, setLamps] = React.useState<number | null>(null);
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
@@ -40,21 +40,21 @@ export default function Home() {
     const setIsPlaying = useIsPlayingStore((state) => state.setIsPlaying);
 
     // when user switches between kits, load his kit of choice
-    // React.useEffect(() => {
-    //     if (!kitPreloader_default || !kitPreloader_green) return;
+    React.useEffect(() => {
+        if (!kitPreloader_default || !kitPreloader_green) return;
 
-    //     if (chosenKit === "default") {
-    //         setDrumkit(kit_default);
-    //         const preloadSamples = new Tone.Players(kitPreloader_default).toDestination();
-    //         setPlayer(preloadSamples);
-    //     }
+        if (chosenKit === "default") {
+            setDrumkit(kit_default);
+            const preloadSamples = new Tone.Players(kitPreloader_default).toDestination();
+            setPlayer(preloadSamples);
+        }
 
-    //     if (chosenKit === "green") {
-    //         setDrumkit(kit_green);
-    //         const preloadSamples = new Tone.Players(kitPreloader_green).toDestination();
-    //         setPlayer(preloadSamples);
-    //     }
-    // }, [chosenKit, setDrumkit]);
+        if (chosenKit === "green") {
+            setDrumkit(kit_green);
+            const preloadSamples = new Tone.Players(kitPreloader_green).toDestination();
+            setPlayer(preloadSamples);
+        }
+    }, [chosenKit, setDrumkit]);
 
     // create an empty sequencer grid
     React.useEffect(() => {

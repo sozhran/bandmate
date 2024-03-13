@@ -1,12 +1,8 @@
 import { z } from "zod";
 
-export const BPMValidator = z
-    .number()
-    .int()
-    .min(40, "Tempo must be between 40 and 300")
-    .max(300, "Tempo must be between 40 and 300");
+export const BPMValidator = z.number().int().min(40).max(300);
 
-export const StepValidator = z.number().int().positive();
+export const StepValidator = z.number().int().positive().max(32);
 
 export type BPM = z.infer<typeof BPMValidator>;
 export type Step = z.infer<typeof StepValidator>;

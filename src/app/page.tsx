@@ -3,27 +3,31 @@ import * as React from "react";
 import { Slider } from "@/components/ui/slider";
 import * as Tone from "tone";
 import { default_Patterns } from "@/data/global-defaults";
-import { Drumkit } from "@/data/interfaces";
 import createEmptyGrid from "@/functions/create-empty-grid";
-import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
-import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
+// import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
+// import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
 import {
     useNumberOfStepsStore,
     useMeterStore,
     useBPMStore,
     useGridStore,
     useIsPlayingStore,
+    useDrumkitStore,
 } from "@/data/global-state-store";
 import Header from "@/components/header";
 
 export default function Home() {
     const [player, setPlayer] = React.useState<Tone.Players | null>(null);
-    const [drumkit, setDrumkit] = React.useState<Drumkit[] | null>(null);
-    const [chosenKit, setChosenKit] = React.useState<"default" | "green">("default");
+    // const [chosenKit, setChosenKit] = React.useState<"default" | "green">("default");
     const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
     const [lamps, setLamps] = React.useState<number | null>(null);
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
 
+    // Man, is it verbose as hell, and doesn't look too nice importing a ton of same stuff in different places.
+    // But I was eager to try Zustand, and it's working, so I'll leave it for now.
+    // Will likely replace with a reducer later.
+    const drumkit = useDrumkitStore((state) => state.drumkit);
+    const setDrumkit = useDrumkitStore((state) => state.setDrumkit);
     const numberOfSteps = useNumberOfStepsStore((state) => state.numberOfSteps);
     const setNumberOfSteps = useNumberOfStepsStore((state) => state.setNumberOfSteps);
     const meter = useMeterStore((state) => state.meter);
@@ -35,22 +39,22 @@ export default function Home() {
     const isPlaying = useIsPlayingStore((state) => state.isPlaying);
     const setIsPlaying = useIsPlayingStore((state) => state.setIsPlaying);
 
-    // when user switches kits, load his kit of choice
-    React.useEffect(() => {
-        if (!kitPreloader_default || !kitPreloader_green) return;
+    // when user switches between kits, load his kit of choice
+    // React.useEffect(() => {
+    //     if (!kitPreloader_default || !kitPreloader_green) return;
 
-        if (chosenKit === "default") {
-            setDrumkit(kit_default);
-            const preloadSamples = new Tone.Players(kitPreloader_default).toDestination();
-            setPlayer(preloadSamples);
-        }
+    //     if (chosenKit === "default") {
+    //         setDrumkit(kit_default);
+    //         const preloadSamples = new Tone.Players(kitPreloader_default).toDestination();
+    //         setPlayer(preloadSamples);
+    //     }
 
-        if (chosenKit === "green") {
-            setDrumkit(kit_green);
-            const preloadSamples = new Tone.Players(kitPreloader_green).toDestination();
-            setPlayer(preloadSamples);
-        }
-    }, [chosenKit]);
+    //     if (chosenKit === "green") {
+    //         setDrumkit(kit_green);
+    //         const preloadSamples = new Tone.Players(kitPreloader_green).toDestination();
+    //         setPlayer(preloadSamples);
+    //     }
+    // }, [chosenKit, setDrumkit]);
 
     // create an empty sequencer grid
     React.useEffect(() => {
@@ -63,7 +67,7 @@ export default function Home() {
         }
     }, [drumkit, setGrid]);
 
-    // function to program the beat
+    // function to save input when user is programming a beat
     const toggleNote = (x: number, y: number) => {
         if (grid) {
             const changedGrid = [...grid];
@@ -102,10 +106,6 @@ export default function Home() {
                 setLamps(step);
                 grid.forEach((kitElement) => {
                     if (kitElement.rowSteps[step] !== null) {
-                        // replace with regexp
-                        // player.player(`${kitElement.rowName}` + "_1").stop(1);
-                        // player.player(`${kitElement.rowName}` + "_2").stop(1);
-                        // player.player(`${kitElement.rowName}` + "_3").stop(1);
                         player.player(`${kitElement.rowName}` + "_" + `${kitElement.rowSteps[step]}`).start(time);
                     }
                 });
@@ -130,24 +130,18 @@ export default function Home() {
         }
     };
 
-    // changing the tempo via page slider
+    // change the tempo via slider
     const handleBPMChange = (values: number[]) => {
         setBpm(values[0]);
         Tone.Transport.bpm.value = values[0];
-        // const zodSaysHello = BPMValidator.safeParse(Math.round(parseInt(e.target.value)));
-        // if (!zodSaysHello.success) {
-        //     return;
-        // } else {
-        //     Tone.Transport.bpm.value = zodSaysHello.data;
-        //     setBpm(zodSaysHello.data);
-        // }
     };
 
+    // change the grid size (number of steps)
     const handleNumberOfStepsChange = (values: number[]) => {
         setNumberOfSteps(values[0]);
     };
 
-    // switch between 4/4 and 3/4 (cosmetic only)
+    // switch between 4/4 and 3/4
     const handleMeterChange = () => {
         if (meter === "quadruple") {
             setMeter("triple");
@@ -159,7 +153,7 @@ export default function Home() {
         }
     };
 
-    // clearing the gird
+    // clear the gird
     const clearGrid = () => {
         const emptyGrid = createEmptyGrid(drumkit, numberOfSteps);
         if (emptyGrid) {
@@ -167,7 +161,7 @@ export default function Home() {
         }
     };
 
-    // clear a single row (reset all notes in this row)
+    // clear a single row (resets all notes in this row)
     const clearRow = (y: number) => {
         if (grid) {
             const changedGrid = [...grid];
@@ -185,17 +179,15 @@ export default function Home() {
         }
     };
 
-    // save current grid to localstorage
+    // save current beat to localStorage
     const handleSavePattern = (id: number) => {
         if (!grid) return;
         const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
-        // const patternId = id.toString();
         const patternSteps = numberOfSteps.toString();
         const patternMeter = meter.toString();
         const patternBPM = bpm.toString();
         const patternGrid = JSON.stringify(grid);
         const patternValue = {
-            // id: patternId,
             steps: patternSteps,
             meter: patternMeter,
             bpm: patternBPM,
@@ -205,7 +197,7 @@ export default function Home() {
         localStorage.setItem(patternKey, JSON.stringify(patternValue));
     };
 
-    // load saved pattern from local storage
+    // load saved pattern from localStorage
     const handleLoadPattern = (id: number) => {
         const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
         const storageItem = localStorage.getItem(patternKey);
@@ -400,9 +392,3 @@ export default function Home() {
         </>
     );
 }
-
-// onClick={() => setPattern6(structuredClone(grid))
-
-// onClick={() => Pattern4 && setGrid(Pattern4)}
-
-// return <PatternButton key={x} id={x} />;

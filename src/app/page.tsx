@@ -18,7 +18,7 @@ import Header from "@/components/header";
 
 export default function Home() {
     const [player, setPlayer] = React.useState<Tone.Players | null>(null);
-    // const [chosenKit, setChosenKit] = React.useState<"default" | "green">("default");
+    const [chosenKit, setChosenKit] = React.useState<"default" | "green">("default");
     const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
     const [lamps, setLamps] = React.useState<number | null>(null);
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);

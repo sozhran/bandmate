@@ -2,80 +2,38 @@
 import * as React from "react";
 import { Slider } from "@/components/ui/slider";
 import * as Tone from "tone";
-import { z } from "zod";
-import { default_BPM, default_Steps, default_Patterns } from "@/components/global-defaults";
-import createEmptyGrid from "@/components/create-empty-grid";
-import loadDemoPattern from "@/components/load-demo";
+import { default_Patterns } from "@/data/global-defaults";
+import { Drumkit } from "@/data/interfaces";
+import createEmptyGrid from "@/functions/create-empty-grid";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
+import {
+    useNumberOfStepsStore,
+    useMeterStore,
+    useBPMStore,
+    useGridStore,
+    useIsPlayingStore,
+} from "@/data/global-state-store";
 import Header from "@/components/header";
-import * as demo1 from "@/data/demo/pattern1.json";
-import * as demo2 from "@/data/demo/pattern2.json";
-import * as demo3 from "@/data/demo/pattern3.json";
-import * as demo4 from "@/data/demo/pattern4.json";
-import * as demo5 from "@/data/demo/pattern5.json";
-import * as demo6 from "@/data/demo/pattern6.json";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Link from "next/link";
-
-const BPMValidator = z
-    .number()
-    .int()
-    .min(40, "Tempo must be between 40 and 300")
-    .max(300, "Tempo must be between 40 and 300");
-
-const StepValidator = z.number().int().positive();
-
-export type BPM = z.infer<typeof BPMValidator>;
-export type Step = z.infer<typeof StepValidator>;
-
-export type Grid = { rowName: string; rowButtonName: string; rowSteps: ("1" | "2" | "3" | null)[] }[];
-
-export interface Pattern {
-    steps: string;
-    meter: string;
-    bpm: string;
-    grid: string;
-}
-
-export interface Drumkit {
-    name: string;
-    buttonName: string;
-}
 
 export default function Home() {
     const [player, setPlayer] = React.useState<Tone.Players | null>(null);
     const [drumkit, setDrumkit] = React.useState<Drumkit[] | null>(null);
     const [chosenKit, setChosenKit] = React.useState<"default" | "green">("default");
-    const [bpm, setBpm] = React.useState<BPM>(default_BPM);
-
-    const [numberOfSteps, setNumberOfSteps] = React.useState<Step>(default_Steps);
-    const [grid, setGrid] = React.useState<Grid | null>(null);
-    const [meter, setMeter] = React.useState<"triple" | "quadruple">("quadruple");
     const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
-
-    // const [initialize, setInitialize] = React.useState<boolean>(false);
-    const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
-
-    const sequenceRef = React.useRef<Tone.Sequence | null>(null);
     const [lamps, setLamps] = React.useState<number | null>(null);
+    const sequenceRef = React.useRef<Tone.Sequence | null>(null);
 
-    // set initial BPM, with validation
-    // I might want to store personal BPM default for users later, hence this logic.
-    // If I choose not to, it can be easily removed, and does not affect anything atm.
-    //
-    // Also, I store bpm in 2 places because rendering can't access Tone.Transport.bpm.value
-    React.useEffect(() => {
-        const zodSaysHello = BPMValidator.safeParse(Math.round(default_BPM));
-        if (!zodSaysHello.success) {
-            setBpm(120);
-            Tone.Transport.bpm.value = 120;
-        } else {
-            setBpm(zodSaysHello.data);
-            Tone.Transport.bpm.value = zodSaysHello.data;
-        }
-    }, []);
+    const numberOfSteps = useNumberOfStepsStore((state) => state.numberOfSteps);
+    const setNumberOfSteps = useNumberOfStepsStore((state) => state.setNumberOfSteps);
+    const meter = useMeterStore((state) => state.meter);
+    const setMeter = useMeterStore((state) => state.setMeter);
+    const bpm = useBPMStore((state) => state.bpm);
+    const setBpm = useBPMStore((state) => state.setBpm);
+    const grid = useGridStore((state) => state.grid);
+    const setGrid = useGridStore((state) => state.setGrid);
+    const isPlaying = useIsPlayingStore((state) => state.isPlaying);
+    const setIsPlaying = useIsPlayingStore((state) => state.setIsPlaying);
 
     // when user switches kits, load his kit of choice
     React.useEffect(() => {
@@ -94,10 +52,6 @@ export default function Home() {
         }
     }, [chosenKit]);
 
-    // React.useEffect(() => {
-    //     setInitialize(true);
-    // }, [drumkit, numberOfSteps]);
-
     // create an empty sequencer grid
     React.useEffect(() => {
         if (drumkit) {
@@ -107,7 +61,7 @@ export default function Home() {
                 setGrid(emptyGrid);
             }
         }
-    }, [drumkit]);
+    }, [drumkit, setGrid]);
 
     // function to program the beat
     const toggleNote = (x: number, y: number) => {
@@ -266,66 +220,21 @@ export default function Home() {
                         setBpm(parseInt(item.bpm));
                         setGrid(JSON.parse(item.grid));
                     } catch (e) {
-                        console.log("NOPE SORRY");
+                        console.log("Error: Failed to setStates");
                     }
                 } else {
-                    console.log("Failed to find the 4 in item");
+                    console.log("Error: Failed to find all 4 variables in 'item'");
                 }
             } catch (e) {
-                console.log("item is false");
+                console.log("Error: 'item' is false");
             }
         }
-    };
-
-    // delete all saved patterns in local storage
-    const nuclearPurge = () => {
-        default_Patterns.map((x) => {
-            const storageKey: string = "BeateRRR_" + "Pattern" + x.toString();
-            localStorage.removeItem(storageKey);
-        });
-    };
-
-    const handleDemo = () => {
-        loadDemoPattern(demo1, 1);
-        loadDemoPattern(demo2, 2);
-        loadDemoPattern(demo3, 3);
-        loadDemoPattern(demo4, 4);
-        loadDemoPattern(demo5, 5);
-        loadDemoPattern(demo6, 6);
-        handleLoadPattern(1);
     };
 
     // finally, RENDERING
     return (
         <>
-            {/* <Header /> */}
-            {/* Header starts */}
-            <div className="header">
-                <span className="logo">
-                    <Image src="/icons/icon.png" width={35} height={35} alt="Drummer"></Image>
-                    <h1 className="text-3xl font-bold">BANDMATE</h1>
-                    <Button
-                        variant="ghost"
-                        className="w-[4rem] h-[4rem] opacity-0 hover:opacity-100 bg-opacity-90 line-through"
-                        onClick={nuclearPurge}
-                    >
-                        <Image src="https://i.imgur.com/mgifSOk.png" width={50} height={50} alt=""></Image>
-                    </Button>
-                </span>
-                <span className="logo">
-                    {/* {window.location.pathname === "/about" ? (
-                        <></>
-                    ) : (
-                        <Link href="/about">
-                            <button className="button main-button">About</button>
-                        </Link>
-                    )} */}
-                    <button className="button main-button" onClick={handleDemo}>
-                        DEMO
-                    </button>
-                </span>
-            </div>
-            {/* Header ends */}
+            <Header />
             {grid ? (
                 grid.map((x, indexOf) => {
                     return (

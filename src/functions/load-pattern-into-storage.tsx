@@ -1,4 +1,4 @@
-import { Pattern } from "@/app/page";
+import { Pattern } from "@/data/interfaces";
 
 export default function loadDemoPattern(pattern: Pattern, number: number) {
     if (!pattern) return;

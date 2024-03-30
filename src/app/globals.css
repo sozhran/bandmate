@@ -76,10 +76,14 @@ body {
     margin: 3px;
 }
 
+/* .main-button:hover {
+    background-color: var(--button-color-hover);
+} */
+
 .savepattern {
     width: 5rem;
     height: 2.5rem;
-    margin: 3px;
+    margin: 2px;
 }
 
 .saved-patterns {
@@ -87,7 +91,7 @@ body {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    gap: 5px;
+    gap: 0px;
     margin-left: var(--margin-general);
 }
 
@@ -106,6 +110,10 @@ body {
 
 .red {
     background-color: red;
+}
+
+.transparent {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .note {
@@ -131,8 +139,12 @@ body {
 
 .inactive {
     /* background-color: var(--color1); */
-    background-color: grey;
+    background-color: #808080;
     transition: background-color 0.1s;
+}
+
+.inactive:hover {
+    background-color: #646464;
 }
 
 .active-1 {
@@ -151,6 +163,13 @@ body {
     /* background-color: var(--color2); */
     background-color: #b91c1c;
     transition: background-color 0.1s;
+}
+
+.active-1:hover,
+.active-2:hover,
+.active-3:hover {
+    font-weight: 500;
+    font-size: 125%;
 }
 
 .note-controls {

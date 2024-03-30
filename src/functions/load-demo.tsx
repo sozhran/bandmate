@@ -65,7 +65,7 @@ export default function Demo() {
         setIsPlaying(true);
     };
     return (
-        <button className="button main-button" onClick={handleDemo}>
+        <button className="button main-button hover:bg-gray-700" onClick={handleDemo}>
             DEMO
         </button>
     );

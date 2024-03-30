@@ -197,6 +197,17 @@ export default function Home() {
         localStorage.setItem(patternKey, JSON.stringify(patternValue));
     };
 
+    const checkIfInLocalStorage = (id: number) => {
+        const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
+        if (typeof window !== undefined) {
+            if (localStorage.getItem(patternKey)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
     // load saved pattern from localStorage
     const handleLoadPattern = (id: number) => {
         const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
@@ -238,7 +249,7 @@ export default function Home() {
                                 {x.rowButtonName}
                             </button>
                             <button
-                                className="button cell-size w-[2rem] min-w-[1.5rem]"
+                                className="button cell-size w-[2rem] min-w-[1.5rem] hover:bg-gray-700"
                                 onClick={() => clearRow(indexOf)}
                             >
                                 X
@@ -291,15 +302,18 @@ export default function Home() {
             </div>
             <div className="controls">
                 <button
-                    className={"button main-button font-bold min-w-[3.5rem]" + (isPlaying ? " text-amber-600" : "")}
+                    className={
+                        "button main-button font-bold min-w-[3.5rem] hover:bg-gray-700" +
+                        (isPlaying ? " text-amber-600" : "")
+                    }
                     onClick={handlePlayButton}
                 >
                     {isPlaying ? "STOP" : "PLAY"}
                 </button>
-                <button className="button main-button min-w-[3.5rem]" onClick={handleMeterChange}>
+                <button className="button main-button min-w-[3.5rem] hover:bg-gray-700" onClick={handleMeterChange}>
                     {meter === "quadruple" ? "4/4" : "3/4"}
                 </button>
-                <button className="button main-button min-w-[3.5rem]" onClick={clearGrid}>
+                <button className="button main-button min-w-[3.5rem] hover:bg-gray-700" onClick={clearGrid}>
                     CLEAR
                 </button>
                 {/* <button
@@ -319,7 +333,7 @@ export default function Home() {
                 <span className="note-controls">
                     <button
                         className={
-                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem]" +
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
                             (dynamics === "1" ? " text-amber-950 font-bold" : "")
                         }
                         onClick={() => setDynamics("1")}
@@ -328,7 +342,7 @@ export default function Home() {
                     </button>
                     <button
                         className={
-                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem]" +
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
                             (dynamics === "2" ? " text-amber-600 font-bold" : "")
                         }
                         onClick={() => setDynamics("2")}
@@ -337,7 +351,7 @@ export default function Home() {
                     </button>
                     <button
                         className={
-                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem]" +
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
                             (dynamics === "3" ? " text-red-700 font-bold" : "")
                         }
                         onClick={() => setDynamics("3")}
@@ -346,7 +360,7 @@ export default function Home() {
                     </button>
                 </span>
                 <Slider
-                    className="w-[300px] min-w-[120px] bg-slate-700 ml-[10px] mr-[10px]"
+                    className="w-[300px] min-w-[120px] bg-slate-700 ml-[10px] mr-[10px] hover:bg-gray-600"
                     value={[bpm]}
                     defaultValue={[120]}
                     min={30}
@@ -359,7 +373,7 @@ export default function Home() {
                     BPM: {bpm ? bpm : <></>}
                 </label>
                 <Slider
-                    className="w-[150px] min-w-[60px] bg-slate-700 ml-[10px] mr-[10px]"
+                    className="w-[150px] min-w-[60px] bg-slate-700 ml-[10px] mr-[10px] hover:bg-gray-600"
                     value={[numberOfSteps]}
                     defaultValue={[16]}
                     min={4}
@@ -376,12 +390,21 @@ export default function Home() {
                     return (
                         <div key={"pattern-row-" + `${x}`}>
                             <p>
-                                <button className="button savepattern" onClick={() => handleSavePattern(x)}>
+                                <button
+                                    className="button savepattern hover:bg-gray-700"
+                                    onClick={() => handleSavePattern(x)}
+                                >
                                     Save <b>({x})</b>
                                 </button>
                             </p>
                             <p>
-                                <button className="button savepattern" onClick={() => handleLoadPattern(x)}>
+                                <button
+                                    className={
+                                        "button savepattern hover:bg-gray-700"
+                                        // + (checkIfInLocalStorage(x) === true ? "" : " transparent")
+                                    }
+                                    onClick={() => handleLoadPattern(x)}
+                                >
                                     Load <b>({x})</b>
                                 </button>
                             </p>

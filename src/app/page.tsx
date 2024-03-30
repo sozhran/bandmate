@@ -198,11 +198,13 @@ export default function Home() {
     };
 
     const checkIfInLocalStorage = (id: number) => {
-        const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
-        if (localStorage.getItem(patternKey)) {
-            return true;
-        } else {
-            return false;
+        if (typeof window !== undefined) {
+            const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
+            if (localStorage.getItem(patternKey)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     };
 

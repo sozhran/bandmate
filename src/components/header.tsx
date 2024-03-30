@@ -5,19 +5,9 @@ import { default_Patterns } from "@/data/global-defaults";
 import Demo from "@/functions/load-demo";
 import createEmptyGrid from "@/functions/create-empty-grid";
 import { useDrumkitStore } from "@/data/global-state-store";
+import useNuclearButton from "@/functions/nuclear";
 
 export default function Header() {
-    // delete all saved patterns in local storage
-    const useNuclearButton = () => {
-        const drumkit = useDrumkitStore((state) => state.drumkit);
-
-        default_Patterns.map((x) => {
-            const storageKey: string = "BeateRRR_" + "Pattern" + x.toString();
-            localStorage.removeItem(storageKey);
-        });
-        createEmptyGrid(drumkit, 32);
-    };
-
     return (
         <div className="header">
             <span className="logo">

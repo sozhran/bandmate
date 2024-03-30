@@ -6,8 +6,11 @@ I like to play guitar, and try to practice when I can. Playing along to a monoto
 I decided to build my own. I thought it'd be a nice challenge:
 
 I have no idea how to do it - ✅
+
 I'm personally invested and want to use the app - ✅
+
 I have experience with similar apps, and rather than just replicate them, I actually have new ideas I want to try - ✅
+
 
 This project is a result.
 

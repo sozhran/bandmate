@@ -198,8 +198,8 @@ export default function Home() {
     };
 
     const checkIfInLocalStorage = (id: number) => {
+        const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
         if (typeof window !== undefined) {
-            const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
             if (localStorage.getItem(patternKey)) {
                 return true;
             } else {
@@ -400,8 +400,8 @@ export default function Home() {
                             <p>
                                 <button
                                     className={
-                                        "button savepattern hover:bg-gray-700" +
-                                        (checkIfInLocalStorage(x) === true ? "" : " transparent")
+                                        "button savepattern hover:bg-gray-700"
+                                        // + (checkIfInLocalStorage(x) === true ? "" : " transparent")
                                     }
                                     onClick={() => handleLoadPattern(x)}
                                 >

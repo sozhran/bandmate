@@ -6,8 +6,12 @@ import Demo from "@/functions/load-demo";
 import createEmptyGrid from "@/functions/create-empty-grid";
 import { useDrumkitStore } from "@/data/global-state-store";
 import useNuclearButton from "@/functions/nuclear";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+    const location = usePathname();
+
     return (
         <div className="header">
             <span className="logo">
@@ -22,13 +26,13 @@ export default function Header() {
                 </Button>
             </span>
             <span className="logo">
-                {/* {window.location.pathname === "/about" ? (
+                {location === "/about" ? (
                     <></>
                 ) : (
                     <Link href="/about">
-                        <button className="button main-button">About</button>
+                        <button className="button main-button hover:bg-gray-700">About</button>
                     </Link>
-                )} */}
+                )}
                 <Demo />
             </span>
         </div>

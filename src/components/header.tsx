@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { default_Patterns } from "@/data/global-defaults";
 import Demo from "@/functions/load-demo";
 import createEmptyGrid from "@/functions/create-empty-grid";
-import { useDrumkitStore } from "@/data/global-state-store";
+import UploadFile from "@/components/upload-file";
 import useNuclearButton from "@/functions/nuclear";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -26,13 +26,15 @@ export default function Header() {
                 </Button>
             </span>
             <span className="logo">
-                {location === "/about" ? (
+                {/* <button className="button main-button hover:bg-gray-700">Save</button> */}
+                <UploadFile />
+                {/* {location === "/about" ? (
                     <></>
                 ) : (
                     <Link href="/about">
                         <button className="button main-button hover:bg-gray-700">About</button>
                     </Link>
-                )}
+                )} */}
                 <Demo />
             </span>
         </div>

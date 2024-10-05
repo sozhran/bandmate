@@ -20,3 +20,21 @@ export interface Drumkit {
     name: string;
     buttonName: string;
 }
+
+// Battleplan
+//
+// TOP PRIORITY
+//
+// Dropdown with N presets
+// Make these presets
+// Replace drum sounds (1-2 kits)
+// Remove the Local Storage stuff
+//
+// NICE TO HAVE
+//
+// Save preset in a file
+// Load preset from a file
+// Drag-drop preset
+// 'About' page (last priority really)
+
+// Songs for presets: Custard pie, AC/DC beat, skank, double bass PM beat, something 5/4 and 7/4, floor tom beat, Hunger style blastbeat, Breed, SLTS, Ska-P beat?, Rock And Roll

@@ -54,4 +54,5 @@ export const kitPreloader = {
     tom4_1: require("@/data/kits/default/mp3/tom4_1.mp3"),
     tom4_2: require("@/data/kits/default/mp3/tom4_2.mp3"),
     tom4_3: require("@/data/kits/default/mp3/tom4_3.mp3"),
+    crash_extra: require("@/data/kits/extra/crash_extra.mp3"),
 };

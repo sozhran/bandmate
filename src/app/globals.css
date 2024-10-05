@@ -21,6 +21,13 @@ body {
     font-size: var(--font-size);
 }
 
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-start;
+}
+
 .logo {
     display: flex;
     flex-direction: row;
@@ -172,7 +179,7 @@ body {
     font-size: 125%;
 }
 
-.note-controls {
+.controls-group {
     display: flex;
     flex-direction: row;
     gap: 0px;
@@ -188,6 +195,26 @@ body {
     margin-left: var(--margin-general);
     margin: 20px;
     gap: 8px;
+}
+
+.about-full-container {
+    margin: 50px;
+    width: 600px;
+    min-width: 600px;
+}
+
+.about-left {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    border: 3px solid purple;
+    min-height: 100px;
+}
+
+.about-right {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    border: 3px solid purple;
+    min-height: 100px;
 }
 
 .Slider {

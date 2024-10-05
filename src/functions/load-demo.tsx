@@ -33,17 +33,17 @@ export default function Demo() {
             try {
                 const item = JSON.parse(storageItem);
 
-                if ("steps" && "meter" && "bpm" && "grid" in item) {
-                    try {
-                        setNumberOfSteps(parseInt(item.steps));
-                        setMeter(item.meter);
-                        setBpm(parseInt(item.bpm));
-                        setGrid(JSON.parse(item.grid));
-                    } catch (e) {
-                        console.log("Error: Failed to setStates");
-                    }
-                } else {
+                if (!item.steps || !item.meter || !item.bpm || !item.grid) {
                     console.log("Error: Failed to find all 4 variables in 'item'");
+                    return;
+                }
+                try {
+                    setNumberOfSteps(parseInt(item.steps));
+                    setMeter(item.meter);
+                    setBpm(parseInt(item.bpm));
+                    setGrid(JSON.parse(item.grid));
+                } catch (e) {
+                    console.log("Error: Failed to setStates");
                 }
             } catch (e) {
                 console.log("Error: 'item' is false");

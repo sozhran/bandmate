@@ -5,7 +5,7 @@ import * as Tone from "tone";
 import { default_Patterns } from "@/data/global-defaults";
 import createEmptyGrid from "@/functions/create-empty-grid";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
-import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green/green";
+import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green_complete/green_complete";
 import {
     useNumberOfStepsStore,
     useMeterStore,
@@ -21,11 +21,12 @@ export default function Home() {
     const [chosenKit, setChosenKit] = React.useState<"default" | "green">("default");
     const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
     const [lamps, setLamps] = React.useState<number | null>(null);
+    const [loopCounter, setLoopCounter] = React.useState<number>(0);
+    const [addExtraCrash, setAddExtraCrash] = React.useState<2 | 4 | null>(null);
+    const [addExtraFill, setAddExtraFill] = React.useState<2 | 4 | null>(null);
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
 
-    // Man, is it verbose as hell, and doesn't look too nice importing a ton of same stuff in different places.
-    // But I was eager to try Zustand, and it's working, so I'll leave it for now.
-    // Will likely replace with a reducer later.
+    // Stores
     const drumkit = useDrumkitStore((state) => state.drumkit);
     const setDrumkit = useDrumkitStore((state) => state.setDrumkit);
     const numberOfSteps = useNumberOfStepsStore((state) => state.numberOfSteps);
@@ -67,7 +68,7 @@ export default function Home() {
         }
     }, [drumkit, setGrid]);
 
-    // function to save input when user is programming a beat
+    // save input while user is programming a beat
     const toggleNote = (x: number, y: number) => {
         if (grid) {
             const changedGrid = [...grid];
@@ -89,7 +90,7 @@ export default function Home() {
         }
     };
 
-    // taking the grid and preparing the sequence for playback
+    // take the grid and prepare the sequence for playback
     // renews every time the grid is changed
     React.useEffect(() => {
         if (!grid || !player) {
@@ -104,17 +105,35 @@ export default function Home() {
         sequenceRef.current = new Tone.Sequence(
             (time, step) => {
                 setLamps(step);
-                grid.forEach((kitElement) => {
-                    if (kitElement.rowSteps[step] !== null) {
-                        player.player(`${kitElement.rowName}` + "_" + `${kitElement.rowSteps[step]}`).start(time);
+
+                if (step === 0) {
+                    setLoopCounter(loopCounter + 1);
+                    console.log(loopCounter);
+                }
+
+                if (addExtraCrash && loopCounter % addExtraCrash === 0 && step === 0) {
+                    player.player("crash_extra").stop();
+                    player.player("crash_extra").start();
+                }
+
+                if (addExtraFill && loopCounter % addExtraFill === 0 && step > numberOfSteps - 4) {
+                    if (grid[0].rowSteps[step] !== null) {
+                        player.player(`${grid[0].rowName}` + "_" + `${grid[0].rowSteps[step]}`).start(time);
                     }
-                });
+                    player.player(`snare_2`).start(time);
+                } else {
+                    grid.forEach((kitElement) => {
+                        if (kitElement.rowSteps[step] !== null) {
+                            player.player(`${kitElement.rowName}` + "_" + `${kitElement.rowSteps[step]}`).start(time);
+                        }
+                    });
+                }
             },
             steps,
             "16n"
         );
         sequenceRef.current.start(0);
-    }, [numberOfSteps, grid, player]);
+    }, [numberOfSteps, grid, player, loopCounter, addExtraCrash, addExtraFill]);
 
     // play/stop functions
     const handlePlayButton = async () => {
@@ -127,16 +146,17 @@ export default function Home() {
             Tone.Transport.toggle();
             setIsPlaying(false);
             setLamps(null);
+            setLoopCounter(0);
         }
     };
 
-    // change the tempo via slider
+    // change the tempo
     const handleBPMChange = (values: number[]) => {
         setBpm(values[0]);
         Tone.Transport.bpm.value = values[0];
     };
 
-    // change the grid size (number of steps)
+    // change grid size (number of steps)
     const handleNumberOfStepsChange = (values: number[]) => {
         setNumberOfSteps(values[0]);
     };
@@ -153,7 +173,7 @@ export default function Home() {
         }
     };
 
-    // clear the gird
+    // clear the grid
     const clearGrid = () => {
         const emptyGrid = createEmptyGrid(drumkit, numberOfSteps);
         if (emptyGrid) {
@@ -166,8 +186,8 @@ export default function Home() {
         if (grid) {
             const changedGrid = [...grid];
 
-            const setOfNulls: ("1" | "2" | "3" | null)[] = [];
-            for (let i = 0; i < numberOfSteps; i++) {
+            const setOfNulls: null[] = [];
+            for (let i = 0; i < 32; i++) {
                 setOfNulls.push(null);
             }
             changedGrid.map((row, index) => {
@@ -197,17 +217,6 @@ export default function Home() {
         localStorage.setItem(patternKey, JSON.stringify(patternValue));
     };
 
-    const checkIfInLocalStorage = (id: number) => {
-        const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
-        if (typeof window !== undefined) {
-            if (localStorage.getItem(patternKey)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    };
-
     // load saved pattern from localStorage
     const handleLoadPattern = (id: number) => {
         const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
@@ -216,17 +225,17 @@ export default function Home() {
             try {
                 const item = JSON.parse(storageItem);
 
-                if ("steps" && "meter" && "bpm" && "grid" in item) {
-                    try {
-                        setNumberOfSteps(parseInt(item.steps));
-                        setMeter(item.meter);
-                        setBpm(parseInt(item.bpm));
-                        setGrid(JSON.parse(item.grid));
-                    } catch (e) {
-                        console.log("Error: Failed to setStates");
-                    }
-                } else {
+                if (!item.steps || !item.meter || !item.bpm || !item.grid) {
                     console.log("Error: Failed to find all 4 variables in 'item'");
+                    return;
+                }
+                try {
+                    setNumberOfSteps(parseInt(item.steps));
+                    setMeter(item.meter);
+                    setBpm(parseInt(item.bpm));
+                    setGrid(JSON.parse(item.grid));
+                } catch (e) {
+                    console.log("Error: Failed to setStates");
                 }
             } catch (e) {
                 console.log("Error: 'item' is false");
@@ -286,7 +295,7 @@ export default function Home() {
                     {[...Array(numberOfSteps)].map((_, i) => {
                         return (
                             <button
-                                key={"lamp-" + { i }}
+                                key={"lamp-" + i}
                                 data-step={i}
                                 className={
                                     "w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] justify-center items-center " +
@@ -294,7 +303,7 @@ export default function Home() {
                                     `${meter}`
                                 }
                             >
-                                <button className={"lamp" + " " + (lamps === i ? "red" : "")}></button>
+                                <span key={"lamp_" + i} className={"lamp" + " " + (lamps === i ? "red" : "")}></span>
                             </button>
                         );
                     })}
@@ -330,7 +339,7 @@ export default function Home() {
                 >
                     Green Kit
                 </button> */}
-                <span className="note-controls">
+                <span className="controls-group">
                     <button
                         className={
                             "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
@@ -399,10 +408,7 @@ export default function Home() {
                             </p>
                             <p>
                                 <button
-                                    className={
-                                        "button savepattern hover:bg-gray-700"
-                                        // + (checkIfInLocalStorage(x) === true ? "" : " transparent")
-                                    }
+                                    className={"button savepattern hover:bg-gray-700"}
                                     onClick={() => handleLoadPattern(x)}
                                 >
                                     Load <b>({x})</b>
@@ -411,6 +417,66 @@ export default function Home() {
                         </div>
                     );
                 })}
+                <span className="controls-group">
+                    <p>Add extra Crash</p>
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
+                            (addExtraCrash === null ? " text-amber-600 font-bold" : "")
+                        }
+                        onClick={() => setAddExtraCrash(null)}
+                    >
+                        Off
+                    </button>
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
+                            (addExtraCrash === 2 ? " text-amber-600 font-bold" : "")
+                        }
+                        onClick={() => setAddExtraCrash(2)}
+                    >
+                        Every 2 bars
+                    </button>
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
+                            (addExtraCrash === 4 ? " text-red-600 font-bold" : "")
+                        }
+                        onClick={() => setAddExtraCrash(4)}
+                    >
+                        Every 4 bars
+                    </button>
+                </span>
+                <span className="controls-group">
+                    <p>Add extra Fill</p>
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
+                            (addExtraFill === null ? " text-amber-600 font-bold" : "")
+                        }
+                        onClick={() => setAddExtraFill(null)}
+                    >
+                        Off
+                    </button>
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
+                            (addExtraFill === 2 ? " text-amber-600 font-bold" : "")
+                        }
+                        onClick={() => setAddExtraFill(2)}
+                    >
+                        Every 2 bars
+                    </button>
+                    <button
+                        className={
+                            "button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" +
+                            (addExtraFill === 4 ? " text-red-600 font-bold" : "")
+                        }
+                        onClick={() => setAddExtraFill(4)}
+                    >
+                        Every 4 bars
+                    </button>
+                </span>
             </div>
         </>
     );

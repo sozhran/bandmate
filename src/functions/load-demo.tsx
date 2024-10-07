@@ -5,13 +5,7 @@ import * as demo3 from "@/data/demo/pattern3.json";
 import * as demo4 from "@/data/demo/pattern4.json";
 // import * as demo5 from "@/data/demo/pattern5.json";
 // import * as demo6 from "@/data/demo/pattern6.json";
-import {
-    useNumberOfStepsStore,
-    useMeterStore,
-    useBPMStore,
-    useGridStore,
-    useIsPlayingStore,
-} from "@/data/global-state-store";
+import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore } from "@/data/global-state-store";
 import loadPatternIntoLocalStorage from "@/functions/load-pattern-into-storage";
 
 export default function Demo() {

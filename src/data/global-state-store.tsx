@@ -39,30 +39,30 @@ export interface IsPlayingState {
 
 export const useDrumkitStore = create<DrumkitState>()((set) => ({
     drumkit: null,
-    setDrumkit: (value) => set({ drumkit: value }),
+    setDrumkit: (value) => set({ drumkit: value })
 }));
 
 export const useNumberOfStepsStore = create<NumberOfStepsState>()((set) => ({
     numberOfSteps: default_Steps,
-    setNumberOfSteps: (value) => set({ numberOfSteps: value }),
+    setNumberOfSteps: (value) => set({ numberOfSteps: value })
 }));
 
 export const useMeterStore = create<MeterState>()((set) => ({
     meter: "quadruple",
-    setMeter: (value) => set({ meter: value }),
+    setMeter: (value) => set({ meter: value })
 }));
 
 export const useBPMStore = create<BPMState>()((set) => ({
     bpm: default_BPM,
-    setBpm: (value) => set({ bpm: value }),
+    setBpm: (value) => set({ bpm: value })
 }));
 
 export const useGridStore = create<GridState>()((set) => ({
     grid: null,
-    setGrid: (value) => set({ grid: value }),
+    setGrid: (value) => set({ grid: value })
 }));
 
 export const useIsPlayingStore = create<IsPlayingState>()((set) => ({
     isPlaying: false,
-    setIsPlaying: (value) => set({ isPlaying: value }),
+    setIsPlaying: (value) => set({ isPlaying: value })
 }));

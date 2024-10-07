@@ -1,20 +1,13 @@
 "use client";
 import * as React from "react";
-import { Slider } from "@/components/ui/slider";
 import * as Tone from "tone";
+import { Slider } from "@/components/ui/slider";
 import { default_Patterns } from "@/data/global-defaults";
-import createEmptyGrid from "@/functions/create-empty-grid";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { kit as kit_green, kitPreloader as kitPreloader_green } from "@/data/kits/green_complete/green_complete";
-import {
-    useNumberOfStepsStore,
-    useMeterStore,
-    useBPMStore,
-    useGridStore,
-    useIsPlayingStore,
-    useDrumkitStore,
-} from "@/data/global-state-store";
+import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore, useDrumkitStore } from "@/data/global-state-store";
 import Header from "@/components/header";
+import createEmptyGrid from "@/functions/create-empty-grid";
 
 export default function Home() {
     const [player, setPlayer] = React.useState<Tone.Players | null>(null);
@@ -22,8 +15,8 @@ export default function Home() {
     const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
     const [lamps, setLamps] = React.useState<number | null>(null);
     const [loopCounter, setLoopCounter] = React.useState<number>(0);
-    const [addExtraCrash, setAddExtraCrash] = React.useState<2 | 4 | null>(null);
-    const [addExtraFill, setAddExtraFill] = React.useState<2 | 4 | null>(null);
+    const [addExtraCrash, setAddExtraCrash] = React.useState<2 | 4 | 8 | null>(null);
+    const [addExtraFill, setAddExtraFill] = React.useState<2 | 4 | 8 | null>(null);
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
 
     // Stores
@@ -150,6 +143,11 @@ export default function Home() {
         }
     };
 
+    const playOnKey = (e: KeyboardEvent) => {
+        if (e.code === "Space") {
+            handlePlayButton;
+        }
+    };
     // change the tempo
     const handleBPMChange = (values: number[]) => {
         setBpm(values[0]);
@@ -204,14 +202,14 @@ export default function Home() {
         if (!grid) return;
         const patternKey: string = "BeateRRR_" + "Pattern" + id.toString();
         const patternSteps = numberOfSteps.toString();
-        const patternMeter = meter.toString();
+        const patternMeter = meter;
         const patternBPM = bpm.toString();
         const patternGrid = JSON.stringify(grid);
         const patternValue = {
             steps: patternSteps,
             meter: patternMeter,
             bpm: patternBPM,
-            grid: patternGrid,
+            grid: patternGrid
         };
 
         localStorage.setItem(patternKey, JSON.stringify(patternValue));
@@ -243,6 +241,8 @@ export default function Home() {
         }
     };
 
+    document.addEventListener("keyup", playOnKey);
+
     // finally, RENDERING
     return (
         <>
@@ -257,10 +257,7 @@ export default function Home() {
                             >
                                 {x.rowButtonName}
                             </button>
-                            <button
-                                className="button cell-size w-[2rem] min-w-[1.5rem] hover:bg-gray-700"
-                                onClick={() => clearRow(indexOf)}
-                            >
+                            <button className="button cell-size w-[2rem] min-w-[1.5rem] hover:bg-gray-700" onClick={() => clearRow(indexOf)}>
                                 X
                             </button>
                             <span className="flex align-center">
@@ -269,9 +266,7 @@ export default function Home() {
                                         <button
                                             key={i}
                                             className={
-                                                (x.rowSteps[i] !== null
-                                                    ? "note active-" + `${x.rowSteps[i]}`
-                                                    : "note inactive") +
+                                                (x.rowSteps[i] !== null ? "note active-" + `${x.rowSteps[i]}` : "note inactive") +
                                                 " " +
                                                 `${meter}`
                                             }
@@ -297,11 +292,7 @@ export default function Home() {
                             <button
                                 key={"lamp-" + i}
                                 data-step={i}
-                                className={
-                                    "w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] justify-center items-center " +
-                                    " " +
-                                    `${meter}`
-                                }
+                                className={"w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] justify-center items-center " + " " + `${meter}`}
                             >
                                 <span key={"lamp_" + i} className={"lamp" + " " + (lamps === i ? "red" : "")}></span>
                             </button>
@@ -311,10 +302,7 @@ export default function Home() {
             </div>
             <div className="controls">
                 <button
-                    className={
-                        "button main-button font-bold min-w-[3.5rem] hover:bg-gray-700" +
-                        (isPlaying ? " text-amber-600" : "")
-                    }
+                    className={"button main-button font-bold min-w-[3.5rem] hover:bg-gray-700" + (isPlaying ? " text-amber-600" : "")}
                     onClick={handlePlayButton}
                 >
                     {isPlaying ? "STOP" : "PLAY"}
@@ -399,18 +387,12 @@ export default function Home() {
                     return (
                         <div key={"pattern-row-" + `${x}`}>
                             <p>
-                                <button
-                                    className="button savepattern hover:bg-gray-700"
-                                    onClick={() => handleSavePattern(x)}
-                                >
+                                <button className="button savepattern hover:bg-gray-700" onClick={() => handleSavePattern(x)}>
                                     Save <b>({x})</b>
                                 </button>
                             </p>
                             <p>
-                                <button
-                                    className={"button savepattern hover:bg-gray-700"}
-                                    onClick={() => handleLoadPattern(x)}
-                                >
+                                <button className={"button savepattern hover:bg-gray-700"} onClick={() => handleLoadPattern(x)}>
                                     Load <b>({x})</b>
                                 </button>
                             </p>

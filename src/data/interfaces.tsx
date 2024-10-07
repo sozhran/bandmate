@@ -9,6 +9,14 @@ export type Step = z.infer<typeof StepValidator>;
 
 export type Grid = { rowName: string; rowButtonName: string; rowSteps: ("1" | "2" | "3" | null)[] }[];
 
+export interface Preset {
+    presetName: string;
+    steps: Step;
+    meter: "triple" | "quadruple";
+    bpm: BPM;
+    grid: Grid;
+}
+
 export interface Pattern {
     steps: string;
     meter: string;
@@ -29,11 +37,11 @@ export interface Drumkit {
 // Make these presets
 // Replace drum sounds (1-2 kits)
 // Remove the Local Storage stuff
+// Re-do layout of buttons below
 //
 // NICE TO HAVE
 //
 // Save preset in a file
-// Load preset from a file
 // Drag-drop preset
 // 'About' page (last priority really)
 

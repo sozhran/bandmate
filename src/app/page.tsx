@@ -198,21 +198,6 @@ export default function Home() {
         }
     }
 
-    function handleHotKeys(e: KeyboardEvent) {
-        if (e.key === "Space" || "Enter") {
-            handlePlayButton;
-        }
-        if (e.key === "1") {
-            setDynamics("1");
-        }
-        if (e.key === "2") {
-            setDynamics("2");
-        }
-        if (e.key === "3") {
-            setDynamics("3");
-        }
-    }
-
     // save current beat to localStorage
     const handleSavePattern = (id: number) => {
         if (!grid) return;
@@ -257,7 +242,27 @@ export default function Home() {
         }
     };
 
-    document.addEventListener("keyup", handleHotKeys);
+    function handleHotKeys(e: KeyboardEvent) {
+        if (e.key === "x" || "X") {
+            handlePlayButton();
+        }
+        if (e.key === "1") {
+            setDynamics("1");
+        }
+        if (e.key === "2") {
+            setDynamics("2");
+        }
+        if (e.key === "3") {
+            setDynamics("3");
+        }
+    }
+
+    React.useEffect(() => {
+        window.addEventListener("keyup", handleHotKeys);
+        return () => {
+            window.removeEventListener("keyup", handleHotKeys);
+        };
+    });
 
     // finally, RENDERING
     return (

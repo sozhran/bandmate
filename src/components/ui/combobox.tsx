@@ -23,16 +23,19 @@ export default function Combobox() {
     const setBpm = useBPMStore((state) => state.setBpm);
     const grid = useGridStore((state) => state.grid);
     const setGrid = useGridStore((state) => state.setGrid);
-    const isPlaying = useIsPlayingStore((state) => state.isPlaying);
-    const setIsPlaying = useIsPlayingStore((state) => state.setIsPlaying);
+
+    const handleBPMChange = (value: number) => {
+        setBpm(value);
+        Tone.Transport.bpm.value = value;
+    };
 
     const loadPreset = (preset: any) => {
         if (preset && preset.steps && preset.meter && preset.bpm && preset.grid) {
             try {
                 setNumberOfSteps(preset.steps);
                 setMeter(preset.meter);
-                setBpm(preset.bpm);
                 setGrid(preset.grid);
+                handleBPMChange(preset.bpm);
             } catch (e) {
                 console.log("Error: couldn't load parts of preset");
             }
@@ -48,7 +51,7 @@ export default function Combobox() {
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[500px] p-0">
                 <Command>
                     <CommandInput placeholder="Search framework..." />
                     <CommandList>

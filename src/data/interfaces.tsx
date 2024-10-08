@@ -20,7 +20,7 @@ export interface Preset {
 export interface Pattern {
     steps: string;
     meter: string;
-    bpm: string;
+    bpm: BPM;
     grid: string;
 }
 
@@ -45,4 +45,5 @@ export interface Drumkit {
 // Drag-drop preset
 // 'About' page (last priority really)
 
-// Songs for presets: Custard pie, AC/DC beat, skank, double bass PM beat, something 5/4 and 7/4, floor tom beat, Hunger style blastbeat, Breed, SLTS, Ska-P beat?, Rock And Roll
+// Songs for presets: double bass PM beat, something 5/4 and 7/4, floor tom beat, Ska-P beat?, Rock And Roll
+// Nirvana - Scentless Apprentice, Hairspray Queen ,  + soad? Them Bones, Dam That River, there was something else, D-beat, Tool - Vicarious, The Pot,

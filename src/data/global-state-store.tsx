@@ -22,7 +22,7 @@ export interface MeterState {
 
 export interface BPMState {
     bpm: BPM;
-    setBpm: (numberOfSteps: Step) => void;
+    setBpm: (bpm: BPM) => void;
 }
 
 export interface GridState {

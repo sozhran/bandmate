@@ -45,27 +45,24 @@ export default function Combobox() {
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" role="combobox" aria-expanded={open} className="w-[200px] justify-between">
+                <Button variant="outline" role="combobox" aria-expanded={open} className="w-[320px] justify-between">
                     {value ? value : "Select preset..."}
                     {/* {value ? frameworks.find((framework) => framework.value === value)?.label : "Select preset..."} */}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[500px] p-0">
+            <PopoverContent className="w-[480px] p-0">
                 <Command>
-                    <CommandInput placeholder="Search framework..." />
+                    <CommandInput placeholder="Search presets..." />
                     <CommandList>
-                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandEmpty>No preset found.</CommandEmpty>
                         <CommandGroup>
                             {presets.map((preset) => (
                                 <CommandItem
                                     key={preset.presetName}
                                     value={preset.presetName}
                                     onSelect={(currentValue) => {
-                                        // const getPreset = presets.find((x) => x.presetName === currentValue);
-                                        // if (getPreset) {
                                         loadPreset(preset);
-                                        // }
                                         setValue(currentValue === value ? "" : currentValue);
                                         setOpen(false);
                                     }}

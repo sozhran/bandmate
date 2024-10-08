@@ -1039,62 +1039,62 @@ export const presets = [
         addCrash: null,
         addFill: null,
         grid: [
-            { rowName: "kick", rowButtonName: "Kick", rowSteps: ["3", null, "2", null, "2", null, "2", null, "3", null, "2", null, "2", null, "2", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-            { rowName: "snare", rowButtonName: "Snare", rowSteps: [null, "1", null, "1", null, "1", null, "1", null, "1", null, "1", null, "1", null, "1", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { rowName: "kick", rowButtonName: "Kick", rowSteps: ["3", null, "2", null, "2", null, "2", null, "3", null, "2", null, "2", null, "2", null] },
+            { rowName: "snare", rowButtonName: "Snare", rowSteps: [null, "1", null, "1", null, "1", null, "1", null, "1", null, "1", null, "1", null, "1"] },
             {
                 rowName: "hihat_closed",
                 rowButtonName: "Hi-Hat (closed)",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "hihat_open",
                 rowButtonName: "Hi-Hat (open)",
-                rowSteps: ["3", null, "1", null, "3", null, "1", null, "3", null, "1", null, "3", null, "1", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: ["3", null, "1", null, "3", null, "1", null, "3", null, "1", null, "3", null, "1", null]
             },
             {
                 rowName: "ride",
                 rowButtonName: "Ride",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "ride_bell",
                 rowButtonName: "Ride (bell)",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "crash1",
                 rowButtonName: "Crash #1",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "crash2",
                 rowButtonName: "Crash #2",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "splash",
                 rowButtonName: "Splash",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "tom1",
                 rowButtonName: "Tom #1",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "tom2",
                 rowButtonName: "Tom #2",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "tom3",
                 rowButtonName: "Tom #3",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             },
             {
                 rowName: "tom4",
                 rowButtonName: "Tom #4",
-                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+                rowSteps: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
             }
         ]
     },

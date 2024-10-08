@@ -2,15 +2,8 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Combobox from "./ui/combobox";
-import { default_Patterns } from "@/data/global-defaults";
-// import Demo from "@/functions/load-demo";
-import createEmptyGrid from "@/functions/create-empty-grid";
 import UploadFile from "@/components/upload-file";
 import useNuclearButton from "@/functions/nuclear";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { presets } from "@/data/presets";
-import { Preset } from "@/data/interfaces";
 
 export default function Header() {
     // const location = usePathname();
@@ -28,13 +21,6 @@ export default function Header() {
                 <Combobox />
                 {/* <button className="button main-button hover:bg-gray-700">Save</button> */}
                 {/* <UploadFile /> */}
-                {/* {location === "/about" ? (
-                    <></>
-                ) : (
-                    <Link href="/about">
-                        <button className="button main-button hover:bg-gray-700">About</button>
-                    </Link>
-                )} */}
             </span>
         </div>
     );

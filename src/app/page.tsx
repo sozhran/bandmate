@@ -213,8 +213,6 @@ export default function Home() {
         }
     }
 
-    document.addEventListener("keyup", handleHotKeys);
-
     // save current beat to localStorage
     const handleSavePattern = (id: number) => {
         if (!grid) return;
@@ -258,6 +256,8 @@ export default function Home() {
             console.log("Error: 'item' is false");
         }
     };
+
+    document.addEventListener("keyup", handleHotKeys);
 
     // finally, RENDERING
     return (
@@ -355,29 +355,41 @@ export default function Home() {
                         </div>
                     );
                 })}
-                <span className="controls-group">
-                    <p>Add extra Crash</p>
-                    <button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraCrash(null)}>
-                        Off
-                    </button>
-                    <button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraCrash(2)}>
-                        Every 2 bars
-                    </button>
-                    <button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraCrash(4)}>
-                        Every 4 bars
-                    </button>
-                </span>
-                <span className="controls-group">
-                    <p>Add extra Fill</p>
-                    <button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraFill(null)}>
-                        Off
-                    </button>
-                    <button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraFill(2)}>
-                        Every 2 bars
-                    </button>
-                    <button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraFill(4)}>
-                        Every 4 bars
-                    </button>
+                <span className="extra-controls-table">
+                    <span className="extra-controls-row">
+                        <button className="extra-control w-36" disabled>
+                            Add accent
+                        </button>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraCrash(null)}>
+                            Off
+                        </button>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraCrash(2)}>
+                            Every 2 bars
+                        </button>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraCrash(4)}>
+                            Every 4 bars
+                        </button>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraCrash(8)}>
+                            Every 8 bars
+                        </button>
+                    </span>
+                    <span className="extra-controls-row">
+                        <button className="extra-control w-36" disabled>
+                            <p>Add fill</p>
+                        </button>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraFill(null)}>
+                            Off
+                        </button>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraFill(2)}>
+                            Every 2 bars
+                        </button>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraFill(4)}>
+                            Every 4 bars
+                        </button>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraFill(8)}>
+                            Every 8 bars
+                        </button>
+                    </span>
                 </span>
             </div>
         </>

@@ -11,7 +11,7 @@ export const kit = [
     { name: "tom1", buttonName: "Tom #1" },
     { name: "tom2", buttonName: "Tom #2" },
     { name: "tom3", buttonName: "Tom #3" },
-    { name: "tom4", buttonName: "Tom #4" },
+    { name: "tom4", buttonName: "Tom #4" }
 ];
 
 export const kitPreloader = {
@@ -54,4 +54,5 @@ export const kitPreloader = {
     tom4_1: require("@/data/kits/default/mp3/tom4_1.mp3"),
     tom4_2: require("@/data/kits/default/mp3/tom4_2.mp3"),
     tom4_3: require("@/data/kits/default/mp3/tom4_3.mp3"),
+    crash_extra: require("@/data/kits/extra/crash_extra.mp3")
 };

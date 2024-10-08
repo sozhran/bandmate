@@ -9,10 +9,18 @@ export type Step = z.infer<typeof StepValidator>;
 
 export type Grid = { rowName: string; rowButtonName: string; rowSteps: ("1" | "2" | "3" | null)[] }[];
 
+export interface Preset {
+    presetName: string;
+    steps: Step;
+    meter: "triple" | "quadruple";
+    bpm: BPM;
+    grid: Grid;
+}
+
 export interface Pattern {
     steps: string;
     meter: string;
-    bpm: string;
+    bpm: BPM;
     grid: string;
 }
 
@@ -20,3 +28,22 @@ export interface Drumkit {
     name: string;
     buttonName: string;
 }
+
+// Battleplan
+//
+// TOP PRIORITY
+//
+// Dropdown with N presets
+// Make these presets
+// Replace drum sounds (1-2 kits)
+// Remove the Local Storage stuff
+// Re-do layout of buttons below
+//
+// NICE TO HAVE
+//
+// Save preset in a file
+// Drag-drop preset
+// 'About' page (last priority really)
+
+// Songs for presets: double bass PM beat, something 5/4 and 7/4, floor tom beat, Ska-P beat?, Rock And Roll
+// Nirvana - Scentless Apprentice, Hairspray Queen ,  + soad? Them Bones, Dam That River, there was something else, D-beat, Tool - Vicarious, The Pot,

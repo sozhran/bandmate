@@ -29,13 +29,12 @@ Right now Bandmate has all basic functionality of a drum machine: it has an exte
 
 Many other features are planned, and some are currently in work.
 
-- Accenter - a feature that adds a 'crash' sample to the 1st step of the pattern every N repeats (while removing other cymbals on this step from the sequence).
-- Filler - similarly, a feature that adds a short fill in the end of the pattern every N repeats (replacing the original notes with itself).
-These features will make the beat less rigid and really bring it alive. In most apps, you will need to create separate beats to achieve this, so possibility to create variation around one pattern will be one of Bandmate's original features.
+~~- Accenter - a feature that adds a 'crash' sample to the 1st step of the pattern every N repeats (while removing other cymbals on this step from the sequence).~~
+~~- Filler - similarly, a feature that adds a short fill in the end of the pattern every N repeats (replacing the original notes with itself).~~
+~~- Add a collection of pre-programmed beats from well-known songs.~~
 
 - Sequencer - a second (separate) map where user can lay out a sequence of patterns and play them as a composition. Inspired by FL Studio.
 - Add auth (and back end!) so users can register and save their own beats.
-- Add a collection of pre-programmed beats from well-known songs.
 - Divide notes into duplets and triplets.
 - Add more kits.
 - Create a mobile app.

@@ -35,6 +35,16 @@ export interface IsPlayingState {
     setIsPlaying: (isPlaying: boolean) => void;
 }
 
+export interface AddCrashState {
+    addCrash: 2 | 4 | 8 | null;
+    setAddCrash: (addCrash: 2 | 4 | 8 | null) => void;
+}
+
+export interface AddFillState {
+    addFill: 2 | 4 | 8 | null;
+    setAddFill: (addCrash: 2 | 4 | 8 | null) => void;
+}
+
 // Stores
 
 export const useDrumkitStore = create<DrumkitState>()((set) => ({
@@ -65,4 +75,14 @@ export const useGridStore = create<GridState>()((set) => ({
 export const useIsPlayingStore = create<IsPlayingState>()((set) => ({
     isPlaying: false,
     setIsPlaying: (value) => set({ isPlaying: value })
+}));
+
+export const useAddCrashStore = create<AddCrashState>()((set) => ({
+    addCrash: null,
+    setAddCrash: (value) => set({ addCrash: value })
+}));
+
+export const useAddFillStore = create<AddFillState>()((set) => ({
+    addFill: null,
+    setAddFill: (value) => set({ addFill: value })
 }));

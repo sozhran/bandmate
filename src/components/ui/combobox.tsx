@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { presets } from "@/data/presets";
-import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore } from "@/data/global-state-store";
+import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
 import { Preset } from "@/data/interfaces";
 
 export default function Combobox() {
@@ -23,6 +23,10 @@ export default function Combobox() {
     const setBpm = useBPMStore((state) => state.setBpm);
     const grid = useGridStore((state) => state.grid);
     const setGrid = useGridStore((state) => state.setGrid);
+    const addCrash = useAddCrashStore((state) => state.addCrash);
+    const setAddCrash = useAddCrashStore((state) => state.setAddCrash);
+    const addFill = useAddFillStore((state) => state.addFill);
+    const setAddFill = useAddFillStore((state) => state.setAddFill);
 
     const handleBPMChange = (value: number) => {
         setBpm(value);
@@ -30,15 +34,15 @@ export default function Combobox() {
     };
 
     const loadPreset = (preset: any) => {
-        if (preset && preset.steps && preset.meter && preset.bpm && preset.grid) {
-            try {
-                setNumberOfSteps(preset.steps);
-                setMeter(preset.meter);
-                setGrid(preset.grid);
-                handleBPMChange(preset.bpm);
-            } catch (e) {
-                console.log("Error: couldn't load parts of preset");
-            }
+        try {
+            setNumberOfSteps(preset.steps);
+            setMeter(preset.meter);
+            setGrid(preset.grid);
+            handleBPMChange(preset.bpm);
+            setAddCrash(preset.addCrash);
+            setAddFill(preset.addFill);
+        } catch (e) {
+            console.log("Error: couldn't load parts of preset");
         }
     };
 
@@ -47,11 +51,10 @@ export default function Combobox() {
             <PopoverTrigger asChild>
                 <Button variant="outline" role="combobox" aria-expanded={open} className="w-[320px] justify-between">
                     {value ? value : "Select preset..."}
-                    {/* {value ? frameworks.find((framework) => framework.value === value)?.label : "Select preset..."} */}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[480px] p-0">
+            <PopoverContent className="w-[480px] p-0 bg-gray-900">
                 <Command>
                     <CommandInput placeholder="Search presets..." />
                     <CommandList>

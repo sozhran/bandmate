@@ -4,8 +4,7 @@ import * as Tone from "tone";
 import { Slider } from "@/components/ui/slider";
 import { default_Patterns } from "@/data/global-defaults";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
-// import { kit as kit_greenrock, kitPreloader as kitPreloader_greenrock } from "@/data/kits/greenrock/greenrock";
-import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore, useDrumkitStore } from "@/data/global-state-store";
+import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore, useDrumkitStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
 import Header from "@/components/header";
 import createEmptyGrid from "@/functions/create-empty-grid";
 
@@ -15,8 +14,6 @@ export default function Home() {
     const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
     const [lamps, setLamps] = React.useState<number | null>(null);
     const [loopCounter, setLoopCounter] = React.useState<number>(0);
-    const [addExtraCrash, setAddExtraCrash] = React.useState<2 | 4 | 8 | null>(null);
-    const [addExtraFill, setAddExtraFill] = React.useState<2 | 4 | 8 | null>(null);
     const sequenceRef = React.useRef<Tone.Sequence | null>(null);
 
     // Stores
@@ -32,10 +29,13 @@ export default function Home() {
     const setGrid = useGridStore((state) => state.setGrid);
     const isPlaying = useIsPlayingStore((state) => state.isPlaying);
     const setIsPlaying = useIsPlayingStore((state) => state.setIsPlaying);
+    const addCrash = useAddCrashStore((state) => state.addCrash);
+    const setAddCrash = useAddCrashStore((state) => state.setAddCrash);
+    const addFill = useAddFillStore((state) => state.addFill);
+    const setAddFill = useAddFillStore((state) => state.setAddFill);
 
     // load chosen kit - only 1 currently available
     React.useEffect(() => {
-        // if (!kitPreloader_default || kitPreloader_greenrock) return;
         if (!kitPreloader_default) return;
 
         if (chosenKit === "default") {
@@ -43,12 +43,6 @@ export default function Home() {
             const preloadSamples = new Tone.Players(kitPreloader_default).toDestination();
             setPlayer(preloadSamples);
         }
-
-        // if (chosenKit === "greenrock") {
-        //     setDrumkit(kit_greenrock);
-        //     const preloadSamples = new Tone.Players(kitPreloader_greenrock).toDestination();
-        //     setPlayer(preloadSamples);
-        // }
     }, [chosenKit, setDrumkit]);
 
     // create an empty sequencer grid
@@ -100,19 +94,22 @@ export default function Home() {
 
                 if (step === 0) {
                     setLoopCounter(loopCounter + 1);
-                    console.log(loopCounter);
                 }
 
-                if (addExtraCrash && loopCounter % addExtraCrash === 0 && step === 0) {
-                    player.player("crash_extra").stop();
-                    player.player("crash_extra").start();
+                if (addCrash && loopCounter % addCrash === 0 && step === 0) {
+                    player.player("extra_crash").stop();
+                    player.player("extra_crash").start();
                 }
 
-                if (addExtraFill && loopCounter % addExtraFill === 0 && step > numberOfSteps - 4) {
+                if (addFill && loopCounter % addFill === 0 && step > numberOfSteps - 4) {
                     if (grid[0].rowSteps[step] !== null) {
                         player.player(`${grid[0].rowName}` + "_" + `${grid[0].rowSteps[step]}`).start(time);
                     }
-                    player.player(`snare_2`).start(time);
+                    if (numberOfSteps % step === 0) {
+                        player.player("extra_snare").start(time);
+                    } else {
+                        player.player("snare_2").start(time);
+                    }
                 } else {
                     grid.forEach((kitElement) => {
                         if (kitElement.rowSteps[step] !== null) {
@@ -125,10 +122,10 @@ export default function Home() {
             "16n"
         );
         sequenceRef.current.start(0);
-    }, [numberOfSteps, grid, player, loopCounter, addExtraCrash, addExtraFill]);
+    }, [numberOfSteps, grid, player, loopCounter, addCrash, addFill]);
 
     // play/stop functions
-    const handlePlayButton = async () => {
+    async function handlePlayButton() {
         if (!isPlaying) {
             await Tone.start();
             Tone.Transport.toggle();
@@ -141,7 +138,7 @@ export default function Home() {
             setLamps(null);
             setLoopCounter(0);
         }
-    };
+    }
 
     // change the tempo by slider
     function handleBPMSliderChange(values: number[]) {
@@ -174,7 +171,7 @@ export default function Home() {
 
     // clear the grid
     function clearGrid() {
-        const emptyGrid = createEmptyGrid(drumkit, numberOfSteps);
+        const emptyGrid = createEmptyGrid(drumkit, 32);
         if (emptyGrid) {
             setGrid(structuredClone(emptyGrid));
         }
@@ -199,25 +196,23 @@ export default function Home() {
     }
 
     // save current beat to localStorage
-    const handleSavePattern = (id: number) => {
+    const savePresetToLocalStorage = (id: number) => {
         if (!grid) return;
-        const patternKey: string = "BANDMATE_" + id.toString();
-        const patternSteps = numberOfSteps;
-        const patternMeter = meter;
-        const patternBPM = bpm;
-        const patternGrid = JSON.stringify(grid);
-        const patternValue = {
-            steps: patternSteps,
-            meter: patternMeter,
-            bpm: patternBPM,
-            grid: patternGrid
+        const fileName: string = "BANDMATE_" + id.toString();
+        const Preset = {
+            steps: numberOfSteps,
+            meter: meter,
+            bpm: bpm,
+            addCrash: addCrash,
+            addFill: addFill,
+            grid: JSON.stringify(grid)
         };
 
-        localStorage.setItem(patternKey, JSON.stringify(patternValue));
+        localStorage.setItem(fileName, JSON.stringify(Preset));
     };
 
     // load saved pattern from localStorage
-    const handleLoadPattern = (id: number) => {
+    const loadPresetFromLocalStorage = (id: number) => {
         const patternKey: string = "BANDMATE_" + id.toString();
         const storageItem = localStorage.getItem(patternKey);
         if (!storageItem) return;
@@ -225,8 +220,8 @@ export default function Home() {
         try {
             const item = JSON.parse(storageItem);
 
-            if (!item.steps || !item.meter || !item.bpm || !item.grid) {
-                console.log("Error: Failed to find all 4 variables in 'item'");
+            if (!item.steps || !item.meter || !item.bpm || !item.grid || !item.addCrash || !item.addFill) {
+                console.log("Error: Failed to find all 6 variables in 'item'");
                 return;
             }
             try {
@@ -234,6 +229,8 @@ export default function Home() {
                 setMeter(item.meter);
                 setGrid(JSON.parse(item.grid));
                 handleBPMChange(item.bpm);
+                setAddCrash(item.addCrash);
+                setAddFill(item.addFill);
             } catch (e) {
                 console.log("Error: Failed to setStates");
             }
@@ -243,17 +240,14 @@ export default function Home() {
     };
 
     function handleHotKeys(e: KeyboardEvent) {
-        if (e.key === "x" || "X") {
-            handlePlayButton();
-        }
         if (e.key === "1") {
             setDynamics("1");
-        }
-        if (e.key === "2") {
+        } else if (e.key === "2") {
             setDynamics("2");
-        }
-        if (e.key === "3") {
+        } else if (e.key === "3") {
             setDynamics("3");
+        } else if (e.key === "x" || "X") {
+            handlePlayButton();
         }
     }
 
@@ -348,12 +342,12 @@ export default function Home() {
                     return (
                         <div key={"pattern-row-" + `${x}`}>
                             <p>
-                                <button className="button savepattern hover:bg-gray-700" onClick={() => handleSavePattern(x)}>
+                                <button className="button savepattern hover:bg-gray-700" onClick={() => savePresetToLocalStorage(x)}>
                                     Save <b>({x})</b>
                                 </button>
                             </p>
                             <p>
-                                <button className={"button savepattern hover:bg-gray-700"} onClick={() => handleLoadPattern(x)}>
+                                <button className={"button savepattern hover:bg-gray-700"} onClick={() => loadPresetFromLocalStorage(x)}>
                                     Load <b>({x})</b>
                                 </button>
                             </p>
@@ -365,16 +359,16 @@ export default function Home() {
                         <button className="extra-control w-36" disabled>
                             Add accent
                         </button>
-                        <button className={"button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraCrash(null)}>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addCrash === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddCrash(null)}>
                             Off
                         </button>
-                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraCrash(2)}>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addCrash === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddCrash(2)}>
                             Every 2 bars
                         </button>
-                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraCrash(4)}>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addCrash === 4 ? " text-amber-600 font-bold" : "")} onClick={() => setAddCrash(4)}>
                             Every 4 bars
                         </button>
-                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraCrash === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraCrash(8)}>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addCrash === 8 ? " text-amber-600 font-bold" : "")} onClick={() => setAddCrash(8)}>
                             Every 8 bars
                         </button>
                     </span>
@@ -382,16 +376,16 @@ export default function Home() {
                         <button className="extra-control w-36" disabled>
                             <p>Add fill</p>
                         </button>
-                        <button className={"button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraFill(null)}>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addFill === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddFill(null)}>
                             Off
                         </button>
-                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddExtraFill(2)}>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addFill === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddFill(2)}>
                             Every 2 bars
                         </button>
-                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraFill(4)}>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addFill === 4 ? " text-amber-600 font-bold" : "")} onClick={() => setAddFill(4)}>
                             Every 4 bars
                         </button>
-                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addExtraFill === 4 ? " text-red-600 font-bold" : "")} onClick={() => setAddExtraFill(8)}>
+                        <button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addFill === 8 ? " text-amber-600 font-bold" : "")} onClick={() => setAddFill(8)}>
                             Every 8 bars
                         </button>
                     </span>

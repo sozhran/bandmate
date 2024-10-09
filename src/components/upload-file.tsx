@@ -13,17 +13,12 @@ export default function UploadFile() {
     const setGrid = useGridStore((state) => state.setGrid);
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("I'm alive");
         if (e.target.files && e.target.files[0]) {
-            console.log("begin upload");
             const reader = new FileReader();
 
             reader.readAsText(e.target.files[0], "UTF-8");
             reader.onload = (e) => {
                 if (e.target && e.target.result) {
-                    console.log("e.target OK");
-                    console.log(e.target);
-                    console.log(e.target.result);
                     const result = e.target.result.toString();
                     const item = JSON.parse(result);
 

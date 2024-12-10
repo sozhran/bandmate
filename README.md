@@ -4,22 +4,22 @@ Bandmate is a drum machine made with React/TypeScript and uses the sampler from 
 
 ### How to use
 
+Program the beat by clicking on the cells of the beat map and use <b>PLAY / STOP</b> to play the beat, or turn it off. Clicking on a kit element's name plays its sound sample.
+
+The rest of the interface is described in the table below:
+
 <table>
   <tr>
-    <td><b>PLAY / STOP</b></td>
-    <td>Turns playback on and off.</td>
-  </tr>
-  <tr>
     <td><b>4/4 / 3/4</b></td>
-    <td>Changes gaps in the grid so beats in different time signatures would be easier to type. Is purely cosmetic and does not affect playback.</td>
+    <td>Changes gaps in the beat map so beats in different time signatures would be easier to type. Is purely cosmetic and does not affect playback.</td>
   </tr>
   <tr>
     <td><b>CLEAR</b></td>
-    <td>Clears the grid and resets it to default. There are also <b>X</b> buttons along the grid to clear lines for every kit element separately.</td>
+    <td>Clears the beat map and resets it to default. There are also <b>X</b> buttons to the right of the kit element's names to clear lines for these kit elements separately.</td>
   </tr>
   <tr>
     <td><b>1 / 2 / 3</b></td>
-    <td>Changes the dynamics of notes you will be typing. [1]-notes are quieter, [3]-notes are louder.</td>
+    <td>Changes the dynamics of notes you will be typing. [2]-notes are typed by default. [1]-notes are quieter, [3]-notes are louder.</td>
   </tr>
   <tr>
     <td><b>BPM</b></td>
@@ -27,7 +27,7 @@ Bandmate is a drum machine made with React/TypeScript and uses the sampler from 
   </tr>
   <tr>
     <td><b>Steps</b></td>
-    <td>Changes the number of beats on the grid (and the time signature as a result).</td>
+    <td>Changes the number of steps on the beat map (and the time signature as a result).</td>
   </tr>
   <tr>
     <td><b>Save (1-8)</b></td>
@@ -45,13 +45,7 @@ Bandmate is a drum machine made with React/TypeScript and uses the sampler from 
 
 #### Roadmap
 
-Many other features are planned, and some are currently in work.
-
-~~- Accenter - a feature that adds a 'crash' sample to the 1st step of the pattern every N repeats (while removing other cymbals on this step from the sequence).~~
-
-~~- Filler - similarly, a feature that adds a short fill in the end of the pattern every N repeats (replacing the original notes with itself).~~
-
-~~- Add a collection of pre-programmed beats from well-known songs.~~
+Some features are already in work, others may happen in the future:
 
 - Saving presets as files
 - Uploading preset files

@@ -6,40 +6,40 @@ Bandmate is a drum machine made with React/TypeScript and uses the sampler from 
 
 <table>
   <tr>
-    <td>PLAY / STOP</td>
+    <td><b>PLAY / STOP</b></td>
     <td>Turns playback on and off.</td>
   </tr>
   <tr>
-    <td>4/4 / 3/4</td>
+    <td><b>4/4 / 3/4</b></td>
     <td>Changes gaps in the grid so beats in different time signatures would be easier to type. Is purely cosmetic and does not affect playback.</td>
   </tr>
   <tr>
-    <td>CLEAR</td>
+    <td><b>CLEAR</b></td>
     <td>Clears the grid and resets it to default. There are also <b>X</b> buttons along the grid to clear lines for every kit element separately.</td>
   </tr>
   <tr>
-    <td>1 / 2 / 3</td>
+    <td><b>1 / 2 / 3</b></td>
     <td>Changes the dynamics of notes you will be typing. [1]-notes are quieter, [3]-notes are louder.</td>
   </tr>
   <tr>
-    <td>BPM</td>
+    <td><b>BPM</b></td>
     <td>Changes the tempo in the range 30-300.</td>
   </tr>
   <tr>
-    <td>Steps</td>
+    <td><b>Steps</b></td>
     <td>Changes the number of beats on the grid (and the time signature as a result).</td>
   </tr>
   <tr>
-    <td>Save (1-8)</td>
+    <td><b>Save (1-8)</b></td>
     <td>Saves preset to your browser's local storage. Use Load buttons to load these presets back in Bandmate. There is also a hidden button that purges all presets from local storage.</td>
   </tr>
   <tr>
-    <td>Add accent</td>
-    <td></td>
+    <td><b>Add accent</b></td>
+    <td>Adds a crash cymbal at the start of the first loop, and repeats every 2, 4, or 8 loops.</td>
   </tr>
   <tr>
-    <td></td>
-    <td>Add fill</td>
+    <td><b>Add fill</b></td>
+    <td>Adds a fill at the end of every 2nd, 4th, or 8th loop by replacing the last 3 steps with 3 snare hits.</td>
   </tr>
 </table>
 
@@ -48,7 +48,9 @@ Bandmate is a drum machine made with React/TypeScript and uses the sampler from 
 Many other features are planned, and some are currently in work.
 
 ~~- Accenter - a feature that adds a 'crash' sample to the 1st step of the pattern every N repeats (while removing other cymbals on this step from the sequence).~~
+
 ~~- Filler - similarly, a feature that adds a short fill in the end of the pattern every N repeats (replacing the original notes with itself).~~
+
 ~~- Add a collection of pre-programmed beats from well-known songs.~~
 
 - Saving presets as files

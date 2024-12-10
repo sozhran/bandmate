@@ -1,29 +1,47 @@
 ## Bandmate
 
-#### Backstory
-I like to play guitar, and try to practice when I can. Playing along to a monotonous click can be quite boring, and I like to program an interesting beat myself and play along to it. I've used quite a few apps for this purpose, from Guitar Pro and Logic to dedicated drum machine apps, both desktop and mobile. I've found a couple I like and use, but I couldn't find the one that would have all features I like, so...
+Bandmate is a drum machine made with React/TypeScript and uses the sampler from [Tone.js](https://tonejs.github.io/) to ensure perfect playback timing. [Webpack](https://webpack.js.org/) is used as a loader for sound samples.
 
-I decided to build my own. I thought it'd be a nice challenge:
+### How to use
 
-I have no idea how to do it - ✅
-
-I'm personally invested and want to use the app - ✅
-
-I have experience with similar apps, and rather than just replicate them, I actually have new ideas I want to try - ✅
-
-
-This project is a result.
-
-#### What's inside
-
-Bandmate is a Node.js application written in TypeScript.
-I use [Tone.js](https://tonejs.github.io/) as a sampler, and to ensure perfect timing during playback.
-[Webpack](https://webpack.js.org/) is used as a loader for sound samples.
-Currently everything lives on the front-end alone, but that's going to change.
-
-#### What Bandmate can do
-
-Right now Bandmate has all basic functionality of a drum machine: it has an extensive drumkit, allows to program and play beats in different time signatures and various tempos. In addition, it also can remember up to 8 patterns (using local storage), and has 3 levels of dynamics for every kit element (using 3 different samples per element to achieve it).
+<table>
+  <tr>
+    <td>PLAY / STOP</td>
+    <td>Turns playback on and off.</td>
+  </tr>
+  <tr>
+    <td>4/4 / 3/4</td>
+    <td>Changes gaps in the grid so beats in different time signatures would be easier to type. Is purely cosmetic and does not affect playback.</td>
+  </tr>
+  <tr>
+    <td>CLEAR</td>
+    <td>Clears the grid and resets it to default. There are also <b>X</b> buttons along the grid to clear lines for every kit element separately.</td>
+  </tr>
+  <tr>
+    <td>1 / 2 / 3</td>
+    <td>Changes the dynamics of notes you will be typing. [1]-notes are quieter, [3]-notes are louder.</td>
+  </tr>
+  <tr>
+    <td>BPM</td>
+    <td>Changes the tempo in the range 30-300.</td>
+  </tr>
+  <tr>
+    <td>Steps</td>
+    <td>Changes the number of beats on the grid (and the time signature as a result).</td>
+  </tr>
+  <tr>
+    <td>Save (1-8)</td>
+    <td>Saves preset to your browser's local storage. Use Load buttons to load these presets back in Bandmate. There is also a hidden button that purges all presets from local storage.</td>
+  </tr>
+  <tr>
+    <td>Add accent</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Add fill</td>
+  </tr>
+</table>
 
 #### Roadmap
 
@@ -33,12 +51,10 @@ Many other features are planned, and some are currently in work.
 ~~- Filler - similarly, a feature that adds a short fill in the end of the pattern every N repeats (replacing the original notes with itself).~~
 ~~- Add a collection of pre-programmed beats from well-known songs.~~
 
+- Saving presets as files
+- Uploading preset files
 - Sequencer - a second (separate) map where user can lay out a sequence of patterns and play them as a composition. Inspired by FL Studio.
 - Add auth (and back end!) so users can register and save their own beats.
 - Divide notes into duplets and triplets.
 - Add more kits.
 - Create a mobile app.
-
-#### Challenges
-
-It took a while to get Tone.js to work and understand how different components come together.

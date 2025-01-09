@@ -5,9 +5,13 @@ import { Slider } from "@/components/ui/slider";
 import { default_Patterns } from "@/data/global-defaults";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore, useDrumkitStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
-import Header from "@/components/header";
 import createEmptyGrid from "@/functions/create-empty-grid";
 import { saveAs } from "file-saver";
+import { DndContext } from "@dnd-kit/core";
+
+import Header from "@/components/Header";
+import Droppable from "@/components/Droppable";
+import Draggable from "@/components/Draggable";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
@@ -16,6 +20,9 @@ export default function Home() {
 	const [lamps, setLamps] = React.useState<number | null>(null);
 	const [loopCounter, setLoopCounter] = React.useState<number>(0);
 	const sequenceRef = React.useRef<Tone.Sequence | null>(null);
+
+	// DnDKit
+	const [isDropped, setIsDropped] = React.useState<true | false>(false);
 
 	// Stores
 	const drumkit = useDrumkitStore((state) => state.drumkit);
@@ -259,7 +266,7 @@ export default function Home() {
 		}
 	};
 
-	function handleHotKeys(e: KeyboardEvent) {
+	const handleHotKeys = (e: KeyboardEvent) => {
 		if (e.key === "1") {
 			setDynamics("1");
 		} else if (e.key === "2") {
@@ -269,7 +276,7 @@ export default function Home() {
 		} else if (e.key === "x" || "X") {
 			handlePlayButton();
 		}
-	}
+	};
 
 	React.useEffect(() => {
 		window.addEventListener("keyup", handleHotKeys);
@@ -278,10 +285,19 @@ export default function Home() {
 		};
 	});
 
+	const handleDragEnd = (event: any) => {
+		if (event.over && event.over.id === "droppable") {
+			setIsDropped(true);
+		}
+	};
+
 	// finally, RENDERING
 	return (
 		<>
 			<Header />
+			<div className="dropzone">
+				<DndContext onDragEnd={handleDragEnd}>{!isDropped ? <Draggable>Drag me</Draggable> : null}</DndContext>
+			</div>
 			{grid ? (
 				grid.map((x, indexOf) => {
 					return (
@@ -375,11 +391,11 @@ export default function Home() {
 					);
 				})}
 
-				{/*<span className="export-preset">
-					<button className="button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" onClick={downloadPreset}>
+				<span className="export-preset">
+					<button className="button-dynamic min-w-[2rem] w-[6.5rem] h-[3rem] hover:bg-gray-700" onClick={downloadPreset}>
 						Save preset
 					</button>
-				</span>*/}
+				</span>
 				<span className="extra-controls-table">
 					<span className="extra-controls-row">
 						<button className="extra-control w-36" disabled>

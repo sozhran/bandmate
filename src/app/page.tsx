@@ -10,8 +10,8 @@ import { saveAs } from "file-saver";
 import { DndContext } from "@dnd-kit/core";
 
 import Header from "@/components/header";
-//import Droppable from "@/components/droppable";
-//import Draggable from "@/components/draggable";
+import Droppable from "@/components/droppable";
+import Draggable from "@/components/draggable";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);

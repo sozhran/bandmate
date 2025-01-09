@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Combobox from "./ui/combobox";
-import UploadFile from "@/components/UploadFile";
+import UploadFile from "@/components/upload-file";
 import useNuclearButton from "@/functions/nuclear";
 
 export default function Header() {

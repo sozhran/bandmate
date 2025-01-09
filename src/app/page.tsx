@@ -9,9 +9,9 @@ import createEmptyGrid from "@/functions/create-empty-grid";
 import { saveAs } from "file-saver";
 import { DndContext } from "@dnd-kit/core";
 
-import Header from "@/components/Header";
-import Droppable from "@/components/Droppable";
-import Draggable from "@/components/Draggable";
+import Header from "@/components/header";
+//import Droppable from "@/components/droppable";
+//import Draggable from "@/components/draggable";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);

@@ -1,5 +1,5 @@
 "use client";
-import Header from "@/components/Header";
+import Header from "@/components/header";
 import Link from "next/link";
 import { Slider } from "@/components/ui/slider";
 import { default_Patterns } from "@/data/global-defaults";

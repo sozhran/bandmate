@@ -50,7 +50,6 @@ export default function About() {
 
 					<div>
 						<div>
-							{/*<span className="active-1">1</span> / <span className="active-2">2</span> / <span className="active-3">3</span>*/}
 							<button className={"button-dynamic w-[4rem] h-[2.5rem] text-amber-950 font-bold"} disabled>
 								1
 							</button>

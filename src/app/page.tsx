@@ -92,7 +92,6 @@ export default function Home() {
 		if (!grid || !player) return;
 
 		const steps = [...new Array(numberOfSteps)].map((_, index) => index);
-		setLamps(null);
 
 		sequenceRef.current?.dispose();
 
@@ -326,12 +325,12 @@ export default function Home() {
 			<div className="sequencer-row">
 				<span className="m-[1px] mr-[10px] cell-size w-[8rem] min-w-[7rem]"></span>
 				<span className="m-[1px] mr-[10px] cell-size w-[2rem] min-w-[1.5rem]"></span>
-				<span>
+				<span className="flex flex-row">
 					{[...Array(numberOfSteps)].map((_, i) => {
 						return (
-							<button key={"lamp-" + i} data-step={i} className={"w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] justify-center items-center " + " " + `${meter}`}>
-								<span key={"lamp_" + i} className={"lamp" + " " + (lamps === i ? "red" : "")}></span>
-							</button>
+							<span key={"lamp-" + i} data-step={i} className={"w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] flex justify-center items-center " + " " + `${meter}`}>
+								{lamps === i ? <span key={"lamp_" + i} className="lamp bg-red-600"></span> : <></>}
+							</span>
 						);
 					})}
 				</span>
@@ -376,7 +375,7 @@ export default function Home() {
 			<div className="saved-patterns">
 				{default_Patterns.map((x) => {
 					return (
-						<div key={"pattern-row-" + `${x}`}>
+						<span key={"pattern-row-" + `${x}`}>
 							<p>
 								<button className="button savepattern hover:bg-gray-700" onClick={() => savePresetToLocalStorage(x)}>
 									Save <b>({x})</b>
@@ -387,7 +386,7 @@ export default function Home() {
 									Load <b>({x})</b>
 								</button>
 							</p>
-						</div>
+						</span>
 					);
 				})}
 

@@ -18,20 +18,23 @@ export default function Header() {
 				<a href="/">
 					<h1 className="text-3xl font-bold">BANDMATE</h1>
 				</a>
-				<Button variant="ghost" className="w-[4rem] h-[4rem] opacity-0 hover:opacity-100 bg-opacity-90 line-through" onClick={cleanLocalStorage}>
+				<Button variant="ghost" className="w-[4rem] h-[4rem] opacity-0 hover:opacity-100 " onClick={cleanLocalStorage}>
 					<Image src="https://i.imgur.com/mgifSOk.png" width={50} height={50} alt=""></Image>
 				</Button>
 			</span>
 			<span className="logo">
+				{/*<button className="button main-controls" onClick={downloadPreset}>Save</button>*/}
 				{location === "/about" ? (
-					<></>
+					<a href="/">
+						<button className="button main-controls">Back</button>
+					</a>
 				) : (
 					<a href="/about">
-						<button className="button main-button hover:bg-gray-700">About</button>
+						<button className="button main-controls">About</button>
 					</a>
 				)}
 				<Combobox />
-				{/* <button className="button main-button hover:bg-gray-700">Save</button> */}
+
 				{/* <UploadFile /> */}
 			</span>
 		</div>

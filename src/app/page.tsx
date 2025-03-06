@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import * as Tone from "tone";
-import { Slider } from "@/components/ui/slider";
+import { Slider } from "@/components/ui/Slider";
 import { default_Patterns } from "@/data/global-defaults";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore, useDrumkitStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
@@ -9,9 +9,9 @@ import createEmptyGrid from "@/functions/create-empty-grid";
 import { saveAs } from "file-saver";
 import { DndContext } from "@dnd-kit/core";
 
-import Header from "@/components/header";
-import Droppable from "@/components/droppable";
-import Draggable from "@/components/draggable";
+import Header from "@/components/Header";
+import Droppable from "@/components/Droppable";
+import Draggable from "@/components/Draggable";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);

@@ -1,7 +1,7 @@
 "use client";
-import Header from "@/components/header";
+import Header from "@/components/Header";
 import Link from "next/link";
-import { Slider } from "@/components/ui/slider";
+import { Slider } from "@/components/ui/Slider";
 import { default_Patterns } from "@/data/global-defaults";
 
 export default function About() {

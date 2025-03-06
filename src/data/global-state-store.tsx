@@ -6,83 +6,83 @@ import { default_BPM, default_Steps } from "@/data/global-defaults";
 // Interfaces
 
 export interface DrumkitState {
-    drumkit: Drumkit[] | null;
-    setDrumkit: (drumkit: Drumkit[] | null) => void;
+	drumkit: Drumkit[] | null;
+	setDrumkit: (drumkit: Drumkit[] | null) => void;
 }
 
 export interface NumberOfStepsState {
-    numberOfSteps: Step;
-    setNumberOfSteps: (numberOfSteps: Step) => void;
+	numberOfSteps: Step;
+	setNumberOfSteps: (numberOfSteps: Step) => void;
 }
 
 export interface MeterState {
-    meter: "triple" | "quadruple";
-    setMeter: (meter: "triple" | "quadruple") => void;
+	meter: "triple" | "quadruple";
+	setMeter: (meter: "triple" | "quadruple") => void;
 }
 
 export interface BPMState {
-    bpm: BPM;
-    setBpm: (bpm: BPM) => void;
+	bpm: BPM;
+	setBpm: (bpm: BPM) => void;
 }
 
 export interface GridState {
-    grid: Grid | null;
-    setGrid: (grid: Grid | null) => void;
+	grid: Grid | null;
+	setGrid: (grid: Grid | null) => void;
 }
 
 export interface IsPlayingState {
-    isPlaying: boolean;
-    setIsPlaying: (isPlaying: boolean) => void;
+	isPlaying: boolean;
+	setIsPlaying: (isPlaying: boolean) => void;
 }
 
 export interface AddCrashState {
-    addCrash: 2 | 4 | 8 | null;
-    setAddCrash: (addCrash: 2 | 4 | 8 | null) => void;
+	addCrash: 2 | 4 | 8 | null;
+	setAddCrash: (addCrash: 2 | 4 | 8 | null) => void;
 }
 
 export interface AddFillState {
-    addFill: 2 | 4 | 8 | null;
-    setAddFill: (addCrash: 2 | 4 | 8 | null) => void;
+	addFill: 2 | 4 | 8 | null;
+	setAddFill: (addCrash: 2 | 4 | 8 | null) => void;
 }
 
 // Stores
 
 export const useDrumkitStore = create<DrumkitState>()((set) => ({
-    drumkit: null,
-    setDrumkit: (value) => set({ drumkit: value })
+	drumkit: null,
+	setDrumkit: (value) => set({ drumkit: value }),
 }));
 
 export const useNumberOfStepsStore = create<NumberOfStepsState>()((set) => ({
-    numberOfSteps: default_Steps,
-    setNumberOfSteps: (value) => set({ numberOfSteps: value })
+	numberOfSteps: default_Steps,
+	setNumberOfSteps: (value) => set({ numberOfSteps: value }),
 }));
 
 export const useMeterStore = create<MeterState>()((set) => ({
-    meter: "quadruple",
-    setMeter: (value) => set({ meter: value })
+	meter: "quadruple",
+	setMeter: (value) => set({ meter: value }),
 }));
 
 export const useBPMStore = create<BPMState>()((set) => ({
-    bpm: default_BPM,
-    setBpm: (value) => set({ bpm: value })
+	bpm: default_BPM,
+	setBpm: (value) => set({ bpm: value }),
 }));
 
 export const useGridStore = create<GridState>()((set) => ({
-    grid: null,
-    setGrid: (value) => set({ grid: value })
+	grid: null,
+	setGrid: (value) => set({ grid: value }),
 }));
 
 export const useIsPlayingStore = create<IsPlayingState>()((set) => ({
-    isPlaying: false,
-    setIsPlaying: (value) => set({ isPlaying: value })
+	isPlaying: false,
+	setIsPlaying: (value) => set({ isPlaying: value }),
 }));
 
 export const useAddCrashStore = create<AddCrashState>()((set) => ({
-    addCrash: null,
-    setAddCrash: (value) => set({ addCrash: value })
+	addCrash: null,
+	setAddCrash: (value) => set({ addCrash: value }),
 }));
 
 export const useAddFillStore = create<AddFillState>()((set) => ({
-    addFill: null,
-    setAddFill: (value) => set({ addFill: value })
+	addFill: null,
+	setAddFill: (value) => set({ addFill: value }),
 }));

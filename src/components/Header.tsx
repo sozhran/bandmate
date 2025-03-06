@@ -2,9 +2,10 @@
 import Image from "next/image";
 import { Button } from "./ui/Button";
 import Combobox from "./ui/Combobox";
-import UploadFile from "@/components/UploadFile";
 import cleanLocalStorage from "@/functions/clean-local-storage";
 import { usePathname } from "next/navigation";
+import SaveFile from "@/components/SaveFile";
+import UploadFile from "@/components/UploadFile";
 
 export default function Header() {
 	const location = usePathname();
@@ -23,7 +24,7 @@ export default function Header() {
 				</Button>
 			</span>
 			<span className="logo">
-				{/*<button className="button main-controls" onClick={downloadPreset}>Save</button>*/}
+				<SaveFile />
 				{location === "/about" ? (
 					<a href="/">
 						<button className="button main-controls">Back</button>
@@ -35,7 +36,7 @@ export default function Header() {
 				)}
 				<Combobox />
 
-				{/* <UploadFile /> */}
+				<UploadFile />
 			</span>
 		</div>
 	);

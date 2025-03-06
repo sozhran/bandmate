@@ -1,8 +1,7 @@
 "use client";
 import Header from "@/components/Header";
-import Link from "next/link";
-import { Slider } from "@/components/ui/Slider";
-import { default_Patterns } from "@/data/global-defaults";
+import Slider from "@/components/ui/Slider";
+import { defaultPatterns } from "@/data/global-defaults";
 
 export default function About() {
 	return (
@@ -84,11 +83,11 @@ export default function About() {
 
 					<div>
 						<button className="button savepattern" disabled>
-							Save 1-{default_Patterns.length}
+							Save 1-{defaultPatterns.length}
 						</button>
 						/
 						<button className="button savepattern" disabled>
-							Load 1-{default_Patterns.length}
+							Load 1-{defaultPatterns.length}
 						</button>
 					</div>
 					<div>Save preset to your browser's local storage. Use Load buttons to load these presets back in Bandmate.</div>

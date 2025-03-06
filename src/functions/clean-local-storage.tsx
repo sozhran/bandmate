@@ -1,7 +1,7 @@
-import { default_Patterns } from "@/data/global-defaults";
+import { defaultPatterns } from "@/data/global-defaults";
 
 export default function cleanLocalStorage() {
-	default_Patterns.map((x) => {
+	defaultPatterns.map((x) => {
 		const storageKey: string = "BANDMATE_" + x.toString();
 		localStorage.removeItem(storageKey);
 	});

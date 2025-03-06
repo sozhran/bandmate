@@ -1,17 +1,18 @@
 "use client";
 import * as React from "react";
 import * as Tone from "tone";
-import { Slider } from "@/components/ui/Slider";
-import { default_Patterns } from "@/data/global-defaults";
+import Slider from "@/components/ui/Slider";
+import { defaultPatterns } from "@/data/global-defaults";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore, useDrumkitStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
 import createEmptyGrid from "@/functions/create-empty-grid";
-import { saveAs } from "file-saver";
 import { DndContext } from "@dnd-kit/core";
 
 import Header from "@/components/Header";
 import Droppable from "@/components/Droppable";
 import Draggable from "@/components/Draggable";
+import createPresetFile from "@/functions/create-preset-file";
+import dynamic from "next/dynamic";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
@@ -70,20 +71,13 @@ export default function Home() {
 
 		const changedGrid = [...grid];
 
-		changedGrid.map((row, index) => {
-			if (index === y) {
-				if (row.rowSteps[x] === null) {
-					row.rowSteps[x] = dynamics;
-				} else {
-					if (row.rowSteps[x] !== dynamics) {
-						row.rowSteps[x] = dynamics;
-					} else {
-						row.rowSteps[x] = null;
-					}
-				}
-			}
-			setGrid(changedGrid);
-		});
+		if (changedGrid[y].rowSteps[x] !== dynamics) {
+			changedGrid[y].rowSteps[x] = dynamics;
+		} else {
+			changedGrid[y].rowSteps[x] = null;
+		}
+
+		setGrid(changedGrid);
 	}
 
 	// take the grid and prepare the sequence for playback
@@ -202,33 +196,12 @@ export default function Home() {
 		}
 	}
 
-	const createPresetFile = () => {
-		if (!grid) return;
-
-		const Preset = {
-			description: "Bandmate Preset",
-			steps: numberOfSteps,
-			meter: meter,
-			bpm: bpm,
-			addCrash: addCrash,
-			addFill: addFill,
-			grid: grid,
-		};
-
-		return JSON.stringify(Preset);
-	};
-
-	const downloadPreset = () => {
-		const content = createPresetFile();
-		if (!content) return;
-
-		const file = new Blob([content], { type: "text/plain" });
-		saveAs(file, "New preset.bandmate");
-	};
-
 	// save current beat to localStorage
 	const savePresetToLocalStorage = (id: number) => {
-		const Preset = createPresetFile();
+		if (!grid) {
+			return;
+		}
+		const Preset = createPresetFile(numberOfSteps, meter, bpm, addCrash, addFill, grid);
 
 		if (!Preset) return;
 
@@ -272,8 +245,8 @@ export default function Home() {
 			setDynamics("2");
 		} else if (e.key === "3") {
 			setDynamics("3");
-		} else if (e.key === "x" || "X") {
-			handlePlayButton();
+			//} else if (e.key === "x" || "X") {xx
+			//	handlePlayButton();
 		}
 	};
 
@@ -373,7 +346,7 @@ export default function Home() {
 				</label>
 			</div>
 			<div className="saved-patterns">
-				{default_Patterns.map((x) => {
+				{defaultPatterns.map((x) => {
 					return (
 						<span key={"pattern-row-" + `${x}`}>
 							<p>
@@ -390,11 +363,11 @@ export default function Home() {
 					);
 				})}
 
-				<span className="export-preset">
+				{/*<span className="export-preset">
 					<button className="button min-w-[2rem] w-[6.5rem] h-[3rem]" onClick={downloadPreset}>
 						Save preset
 					</button>
-				</span>
+				</span>*/}
 				<span className="extra-controls-table">
 					<span className="extra-controls-row">
 						<button className="extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" disabled>

@@ -1,3 +1,3 @@
-export const default_BPM = 120;
-export const default_Steps = 16;
-export const default_Patterns = [1, 2, 3, 4, 5, 6, 7, 8];
+export const defaultBPM = 120;
+export const defaultSteps = 16;
+export const defaultPatterns = [1, 2, 3, 4, 5, 6, 7, 8];

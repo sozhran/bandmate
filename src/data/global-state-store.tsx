@@ -1,7 +1,7 @@
 "use client";
 import { create } from "zustand";
-import { Drumkit, BPM, Step, Grid } from "@/data/interfaces";
-import { default_BPM, default_Steps } from "@/data/global-defaults";
+import { Drumkit, Step, Meter, BPM, Grid, Add } from "@/data/interfaces";
+import { defaultBPM, defaultSteps } from "@/data/global-defaults";
 
 // Interfaces
 
@@ -16,8 +16,8 @@ export interface NumberOfStepsState {
 }
 
 export interface MeterState {
-	meter: "triple" | "quadruple";
-	setMeter: (meter: "triple" | "quadruple") => void;
+	meter: Meter;
+	setMeter: (meter: Meter) => void;
 }
 
 export interface BPMState {
@@ -36,13 +36,13 @@ export interface IsPlayingState {
 }
 
 export interface AddCrashState {
-	addCrash: 2 | 4 | 8 | null;
-	setAddCrash: (addCrash: 2 | 4 | 8 | null) => void;
+	addCrash: Add;
+	setAddCrash: (addCrash: Add) => void;
 }
 
 export interface AddFillState {
-	addFill: 2 | 4 | 8 | null;
-	setAddFill: (addCrash: 2 | 4 | 8 | null) => void;
+	addFill: Add;
+	setAddFill: (addCrash: Add) => void;
 }
 
 // Stores
@@ -53,7 +53,7 @@ export const useDrumkitStore = create<DrumkitState>()((set) => ({
 }));
 
 export const useNumberOfStepsStore = create<NumberOfStepsState>()((set) => ({
-	numberOfSteps: default_Steps,
+	numberOfSteps: defaultSteps,
 	setNumberOfSteps: (value) => set({ numberOfSteps: value }),
 }));
 
@@ -63,7 +63,7 @@ export const useMeterStore = create<MeterState>()((set) => ({
 }));
 
 export const useBPMStore = create<BPMState>()((set) => ({
-	bpm: default_BPM,
+	bpm: defaultBPM,
 	setBpm: (value) => set({ bpm: value }),
 }));
 

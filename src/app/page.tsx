@@ -1,17 +1,18 @@
 "use client";
 import * as React from "react";
 import * as Tone from "tone";
-import { Slider } from "@/components/ui/Slider";
-import { default_Patterns } from "@/data/global-defaults";
+import Slider from "@/components/ui/Slider";
+import { defaultPatterns } from "@/data/global-defaults";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
 import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore, useDrumkitStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
 import createEmptyGrid from "@/functions/create-empty-grid";
-import { saveAs } from "file-saver";
 import { DndContext } from "@dnd-kit/core";
 
 import Header from "@/components/Header";
 import Droppable from "@/components/Droppable";
 import Draggable from "@/components/Draggable";
+import createPresetFile from "@/functions/create-preset-file";
+import dynamic from "next/dynamic";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
@@ -70,20 +71,13 @@ export default function Home() {
 
 		const changedGrid = [...grid];
 
-		changedGrid.map((row, index) => {
-			if (index === y) {
-				if (row.rowSteps[x] === null) {
-					row.rowSteps[x] = dynamics;
-				} else {
-					if (row.rowSteps[x] !== dynamics) {
-						row.rowSteps[x] = dynamics;
-					} else {
-						row.rowSteps[x] = null;
-					}
-				}
-			}
-			setGrid(changedGrid);
-		});
+		if (changedGrid[y].rowSteps[x] !== dynamics) {
+			changedGrid[y].rowSteps[x] = dynamics;
+		} else {
+			changedGrid[y].rowSteps[x] = null;
+		}
+
+		setGrid(changedGrid);
 	}
 
 	// take the grid and prepare the sequence for playback
@@ -202,33 +196,12 @@ export default function Home() {
 		}
 	}
 
-	const createPresetFile = () => {
-		if (!grid) return;
-
-		const Preset = {
-			description: "Bandmate Preset",
-			steps: numberOfSteps,
-			meter: meter,
-			bpm: bpm,
-			addCrash: addCrash,
-			addFill: addFill,
-			grid: grid,
-		};
-
-		return JSON.stringify(Preset);
-	};
-
-	const downloadPreset = () => {
-		const content = createPresetFile();
-		if (!content) return;
-
-		const file = new Blob([content], { type: "text/plain" });
-		saveAs(file, "New preset.bandmate");
-	};
-
 	// save current beat to localStorage
 	const savePresetToLocalStorage = (id: number) => {
-		const Preset = createPresetFile();
+		if (!grid) {
+			return;
+		}
+		const Preset = createPresetFile(numberOfSteps, meter, bpm, addCrash, addFill, grid);
 
 		if (!Preset) return;
 
@@ -272,8 +245,8 @@ export default function Home() {
 			setDynamics("2");
 		} else if (e.key === "3") {
 			setDynamics("3");
-		} else if (e.key === "x" || "X") {
-			handlePlayButton();
+			//} else if (e.key === "x" || "X") {xx
+			//	handlePlayButton();
 		}
 	};
 
@@ -301,10 +274,10 @@ export default function Home() {
 				grid.map((x, indexOf) => {
 					return (
 						<div key={"sequencer-row-" + `${indexOf}`} className="sequencer-row">
-							<button className="button cell-size w-[8rem] min-w-[7rem]" onClick={() => player?.player(`${x.rowName}` + "_" + `${dynamics}`).start()}>
+							<button className="button cell-size w-[8rem] min-w-[7rem] m-[1px] mr-[10px]" onClick={() => player?.player(`${x.rowName}` + "_" + `${dynamics}`).start()}>
 								{x.rowButtonName}
 							</button>
-							<button className="button cell-size w-[2rem] min-w-[1.5rem] hover:bg-gray-700" onClick={() => clearRow(indexOf)}>
+							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]" onClick={() => clearRow(indexOf)}>
 								X
 							</button>
 							<span className="flex align-center">
@@ -323,26 +296,26 @@ export default function Home() {
 				<p>Loading...</p>
 			)}
 			<div className="sequencer-row">
-				<span className="m-[1px] mr-[10px] cell-size w-[8rem] min-w-[7rem]"></span>
-				<span className="m-[1px] mr-[10px] cell-size w-[2rem] min-w-[1.5rem]"></span>
+				<span className="cell-size w-[8rem] min-w-[7rem] m-[1px] mr-[10px]"></span>
+				<span className="cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]"></span>
 				<span className="flex flex-row">
 					{[...Array(numberOfSteps)].map((_, i) => {
 						return (
-							<span key={"lamp-" + i} data-step={i} className={"w-[var(--cell-size)] h-[var(--cell-size)] m-[1px] flex justify-center items-center " + " " + `${meter}`}>
-								{lamps === i ? <span key={"lamp_" + i} className="lamp bg-red-600"></span> : <></>}
+							<span key={"lamp-" + i} className={`lamp-square ${meter}`}>
+								{lamps === i ? <span key={"lamp_" + i} className="lamp bg-red-700"></span> : <></>}
 							</span>
 						);
 					})}
 				</span>
 			</div>
 			<div className="controls">
-				<button className={"button main-button font-bold min-w-[3.5rem] hover:bg-gray-700" + (isPlaying ? " text-amber-600" : "")} onClick={handlePlayButton}>
+				<button className={"button main-controls font-bold " + (isPlaying ? " text-amber-600" : "")} onClick={handlePlayButton}>
 					{isPlaying ? "STOP" : "PLAY"}
 				</button>
-				<button className="button main-button min-w-[3.5rem] hover:bg-gray-700" onClick={handleMeterChange}>
+				<button className="button main-controls" onClick={handleMeterChange}>
 					{meter === "quadruple" ? "4/4" : "3/4"}
 				</button>
-				<button className="button main-button min-w-[3.5rem] hover:bg-gray-700" onClick={clearGrid}>
+				<button className="button main-controls" onClick={clearGrid}>
 					CLEAR
 				</button>
 				{/* <button className={"button main-button mr-0 min-w-[5rem]" + (chosenKit === "default" ? " text-amber-600" : "")} onClick={() => setChosenKit("default")}>
@@ -352,37 +325,37 @@ export default function Home() {
                     Greenrock
                 </button> */}
 				<span className="controls-group">
-					<button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (dynamics === "1" ? " text-amber-950 font-bold" : "")} onClick={() => setDynamics("1")}>
+					<button className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "1" ? " active-font-1" : "")} onClick={() => setDynamics("1")}>
 						1
 					</button>
-					<button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (dynamics === "2" ? " text-amber-600 font-bold" : "")} onClick={() => setDynamics("2")}>
+					<button className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "2" ? " active-font-2" : "")} onClick={() => setDynamics("2")}>
 						2
 					</button>
-					<button className={"button-dynamic min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (dynamics === "3" ? " text-red-700 font-bold" : "")} onClick={() => setDynamics("3")}>
+					<button className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "3" ? " active-font-3" : "")} onClick={() => setDynamics("3")}>
 						3
 					</button>
 				</span>
-				<Slider className="w-[300px] min-w-[120px] bg-slate-700 ml-[10px] mr-[10px] hover:bg-gray-600" value={[bpm]} defaultValue={[120]} min={30} max={300} step={1} onValueChange={handleBPMSliderChange} />
+				<Slider className="w-[300px] min-w-[120px] ml-[10px] mr-[10px] bg-slate-700 hover:bg-gray-600" value={[bpm]} defaultValue={[120]} min={30} max={300} step={1} onValueChange={handleBPMSliderChange} />
 
 				<label className="ml-[10px] mr-[10px]" htmlFor="BPM">
 					BPM: {bpm ? bpm : <></>}
 				</label>
-				<Slider className="w-[150px] min-w-[60px] bg-slate-700 ml-[10px] mr-[10px] hover:bg-gray-600" value={[numberOfSteps]} defaultValue={[16]} min={4} max={32} step={1} onValueChange={handleNumberOfStepsChange} />
+				<Slider className="w-[150px] min-w-[60px] ml-[10px] mr-[10px] bg-slate-700 hover:bg-gray-600" value={[numberOfSteps]} defaultValue={[16]} min={4} max={32} step={1} onValueChange={handleNumberOfStepsChange} />
 				<label className="ml-[10px] mr-[10px]" htmlFor="BPM">
 					Steps: {numberOfSteps ? numberOfSteps : <></>}
 				</label>
 			</div>
 			<div className="saved-patterns">
-				{default_Patterns.map((x) => {
+				{defaultPatterns.map((x) => {
 					return (
 						<span key={"pattern-row-" + `${x}`}>
 							<p>
-								<button className="button savepattern hover:bg-gray-700" onClick={() => savePresetToLocalStorage(x)}>
+								<button className="button savepattern" onClick={() => savePresetToLocalStorage(x)}>
 									Save <b>({x})</b>
 								</button>
 							</p>
 							<p>
-								<button className={"button savepattern hover:bg-gray-700"} onClick={() => loadPresetFromLocalStorage(x)}>
+								<button className={"button savepattern"} onClick={() => loadPresetFromLocalStorage(x)}>
 									Load <b>({x})</b>
 								</button>
 							</p>
@@ -390,26 +363,26 @@ export default function Home() {
 					);
 				})}
 
-				<span className="export-preset">
-					<button className="button-dynamic min-w-[2rem] w-[6.5rem] h-[3rem] hover:bg-gray-700" onClick={downloadPreset}>
+				{/*<span className="export-preset">
+					<button className="button min-w-[2rem] w-[6.5rem] h-[3rem]" onClick={downloadPreset}>
 						Save preset
 					</button>
-				</span>
+				</span>*/}
 				<span className="extra-controls-table">
 					<span className="extra-controls-row">
-						<button className="extra-control w-36" disabled>
+						<button className="extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" disabled>
 							Add accent
 						</button>
-						<button className={"button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addCrash === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddCrash(null)}>
+						<button className={"button extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" + (addCrash === null ? " active-font-2" : "")} onClick={() => setAddCrash(null)}>
 							Off
 						</button>
-						<button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addCrash === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddCrash(2)}>
+						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 2 ? " active-font-2" : "")} onClick={() => setAddCrash(2)}>
 							Every 2 bars
 						</button>
-						<button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addCrash === 4 ? " text-amber-600 font-bold" : "")} onClick={() => setAddCrash(4)}>
+						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 4 ? " active-font-2" : "")} onClick={() => setAddCrash(4)}>
 							Every 4 bars
 						</button>
-						<button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addCrash === 8 ? " text-amber-600 font-bold" : "")} onClick={() => setAddCrash(8)}>
+						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 8 ? " active-font-2" : "")} onClick={() => setAddCrash(8)}>
 							Every 8 bars
 						</button>
 					</span>
@@ -417,16 +390,16 @@ export default function Home() {
 						<button className="extra-control w-36" disabled>
 							<p>Add fill</p>
 						</button>
-						<button className={"button-dynamic extra-control min-w-[2rem] w-[4rem] h-[2.5rem] hover:bg-gray-700" + (addFill === null ? " text-amber-600 font-bold" : "")} onClick={() => setAddFill(null)}>
+						<button className={"button extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" + (addFill === null ? " active-font-2" : "")} onClick={() => setAddFill(null)}>
 							Off
 						</button>
-						<button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addFill === 2 ? " text-amber-600 font-bold" : "")} onClick={() => setAddFill(2)}>
+						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 2 ? " active-font-2" : "")} onClick={() => setAddFill(2)}>
 							Every 2 bars
 						</button>
-						<button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addFill === 4 ? " text-amber-600 font-bold" : "")} onClick={() => setAddFill(4)}>
+						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 4 ? " active-font-2" : "")} onClick={() => setAddFill(4)}>
 							Every 4 bars
 						</button>
-						<button className={"button-dynamic extra-control min-w-[2rem] w-[6rem] h-[2.5rem] hover:bg-gray-700" + (addFill === 8 ? " text-amber-600 font-bold" : "")} onClick={() => setAddFill(8)}>
+						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 8 ? " active-font-2" : "")} onClick={() => setAddFill(8)}>
 							Every 8 bars
 						</button>
 					</span>

@@ -4,16 +4,16 @@
 
 @layer base {
 	:root {
-		--bg-color: #0f0f0f;
-		--text-color: #ffffff;
+		--bg-color: theme(colors.neutral.950);
+		--text-color: theme(colors.neutral.50);
+		--button-color: theme(colors.gray.800);
+		--button-hover: theme(colors.gray.700);
+		--active-1: theme(colors.amber.950);
+		--active-2: theme(colors.amber.600);
+		--active-3: theme(colors.red.700);
 		--font-size: 0.9em;
 		--cell-size: 30px;
-		--button-color: #1f2937;
-		--orange: bg-amber-700;
 		--margin-general: 20px;
-		--active-color-1: #451a03;
-		--active-color-2: #d97706;
-		--active-color-3: #b91c1c;
 	}
 }
 
@@ -65,29 +65,19 @@ main {
 	border-style: solid;
 	border-width: 1px;
 	border-color: black;
-	margin: 1px;
-	margin-right: 10px;
 	outline: none;
 }
 
-.button-dynamic {
-	background-color: var(--button-color);
-	border-radius: 5px;
-	border-style: solid;
-	border-width: 1px;
-	border-color: black;
-	outline: none;
+.button:enabled:hover {
+	background-color: var(--button-hover);
 }
 
-.main-button {
+.main-controls {
 	width: 6rem;
+	min-width: 3.5rem;
 	height: 2.5rem;
 	margin: 3px;
 }
-
-/* .main-button:hover {
-    background-color: var(--button-color-hover);
-} */
 
 .savepattern {
 	width: 5rem;
@@ -111,7 +101,7 @@ main {
 
 .lamp-square {
 	height: var(--cell-size);
-	max-height: var(--cell-size);
+	width: var(--cell-size);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -162,21 +152,33 @@ main {
 }
 
 .active-1 {
-	/* background-color: var(--color2); */
-	background-color: var(--active-color-1);
+	background-color: var(--active-1);
 	transition: background-color 0.1s;
 }
 
 .active-2 {
-	/* background-color: var(--color2); */
-	background-color: var(--active-color-2);
+	background-color: var(--active-2);
 	transition: background-color 0.1s;
 }
 
 .active-3 {
-	/* background-color: var(--color2); */
-	background-color: var(--active-color-3);
+	background-color: var(--active-3);
 	transition: background-color 0.1s;
+}
+
+.active-font-1 {
+	color: var(--active-1);
+	font-weight: 700;
+}
+
+.active-font-2 {
+	color: var(--active-2);
+	font-weight: 700;
+}
+
+.active-font-3 {
+	color: var(--active-3);
+	font-weight: 700;
 }
 
 .active-1:hover,
@@ -251,50 +253,4 @@ main {
 	height: 100%;
 	opacity: 0.6;
 	visibility: hidden;
-}
-
-/* SLIDER */
-
-.Slider {
-	display: flex;
-	align-items: center;
-	user-select: none;
-	touch-action: none;
-	width: 200px;
-	max-width: 200px;
-	height: 20px;
-}
-
-.SliderTrack {
-	background-color: var(--button-color);
-	position: relative;
-	flex-grow: 1;
-	border-radius: 9999px;
-	height: 3px;
-}
-
-.SliderRange {
-	position: absolute;
-	background-color: white;
-	border-radius: 9999px;
-	height: 100%;
-}
-
-.SliderThumb {
-	display: block;
-	width: 20px;
-	height: 20px;
-	background-color: white;
-	box-shadow: 0 2px 10px var(--button-color);
-	border-radius: 10px;
-}
-
-.SliderThumb:hover {
-	background-color: var(--button-color);
-	cursor: pointer;
-}
-
-.SliderThumb:focus {
-	outline: none;
-	box-shadow: 0 0 0 5px var(--button-color);
 }

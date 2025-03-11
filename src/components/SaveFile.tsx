@@ -17,7 +17,7 @@ export default function SaveFile() {
 			return;
 		}
 
-		const content = JSON.stringify(createPresetFile(numberOfSteps, meter, bpm, addCrash, addFill, grid));
+		const content = createPresetFile(numberOfSteps, meter, bpm, addCrash, addFill, grid);
 
 		if (!content) return;
 

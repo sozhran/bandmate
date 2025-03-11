@@ -10,7 +10,7 @@ import { DndContext } from "@dnd-kit/core";
 
 import Header from "@/components/Header";
 import Droppable from "@/components/Droppable";
-import Draggable from "@/components/Draggable";
+//import Draggable from "@/components/Draggable";
 import createPresetFile from "@/functions/create-preset-file";
 import dynamic from "next/dynamic";
 
@@ -267,9 +267,9 @@ export default function Home() {
 	return (
 		<>
 			<Header />
-			<div className="dropzone">
+			{/*<div className="dropzone">
 				<DndContext onDragEnd={handleDragEnd}>{!isDropped ? <Draggable>Drag me</Draggable> : null}</DndContext>
-			</div>
+			</div>*/}
 			{grid ? (
 				grid.map((x, indexOf) => {
 					return (

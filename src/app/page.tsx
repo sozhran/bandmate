@@ -4,15 +4,27 @@ import * as Tone from "tone";
 import Slider from "@/components/ui/Slider";
 import { defaultPatterns } from "@/data/global-defaults";
 import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
-import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useIsPlayingStore, useDrumkitStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
+import {
+	useNumberOfStepsStore,
+	useMeterStore,
+	useBPMStore,
+	useGridStore,
+	useIsPlayingStore,
+	useDrumkitStore,
+	useAddCrashStore,
+	useAddFillStore,
+} from "@/data/global-state-store";
 import createEmptyGrid from "@/functions/create-empty-grid";
 import { DndContext } from "@dnd-kit/core";
 
 import Header from "@/components/Header";
 import Droppable from "@/components/Droppable";
-//import Draggable from "@/components/Draggable";
+import Draggable from "@/components/Draggable";
 import createPresetFile from "@/functions/create-preset-file";
 import dynamic from "next/dynamic";
+import UploadFile from "@/components/UploadFile";
+import { useDropzone } from "react-dropzone";
+//import uploadPreset from "@/functions/upload-preset";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
@@ -24,6 +36,9 @@ export default function Home() {
 
 	// DnDKit
 	const [isDropped, setIsDropped] = React.useState<true | false>(false);
+
+	// Dropzone
+	const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
 	// Stores
 	const drumkit = useDrumkitStore((state) => state.drumkit);
@@ -263,18 +278,18 @@ export default function Home() {
 		}
 	};
 
-	// finally, RENDERING
 	return (
 		<>
 			<Header />
-			{/*<div className="dropzone">
-				<DndContext onDragEnd={handleDragEnd}>{!isDropped ? <Draggable>Drag me</Draggable> : null}</DndContext>
-			</div>*/}
+			{/*<div className="dropzone" onDrop={() => uploadPreset}></div>*/}
 			{grid ? (
 				grid.map((x, indexOf) => {
 					return (
 						<div key={"sequencer-row-" + `${indexOf}`} className="sequencer-row">
-							<button className="button cell-size w-[8rem] min-w-[7rem] m-[1px] mr-[10px]" onClick={() => player?.player(`${x.rowName}` + "_" + `${dynamics}`).start()}>
+							<button
+								className="button cell-size w-[8rem] min-w-[7rem] m-[1px] mr-[10px]"
+								onClick={() => player?.player(`${x.rowName}` + "_" + `${dynamics}`).start()}
+							>
 								{x.rowButtonName}
 							</button>
 							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]" onClick={() => clearRow(indexOf)}>
@@ -283,7 +298,13 @@ export default function Home() {
 							<span className="flex align-center">
 								{[...Array(numberOfSteps)].map((_, i) => {
 									return (
-										<button key={i} className={(x.rowSteps[i] !== null ? "note active-" + `${x.rowSteps[i]}` : "note inactive") + " " + `${meter}`} onClick={() => toggleNote(i, indexOf)}>
+										<button
+											key={i}
+											className={
+												(x.rowSteps[i] !== null ? "note active-" + `${x.rowSteps[i]}` : "note inactive") + " " + `${meter}`
+											}
+											onClick={() => toggleNote(i, indexOf)}
+										>
 											<span className="opacity-50">{x.rowSteps[i] ? x.rowSteps[i] : ""}</span>
 										</button>
 									);
@@ -325,22 +346,47 @@ export default function Home() {
                     Greenrock
                 </button> */}
 				<span className="controls-group">
-					<button className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "1" ? " active-font-1" : "")} onClick={() => setDynamics("1")}>
+					<button
+						className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "1" ? " active-font-1" : "")}
+						onClick={() => setDynamics("1")}
+					>
 						1
 					</button>
-					<button className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "2" ? " active-font-2" : "")} onClick={() => setDynamics("2")}>
+					<button
+						className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "2" ? " active-font-2" : "")}
+						onClick={() => setDynamics("2")}
+					>
 						2
 					</button>
-					<button className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "3" ? " active-font-3" : "")} onClick={() => setDynamics("3")}>
+					<button
+						className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "3" ? " active-font-3" : "")}
+						onClick={() => setDynamics("3")}
+					>
 						3
 					</button>
 				</span>
-				<Slider className="w-[300px] min-w-[120px] ml-[10px] mr-[10px] bg-slate-700 hover:bg-gray-600" value={[bpm]} defaultValue={[120]} min={30} max={300} step={1} onValueChange={handleBPMSliderChange} />
+				<Slider
+					className="w-[300px] min-w-[120px] ml-[10px] mr-[10px] bg-slate-700 hover:bg-gray-600"
+					value={[bpm]}
+					defaultValue={[120]}
+					min={30}
+					max={300}
+					step={1}
+					onValueChange={handleBPMSliderChange}
+				/>
 
 				<label className="ml-[10px] mr-[10px]" htmlFor="BPM">
 					BPM: {bpm ? bpm : <></>}
 				</label>
-				<Slider className="w-[150px] min-w-[60px] ml-[10px] mr-[10px] bg-slate-700 hover:bg-gray-600" value={[numberOfSteps]} defaultValue={[16]} min={4} max={32} step={1} onValueChange={handleNumberOfStepsChange} />
+				<Slider
+					className="w-[150px] min-w-[60px] ml-[10px] mr-[10px] bg-slate-700 hover:bg-gray-600"
+					value={[numberOfSteps]}
+					defaultValue={[16]}
+					min={4}
+					max={32}
+					step={1}
+					onValueChange={handleNumberOfStepsChange}
+				/>
 				<label className="ml-[10px] mr-[10px]" htmlFor="BPM">
 					Steps: {numberOfSteps ? numberOfSteps : <></>}
 				</label>
@@ -373,16 +419,28 @@ export default function Home() {
 						<button className="extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" disabled>
 							Add accent
 						</button>
-						<button className={"button extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" + (addCrash === null ? " active-font-2" : "")} onClick={() => setAddCrash(null)}>
+						<button
+							className={"button extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" + (addCrash === null ? " active-font-2" : "")}
+							onClick={() => setAddCrash(null)}
+						>
 							Off
 						</button>
-						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 2 ? " active-font-2" : "")} onClick={() => setAddCrash(2)}>
+						<button
+							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 2 ? " active-font-2" : "")}
+							onClick={() => setAddCrash(2)}
+						>
 							Every 2 bars
 						</button>
-						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 4 ? " active-font-2" : "")} onClick={() => setAddCrash(4)}>
+						<button
+							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 4 ? " active-font-2" : "")}
+							onClick={() => setAddCrash(4)}
+						>
 							Every 4 bars
 						</button>
-						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 8 ? " active-font-2" : "")} onClick={() => setAddCrash(8)}>
+						<button
+							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 8 ? " active-font-2" : "")}
+							onClick={() => setAddCrash(8)}
+						>
 							Every 8 bars
 						</button>
 					</span>
@@ -390,16 +448,28 @@ export default function Home() {
 						<button className="extra-control w-36" disabled>
 							<p>Add fill</p>
 						</button>
-						<button className={"button extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" + (addFill === null ? " active-font-2" : "")} onClick={() => setAddFill(null)}>
+						<button
+							className={"button extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" + (addFill === null ? " active-font-2" : "")}
+							onClick={() => setAddFill(null)}
+						>
 							Off
 						</button>
-						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 2 ? " active-font-2" : "")} onClick={() => setAddFill(2)}>
+						<button
+							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 2 ? " active-font-2" : "")}
+							onClick={() => setAddFill(2)}
+						>
 							Every 2 bars
 						</button>
-						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 4 ? " active-font-2" : "")} onClick={() => setAddFill(4)}>
+						<button
+							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 4 ? " active-font-2" : "")}
+							onClick={() => setAddFill(4)}
+						>
 							Every 4 bars
 						</button>
-						<button className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 8 ? " active-font-2" : "")} onClick={() => setAddFill(8)}>
+						<button
+							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 8 ? " active-font-2" : "")}
+							onClick={() => setAddFill(8)}
+						>
 							Every 8 bars
 						</button>
 					</span>

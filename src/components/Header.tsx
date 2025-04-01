@@ -28,6 +28,9 @@ export default function Header() {
 					<a href="/">
 						<button className="button main-controls">Back</button>
 					</a>
+					<a href="/dash">
+						<button className="button main-controls">Dash</button>
+					</a>
 					<Combobox />
 				</span>
 			) : (
@@ -36,6 +39,9 @@ export default function Header() {
 					<UploadFile />
 					<a href="/about">
 						<button className="button main-controls">About</button>
+					</a>
+					<a href="/dash">
+						<button className="button main-controls">Dash</button>
 					</a>
 					<Combobox />
 				</span>

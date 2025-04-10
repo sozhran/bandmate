@@ -7,7 +7,6 @@ export default function About() {
 	return (
 		<>
 			<Header />
-			{/*<div className="text-lg font-bold mb-5">Legend</div>*/}
 			<main>
 				<div className="about">
 					<div>

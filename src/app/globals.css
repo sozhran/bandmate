@@ -244,13 +244,33 @@ main {
 	align-items: center;
 }
 
-.dropzone {
-	background-color: gray;
+.dropzone-wrapper {
 	position: fixed;
-	top: 0;
-	left: 0;
+	visibility: hidden;
+	width: 100%;
+	height: 100%;
+	padding: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dropzone {
+	background-color: black;
+	box-sizing: content-box;
 	width: 100%;
 	height: 100%;
 	opacity: 0.6;
-	visibility: hidden;
+	visibility: visible;
+	border-style: dashed;
+	border-width: 8px;
+	border-color: grey;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+}
+
+.dropzone:hover {
+	opacity: 0.6;
 }

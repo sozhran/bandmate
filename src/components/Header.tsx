@@ -23,21 +23,29 @@ export default function Header() {
 					<Image src="https://i.imgur.com/mgifSOk.png" width={50} height={50} alt=""></Image>
 				</Button>
 			</span>
-			<span className="logo">
-				<SaveFile />
-				{location === "/about" ? (
+			{location === "/about" ? (
+				<span className="logo">
 					<a href="/">
 						<button className="button main-controls">Back</button>
 					</a>
-				) : (
+					{/*<a href="/dash">
+						<button className="button main-controls">Dash</button>
+					</a>*/}
+					<Combobox />
+				</span>
+			) : (
+				<span className="logo">
+					{/*<SaveFile />*/}
+					{/*<UploadFile />*/}
 					<a href="/about">
 						<button className="button main-controls">About</button>
 					</a>
-				)}
-				<Combobox />
-
-				<UploadFile />
-			</span>
+					{/*<a href="/dash">
+						<button className="button main-controls">Dash</button>
+					</a>*/}
+					<Combobox />
+				</span>
+			)}
 		</div>
 	);
 }

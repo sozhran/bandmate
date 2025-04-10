@@ -28,21 +28,21 @@ export default function Header() {
 					<a href="/">
 						<button className="button main-controls">Back</button>
 					</a>
-					<a href="/dash">
+					{/*<a href="/dash">
 						<button className="button main-controls">Dash</button>
-					</a>
+					</a>*/}
 					<Combobox />
 				</span>
 			) : (
 				<span className="logo">
-					<SaveFile />
-					<UploadFile />
+					{/*<SaveFile />*/}
+					{/*<UploadFile />*/}
 					<a href="/about">
 						<button className="button main-controls">About</button>
 					</a>
-					<a href="/dash">
+					{/*<a href="/dash">
 						<button className="button main-controls">Dash</button>
-					</a>
+					</a>*/}
 					<Combobox />
 				</span>
 			)}

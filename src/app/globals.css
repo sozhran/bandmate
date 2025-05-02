@@ -188,23 +188,10 @@ main {
 	font-size: 125%;
 }
 
-.extra-controls-group {
-	display: flex;
-	flex-direction: column;
-	gap: 0px;
-	margin-right: 20px;
-	margin-left: 20px;
-}
-
 .extra-controls-table {
 	display: flex;
 	flex-flow: column nowrap;
 	margin-left: 48px;
-}
-
-.extra-controls-row {
-	display: flex;
-	flex-direction: row;
 }
 
 .extra-control {

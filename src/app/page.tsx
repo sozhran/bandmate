@@ -24,6 +24,7 @@ import createPresetFile from "@/functions/create-preset-file";
 import dynamic from "next/dynamic";
 import UploadFile from "@/components/UploadFile";
 import { useDropzone } from "react-dropzone";
+import { GridRow } from "@/data/interfaces";
 //import uploadPreset from "@/functions/upload-preset";
 
 export default function Home() {
@@ -39,6 +40,8 @@ export default function Home() {
 
 	// Dropzone
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
+	//const files = acceptedFiles.map((file) =>)
 
 	// Stores
 	const drumkit = useDrumkitStore((state) => state.drumkit);
@@ -211,6 +214,29 @@ export default function Home() {
 		}
 	}
 
+	// clear a single row (resets all notes in this row)
+	function fillEntireRow(y: number) {
+		if (grid) {
+			const changedGrid = [...grid];
+
+			const newRow: GridRow = [];
+			for (let i = 0; i < numberOfSteps; i++) {
+				newRow.push(dynamics);
+			}
+
+			while (newRow.length < 32) {
+				newRow.push(null);
+			}
+
+			changedGrid.map((row, index) => {
+				if (index === y) {
+					row.rowSteps = newRow;
+				}
+				setGrid(changedGrid);
+			});
+		}
+	}
+
 	// save current beat to localStorage
 	const savePresetToLocalStorage = (id: number) => {
 		if (!grid) {
@@ -291,6 +317,9 @@ export default function Home() {
 								onClick={() => player?.player(`${x.rowName}` + "_" + `${dynamics}`).start()}
 							>
 								{x.rowButtonName}
+							</button>
+							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]" onClick={() => fillEntireRow(indexOf)}>
+								F
 							</button>
 							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]" onClick={() => clearRow(indexOf)}>
 								X

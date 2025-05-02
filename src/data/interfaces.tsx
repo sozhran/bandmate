@@ -9,7 +9,8 @@ export type Step = z.infer<typeof StepValidator>;
 export type Meter = "quadruple" | "triple";
 export type Add = 2 | 4 | 8 | null;
 
-export type Grid = { rowName: string; rowButtonName: string; rowSteps: ("1" | "2" | "3" | null)[] }[];
+export type GridRow = ("1" | "2" | "3" | null)[];
+export type Grid = { rowName: string; rowButtonName: string; rowSteps: GridRow }[];
 
 export interface Drumkit {
 	name: string;

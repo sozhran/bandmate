@@ -205,12 +205,11 @@ export default function Home() {
 			for (let i = 0; i < 32; i++) {
 				setOfNulls.push(null);
 			}
-			changedGrid.map((row, index) => {
-				if (index === y) {
-					row.rowSteps = setOfNulls;
-				}
+
+			if (changedGrid[y]) {
+				changedGrid[y].rowSteps = setOfNulls;
 				setGrid(changedGrid);
-			});
+			}
 		}
 	}
 
@@ -228,12 +227,54 @@ export default function Home() {
 				newRow.push(null);
 			}
 
-			changedGrid.map((row, index) => {
-				if (index === y) {
-					row.rowSteps = newRow;
-				}
+			if (changedGrid[y]) {
+				changedGrid[y].rowSteps = newRow;
 				setGrid(changedGrid);
-			});
+			}
+		}
+	}
+
+	function fillStrongBeats(y: number) {
+		if (grid) {
+			const changedGrid = [...grid];
+
+			const newRow: GridRow = [];
+			for (let i = 0; i < numberOfSteps; i++) {
+				if (i % (meter === "quadruple" ? 2 : 3) === 0) {
+					newRow.push(dynamics);
+				} else newRow.push(grid[y].rowSteps[i]);
+			}
+
+			while (newRow.length < 32) {
+				newRow.push(null);
+			}
+
+			if (changedGrid[y]) {
+				changedGrid[y].rowSteps = newRow;
+				setGrid(changedGrid);
+			}
+		}
+	}
+
+	function fillWeakBeats(y: number) {
+		if (grid) {
+			const changedGrid = [...grid];
+
+			const newRow: GridRow = [];
+			for (let i = 0; i < numberOfSteps; i++) {
+				if (i % (meter === "quadruple" ? 2 : 3) !== 0) {
+					newRow.push(dynamics);
+				} else newRow.push(grid[y].rowSteps[i]);
+			}
+
+			while (newRow.length < 32) {
+				newRow.push(null);
+			}
+
+			if (changedGrid[y]) {
+				changedGrid[y].rowSteps = newRow;
+				setGrid(changedGrid);
+			}
 		}
 	}
 
@@ -318,12 +359,26 @@ export default function Home() {
 							>
 								{x.rowButtonName}
 							</button>
-							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]" onClick={() => fillEntireRow(indexOf)}>
-								F
+
+							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] text-[4px]" onClick={() => fillEntireRow(indexOf)}>
+								⬛⬛⬛⬛
+							</button>
+							<button
+								className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] font-extrabold text-xl"
+								onClick={() => fillStrongBeats(indexOf)}
+							>
+								♪
+							</button>
+							<button
+								className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] font-extralight text-xs"
+								onClick={() => fillWeakBeats(indexOf)}
+							>
+								♪
 							</button>
 							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]" onClick={() => clearRow(indexOf)}>
 								X
 							</button>
+
 							<span className="flex align-center">
 								{[...Array(numberOfSteps)].map((_, i) => {
 									return (
@@ -444,7 +499,7 @@ export default function Home() {
 					</button>
 				</span>*/}
 				<span className="extra-controls-table">
-					<span className="extra-controls-row">
+					<span className="flex flex-row">
 						<button className="extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" disabled>
 							Add accent
 						</button>
@@ -473,7 +528,7 @@ export default function Home() {
 							Every 8 bars
 						</button>
 					</span>
-					<span className="extra-controls-row">
+					<span className="flex flex-row">
 						<button className="extra-control w-36" disabled>
 							<p>Add fill</p>
 						</button>

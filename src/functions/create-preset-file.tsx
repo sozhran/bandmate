@@ -13,8 +13,6 @@ export default function createPresetFile(numberOfSteps: Step, meter: Meter, bpm:
 
 	const content = JSON.stringify(Preset);
 
-	console.log("PRESET COOKED", typeof content, content);
-
 	if (!content) {
 		return null;
 	}

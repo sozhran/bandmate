@@ -401,8 +401,8 @@ export default function Home() {
 				<p>Loading...</p>
 			)}
 			<div className="sequencer-row">
-				<span className="cell-size w-[8rem] min-w-[7rem] m-[1px] mr-[10px]"></span>
-				<span className="cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]"></span>
+				<span className="w-[16rem] h-[30px] mr-[28px]"></span>
+
 				<span className="flex flex-row">
 					{[...Array(numberOfSteps)].map((_, i) => {
 						return (

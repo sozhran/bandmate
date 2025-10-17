@@ -1,6 +1,6 @@
 import { Drumkit, Step } from "@/data/interfaces";
 
-export default function createEmptyGrid(drumkit: Drumkit[] | null, measures: Step) {
+export default function createEmptyGrid(drumkit: Drumkit[], measures: Step) {
 	if (!drumkit || !measures) return;
 
 	const rows: { rowName: string; rowButtonName: string; rowSteps: ("1" | "2" | "3" | null)[] }[] = [];

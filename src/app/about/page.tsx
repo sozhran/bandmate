@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/components/Header";
 import Slider from "@/components/ui/Slider";
-import { defaultPatterns } from "@/data/global-defaults";
+import { DEFAULT_PATTERNS } from "@/data/global-defaults";
 
 export default function About() {
 	return (
@@ -29,7 +29,10 @@ export default function About() {
 							3/4
 						</button>
 					</div>
-					<div>Change between quadruple and triple meter. It's purely cosmetic and does not affect playback. Just changes gaps between cells to make beats in different meters easier to type.</div>
+					<div>
+						Change between quadruple and triple meter. It's purely cosmetic and does not affect playback. Just changes gaps between cells
+						to make beats in different meters easier to type.
+					</div>
 
 					<div>
 						<button className="button main-controls" disabled>
@@ -65,8 +68,9 @@ export default function About() {
 						<p>
 							Change the dynamics of notes you will be typing.
 							<br />
-							<span className="text-[#451a03] font-bold">1</span>'s are the quietest. <span className="text-[#d97706] font-bold">2</span>'s are typed by default. <span className="text-[#b91c1c] font-bold">3</span>'s are the
-							loudest.
+							<span className="text-[#451a03] font-bold">1</span>'s are the quietest.{" "}
+							<span className="text-[#d97706] font-bold">2</span>'s are typed by default.{" "}
+							<span className="text-[#b91c1c] font-bold">3</span>'s are the loudest.
 						</p>
 					</div>
 
@@ -82,11 +86,11 @@ export default function About() {
 
 					<div>
 						<button className="button savepattern" disabled>
-							Save 1-{defaultPatterns.length}
+							Save 1-{DEFAULT_PATTERNS.length}
 						</button>
 						/
 						<button className="button savepattern" disabled>
-							Load 1-{defaultPatterns.length}
+							Load 1-{DEFAULT_PATTERNS.length}
 						</button>
 					</div>
 					<div>Save preset to your browser's local storage. Use Load buttons to load these presets back in Bandmate.</div>

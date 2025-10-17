@@ -2,8 +2,8 @@
 import * as React from "react";
 import * as Tone from "tone";
 import Slider from "@/components/ui/Slider";
-import { defaultPatterns } from "@/data/global-defaults";
-import { kit as kit_default, kitPreloader as kitPreloader_default } from "@/data/kits/default/default";
+import { DEFAULT_PATTERNS } from "@/data/global-defaults";
+import { drumkitDefault, preloadDrumkit, getDrumSamplesList } from "@/data/kits/default/default";
 import {
 	useNumberOfStepsStore,
 	useMeterStore,
@@ -21,7 +21,6 @@ import Header from "@/components/Header";
 import Droppable from "@/components/Droppable";
 import Draggable from "@/components/Draggable";
 import createPresetFile from "@/functions/create-preset-file";
-import dynamic from "next/dynamic";
 import UploadFile from "@/components/UploadFile";
 import { useDropzone } from "react-dropzone";
 import { GridRow } from "@/data/interfaces";
@@ -29,7 +28,6 @@ import { GridRow } from "@/data/interfaces";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
-	const [chosenKit, setChosenKit] = React.useState<"default" | "greenrock">("default");
 	const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
 	const [lamps, setLamps] = React.useState<number | null>(null);
 	const [loopCounter, setLoopCounter] = React.useState<number>(0);
@@ -40,8 +38,6 @@ export default function Home() {
 
 	// Dropzone
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-
-	//const files = acceptedFiles.map((file) =>)
 
 	// Stores
 	const drumkit = useDrumkitStore((state) => state.drumkit);
@@ -63,14 +59,16 @@ export default function Home() {
 
 	// load chosen kit - only 1 currently available
 	React.useEffect(() => {
-		if (!kitPreloader_default) return;
+		if (!drumkitDefault) return;
 
-		if (chosenKit === "default") {
-			setDrumkit(kit_default);
-			const preloadSamples = new Tone.Players(kitPreloader_default).toDestination();
-			setPlayer(preloadSamples);
-		}
-	}, [chosenKit, setDrumkit]);
+		//if !(sessionStorage.getItem("BANDMATE_DRUMKIT")) {
+		//	sessionStorage.setItem("BANDMATE_DRUMKIT", drumkitDefault)
+		//}
+
+		setDrumkit(drumkit);
+		const preloadSamples = new Tone.Players(preloadDrumkit(getDrumSamplesList(drumkitDefault))).toDestination();
+		setPlayer(preloadSamples);
+	}, [drumkit, setDrumkit]);
 
 	// create an empty sequencer grid
 	React.useEffect(() => {
@@ -476,7 +474,7 @@ export default function Home() {
 				</label>
 			</div>
 			<div className="saved-patterns">
-				{defaultPatterns.map((x) => {
+				{DEFAULT_PATTERNS.map((x) => {
 					return (
 						<span key={"pattern-row-" + `${x}`}>
 							<p>

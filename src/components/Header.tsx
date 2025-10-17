@@ -31,19 +31,18 @@ export default function Header() {
 					{/*<a href="/dash">
 						<button className="button main-controls">Dash</button>
 					</a>*/}
-					<Combobox />
 				</span>
 			) : (
 				<span className="logo">
 					{/*<SaveFile />*/}
 					{/*<UploadFile />*/}
+					<Combobox />
 					<a href="/about">
 						<button className="button main-controls">About</button>
 					</a>
 					{/*<a href="/dash">
 						<button className="button main-controls">Dash</button>
 					</a>*/}
-					<Combobox />
 				</span>
 			)}
 		</div>

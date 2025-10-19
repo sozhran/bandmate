@@ -10,7 +10,7 @@ export default function createEmptyGrid(drumkit: Drumkit[], measures: Step) {
 
 	const grid: Grid = [];
 
-	drumkit.map((element: Drumkit) => grid.push({ rowName: element.name, rowButtonName: element.buttonName, rowSteps: setOfNulls }));
+	drumkit.map((element: Drumkit) => grid.push({ rowName: element.name, rowButtonName: element.buttonName, rowSteps: [...setOfNulls] }));
 
 	return grid;
 }

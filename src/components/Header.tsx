@@ -29,9 +29,6 @@ export default function Header() {
 					<a href="/">
 						<button className="button main-controls">Back</button>
 					</a>
-					{/*<a href="/dash">
-						<button className="button main-controls">Dash</button>
-					</a>*/}
 				</span>
 			) : (
 				<span className="logo">
@@ -42,9 +39,6 @@ export default function Header() {
 					<a href="/about">
 						<button className="button main-controls">About</button>
 					</a>
-					{/*<a href="/dash">
-						<button className="button main-controls">Dash</button>
-					</a>*/}
 				</span>
 			)}
 		</div>

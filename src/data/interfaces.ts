@@ -9,7 +9,13 @@ export type BPM = z.infer<typeof BPMValidator>;
 export type Step = z.infer<typeof StepValidator>;
 
 export type Meter = "quadruple" | "triple";
-export type Add = 2 | 4 | 8 | null;
+
+export const Additions = [2, 4, 8, null]
+export type AdditionsUnion = typeof Additions[number]
+export interface AdditionsOption {
+	label: string;
+	value: AdditionsUnion;
+}
 
 export type DynamicUnion = typeof DYNAMICS[number];
 

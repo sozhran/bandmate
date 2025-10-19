@@ -3,11 +3,10 @@ import * as React from "react";
 import * as Tone from "tone";
 import Header from "@/components/Header";
 import Slider from "@/components/ui/Slider";
-import UploadFile from "@/components/UploadFile";
 import { DEFAULT_PATTERNS } from "@/data/global-defaults";
 import { DynamicUnion, GridRow } from "@/data/interfaces";
 import { useDropzone } from "react-dropzone";
-import { drumkitDefault, preloadDrumkit, getDrumSamplesList, drumkitPreloader } from "@/data/kits/default/default";
+import { drumkitDefault, drumkitPreloader } from "@/data/kits/default/default";
 import {
 	useNumberOfStepsStore,
 	useMeterStore,
@@ -20,7 +19,8 @@ import {
 } from "@/data/global-state-store";
 import createEmptyGrid from "@/functions/create-empty-grid";
 import createPresetFile from "@/functions/create-preset-file";
-//import uploadPreset from "@/functions/upload-preset";
+import AddFillControls from "@/components/AddFillControls";
+import AddCrashControls from "@/components/AddCrashControls";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
@@ -75,23 +75,6 @@ export default function Home() {
 		}
 	}, [drumkit, setGrid]);
 
-	// save input while user is programming a beat
-	function toggleNote(x: number, y: number) {
-		if (!grid) return;
-
-		const changedGrid = [...grid];
-
-		if (changedGrid[y].rowSteps[x] !== dynamics) {
-			changedGrid[y].rowSteps[x] = dynamics;
-		} else {
-			changedGrid[y].rowSteps[x] = null;
-		}
-
-		setGrid(changedGrid);
-	}
-
-	// take the grid and prepare the sequence for playback
-	// renews every time the grid is changed
 	React.useEffect(() => {
 		if (!grid || !player) return;
 
@@ -135,7 +118,20 @@ export default function Home() {
 		sequenceRef.current.start(0);
 	}, [numberOfSteps, grid, player, loopCounter, lamps, addCrash, addFill]);
 
-	// play/stop functions
+	function toggleNote(x: number, y: number) {
+		if (!grid) return;
+
+		const changedGrid = [...grid];
+
+		if (changedGrid[y].rowSteps[x] !== dynamics) {
+			changedGrid[y].rowSteps[x] = dynamics;
+		} else {
+			changedGrid[y].rowSteps[x] = null;
+		}
+
+		setGrid(changedGrid);
+	}
+
 	async function handlePlayButton() {
 		if (!isPlaying) {
 			await Tone.start();
@@ -397,13 +393,6 @@ export default function Home() {
 					CLEAR
 				</button>
 
-				{/* <button className={"button main-button mr-0 min-w-[5rem]" + (chosenKit === "default" ? " text-amber-600" : "")} onClick={() => setChosenKit("default")}>
-                    Default
-                </button>
-                <button className={"button main-button min-w-[5rem]" + (chosenKit === "greenrock" ? " text-amber-600" : "")} onClick={() => setChosenKit("greenrock")}>
-                    Greenrock
-
-                </button> */}
 				<span className="controls-group">
 					{["1", "2", "3"].map((elm) => {
 						return (
@@ -486,64 +475,8 @@ export default function Home() {
 					</button>
 				</span>*/}
 				<span className="extra-controls-table">
-					<span className="flex flex-row">
-						<button className="extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" disabled>
-							Add accent
-						</button>
-						<button
-							className={"button extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" + (addCrash === null ? " active-font-2" : "")}
-							onClick={() => setAddCrash(null)}
-						>
-							Off
-						</button>
-						<button
-							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 2 ? " active-font-2" : "")}
-							onClick={() => setAddCrash(2)}
-						>
-							Every 2 bars
-						</button>
-						<button
-							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 4 ? " active-font-2" : "")}
-							onClick={() => setAddCrash(4)}
-						>
-							Every 4 bars
-						</button>
-						<button
-							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addCrash === 8 ? " active-font-2" : "")}
-							onClick={() => setAddCrash(8)}
-						>
-							Every 8 bars
-						</button>
-					</span>
-					<span className="flex flex-row">
-						<button className="extra-control w-36" disabled>
-							<p>Add fill</p>
-						</button>
-						<button
-							className={"button extra-control min-w-[2rem] w-[4rem] h-[2.5rem]" + (addFill === null ? " active-font-2" : "")}
-							onClick={() => setAddFill(null)}
-						>
-							Off
-						</button>
-						<button
-							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 2 ? " active-font-2" : "")}
-							onClick={() => setAddFill(2)}
-						>
-							Every 2 bars
-						</button>
-						<button
-							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 4 ? " active-font-2" : "")}
-							onClick={() => setAddFill(4)}
-						>
-							Every 4 bars
-						</button>
-						<button
-							className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === 8 ? " active-font-2" : "")}
-							onClick={() => setAddFill(8)}
-						>
-							Every 8 bars
-						</button>
-					</span>
+					<AddCrashControls addCrash={addCrash} setAddCrash={setAddCrash} />
+					<AddFillControls addFill={addFill} setAddFill={setAddFill} />
 				</span>
 			</div>
 		</>

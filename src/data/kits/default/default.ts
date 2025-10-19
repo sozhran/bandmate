@@ -1,7 +1,6 @@
-import { SAMPLE_URL } from "@/data/global-defaults";
 import { Drumkit } from "@/data/interfaces";
 
-export const drumkitDefault = [
+export const drumkitDefault: Drumkit[] = [
     { name: "kick", buttonName: "Kick" },
     { name: "snare", buttonName: "Snare" },
     { name: "hihat_closed", buttonName: "Hi-Hat (closed)" },
@@ -16,25 +15,6 @@ export const drumkitDefault = [
     { name: "tom3", buttonName: "Tom #3" },
     { name: "tom4", buttonName: "Tom #4" }
 ];
-
-export function getDrumSamplesList(drumkit: Drumkit[]): string[] {
-    const result: string[] = []
-
-    drumkit.forEach((elm) => result.push(`${elm.name}_1`, `${elm.name}_2`, `${elm.name}_3`));
-
-    ["kick", "snare"].forEach((elm: string) => result.push(`${elm}_1_extra`, `${elm}_2_extra`, `${elm}_3_extra`))
-
-    return result
-}
-
-export function preloadDrumkit() {
-    const names = getDrumSamplesList(drumkitDefault)
-    const preloader: Record<string, string> = {}
-
-    names.forEach(item => preloader[item] = require(`${SAMPLE_URL}${item}.mp3`))
-
-    return preloader
-}
 
 export const drumkitPreloader = {
     kick_1: require("@/data/kits/default/mp3/kick_1.mp3"),

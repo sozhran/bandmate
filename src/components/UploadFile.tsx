@@ -1,3 +1,4 @@
+import * as Tone from "tone";
 import { MutableRefObject, useRef } from "react";
 import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
 //import uploadPreset from "@/functions/upload-preset";
@@ -30,6 +31,7 @@ export default function UploadFile() {
 			setNumberOfSteps(content.steps);
 			setMeter(content.meter);
 			setBpm(parseInt(content.bpm));
+			Tone.Transport.bpm.value = content.bpm;
 			setGrid(content.grid);
 			setAddCrash(content.addCrash);
 			setAddFill(content.addFill);

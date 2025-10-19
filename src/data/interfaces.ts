@@ -26,3 +26,13 @@ export interface Drumkit {
 	name: string;
 	buttonName: string;
 }
+
+export interface Preset {
+	description: string;
+	steps: Step,
+	meter: Meter,
+	bpm: BPM,
+	addCrash: AdditionsUnion,
+	addFill: AdditionsUnion,
+	grid: Grid,
+}

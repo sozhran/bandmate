@@ -187,24 +187,6 @@ main {
 	font-size: 125%;
 }
 
-.extra-controls-table {
-	display: flex;
-	flex-flow: column nowrap;
-	margin-left: 48px;
-}
-
-.extra-control {
-	display: flex;
-	flex: 1;
-	justify-content: center;
-	align-items: center;
-}
-
-.extra-control-title {
-	justify-content: left;
-	align-items: center;
-}
-
 .about {
 	display: grid;
 	border: 1px solid #111827;

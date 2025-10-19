@@ -15,14 +15,14 @@ export default function AddFillControls({ addFill, setAddFill }: AddFillControls
 
 	return (
 		<span className="flex flex-row">
-			<button className="extra-control w-36" disabled>
+			<button className="flex-1 w-36" disabled>
 				<p>Add fill</p>
 			</button>
 
 			{options.map(({ label, value }) => (
 				<button
 					key={label}
-					className={"button extra-control min-w-[2rem] w-[6rem] h-[2.5rem]" + (addFill === value ? " active-font-2" : "")}
+					className={"button flex-1 w-[6rem] h-[2.5rem]" + (addFill === value ? " active-font-2" : "")}
 					onClick={() => setAddFill(value)}
 				>
 					{label}

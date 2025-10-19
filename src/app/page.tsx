@@ -2,7 +2,6 @@
 import * as React from "react";
 import * as Tone from "tone";
 import Header from "@/components/Header";
-import Slider from "@/components/ui/Slider";
 import { DEFAULT_PATTERNS } from "@/data/global-defaults";
 import { DynamicUnion, RowStep } from "@/data/interfaces";
 import { useDropzone } from "react-dropzone";
@@ -18,7 +17,7 @@ import {
 	useAddFillStore,
 } from "@/data/global-state-store";
 import createEmptyGrid from "@/functions/create-empty-grid";
-import createPresetFile from "@/functions/create-preset-file";
+import createPreset from "@/functions/create-preset";
 import AddFillControls from "@/components/AddFillControls";
 import AddCrashControls from "@/components/AddCrashControls";
 import BeatMapCell from "@/components/BeatMapCell";
@@ -69,16 +68,6 @@ export default function Home() {
 		}
 	}, [drumkit, setDrumkit]);
 
-	//React.useEffect(() => {
-	//	if (drumkit) {
-	//		const emptyGrid = createEmptyGrid(drumkit, 32);
-
-	//		if (emptyGrid) {
-	//			setGrid(emptyGrid);
-	//		}
-	//	}
-	//}, [drumkit, setGrid]);
-
 	React.useEffect(() => {
 		if (!grid || !player) return;
 
@@ -114,7 +103,6 @@ export default function Home() {
 					});
 				}
 				setLamps(step);
-				console.log("LAMPS", lamps);
 			},
 			steps,
 			"16n"
@@ -261,7 +249,7 @@ export default function Home() {
 		if (!grid) {
 			return;
 		}
-		const Preset = createPresetFile(numberOfSteps, meter, bpm, addCrash, addFill, grid);
+		const Preset = createPreset(numberOfSteps, meter, bpm, addCrash, addFill, grid);
 
 		if (!Preset) return;
 
@@ -396,7 +384,7 @@ export default function Home() {
 						);
 					})}
 
-					<span className="extra-controls-table">
+					<span className="flex flex-col flex-nowrap ml-[48px]">
 						<AddCrashControls addCrash={addCrash} setAddCrash={setAddCrash} />
 						<AddFillControls addFill={addFill} setAddFill={setAddFill} />
 					</span>

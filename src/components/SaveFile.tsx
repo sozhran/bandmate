@@ -1,6 +1,6 @@
 import { saveAs } from "file-saver";
 import { useNumberOfStepsStore, useMeterStore, useBPMStore, useGridStore, useAddCrashStore, useAddFillStore } from "@/data/global-state-store";
-import createPresetFile from "@/functions/create-preset-file";
+import createPreset from "@/functions/create-preset";
 
 export default function SaveFile() {
 	const numberOfSteps = useNumberOfStepsStore((state) => state.numberOfSteps);
@@ -17,7 +17,7 @@ export default function SaveFile() {
 			return;
 		}
 
-		const content = createPresetFile(numberOfSteps, meter, bpm, addCrash, addFill, grid);
+		const content = createPreset(numberOfSteps, meter, bpm, addCrash, addFill, grid);
 
 		if (!content) return;
 

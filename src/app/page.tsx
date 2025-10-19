@@ -1,9 +1,13 @@
 "use client";
 import * as React from "react";
 import * as Tone from "tone";
+import Header from "@/components/Header";
 import Slider from "@/components/ui/Slider";
+import UploadFile from "@/components/UploadFile";
 import { DEFAULT_PATTERNS } from "@/data/global-defaults";
-import { drumkitDefault, preloadDrumkit, getDrumSamplesList } from "@/data/kits/default/default";
+import { DynamicUnion, GridRow } from "@/data/interfaces";
+import { useDropzone } from "react-dropzone";
+import { drumkitDefault, preloadDrumkit, getDrumSamplesList, drumkitPreloader } from "@/data/kits/default/default";
 import {
 	useNumberOfStepsStore,
 	useMeterStore,
@@ -15,26 +19,15 @@ import {
 	useAddFillStore,
 } from "@/data/global-state-store";
 import createEmptyGrid from "@/functions/create-empty-grid";
-import { DndContext } from "@dnd-kit/core";
-
-import Header from "@/components/Header";
-import Droppable from "@/components/Droppable";
-import Draggable from "@/components/Draggable";
 import createPresetFile from "@/functions/create-preset-file";
-import UploadFile from "@/components/UploadFile";
-import { useDropzone } from "react-dropzone";
-import { GridRow } from "@/data/interfaces";
 //import uploadPreset from "@/functions/upload-preset";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
-	const [dynamics, setDynamics] = React.useState<"1" | "2" | "3">("2");
+	const [dynamics, setDynamics] = React.useState<DynamicUnion>("2");
 	const [lamps, setLamps] = React.useState<number | null>(null);
 	const [loopCounter, setLoopCounter] = React.useState<number>(0);
 	const sequenceRef = React.useRef<Tone.Sequence | null>(null);
-
-	// DnDKit
-	const [isDropped, setIsDropped] = React.useState<true | false>(false);
 
 	// Dropzone
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
@@ -66,7 +59,8 @@ export default function Home() {
 		//}
 
 		setDrumkit(drumkit);
-		const preloadSamples = new Tone.Players(preloadDrumkit(getDrumSamplesList(drumkitDefault))).toDestination();
+		//const preloadSamples = new Tone.Players(preloadDrumkit()).toDestination();
+		const preloadSamples = new Tone.Players(drumkitPreloader).toDestination();
 		setPlayer(preloadSamples);
 	}, [drumkit, setDrumkit]);
 
@@ -157,24 +151,15 @@ export default function Home() {
 		}
 	}
 
-	// change the tempo by slider
 	function handleBPMSliderChange(values: number[]) {
 		setBpm(values[0]);
 		Tone.Transport.bpm.value = values[0];
 	}
 
-	// change the tempo when loading presets
-	function handleBPMChange(value: number) {
-		setBpm(value);
-		Tone.Transport.bpm.value = value;
-	}
-
-	// change grid size (number of steps)
 	function handleNumberOfStepsChange(values: number[]) {
 		setNumberOfSteps(values[0]);
 	}
 
-	// switch between 4/4 and 3/4
 	function handleMeterChange() {
 		if (meter === "quadruple") {
 			setMeter("triple");
@@ -186,7 +171,6 @@ export default function Home() {
 		}
 	}
 
-	// clear the grid
 	function clearGrid() {
 		const emptyGrid = createEmptyGrid(drumkit, 32);
 		if (emptyGrid) {
@@ -194,8 +178,7 @@ export default function Home() {
 		}
 	}
 
-	// clear a single row (resets all notes in this row)
-	function clearRow(y: number) {
+	function clearEntireRow(y: number) {
 		if (grid) {
 			const changedGrid = [...grid];
 
@@ -211,7 +194,6 @@ export default function Home() {
 		}
 	}
 
-	// clear a single row (resets all notes in this row)
 	function fillEntireRow(y: number) {
 		if (grid) {
 			const changedGrid = [...grid];
@@ -276,7 +258,6 @@ export default function Home() {
 		}
 	}
 
-	// save current beat to localStorage
 	const savePresetToLocalStorage = (id: number) => {
 		if (!grid) {
 			return;
@@ -290,7 +271,6 @@ export default function Home() {
 		localStorage.setItem(fileName, Preset);
 	};
 
-	// load saved pattern from localStorage
 	const loadPresetFromLocalStorage = (id: number) => {
 		const patternKey: string = "BANDMATE_" + id.toString();
 		const storageItem = localStorage.getItem(patternKey);
@@ -307,9 +287,10 @@ export default function Home() {
 				setNumberOfSteps(item.steps);
 				setMeter(item.meter);
 				setGrid(item.grid);
-				handleBPMChange(item.bpm);
+				setBpm(item.bpm);
 				setAddCrash(item.addCrash);
 				setAddFill(item.addFill);
+				Tone.Transport.bpm.value = item.bpm;
 			} catch (e) {
 				console.log("Error: Failed to setStates");
 			}
@@ -337,20 +318,14 @@ export default function Home() {
 		};
 	});
 
-	const handleDragEnd = (event: any) => {
-		if (event.over && event.over.id === "droppable") {
-			setIsDropped(true);
-		}
-	};
-
 	return (
 		<>
 			<Header />
 			{/*<div className="dropzone" onDrop={() => uploadPreset}></div>*/}
 			{grid ? (
-				grid.map((x, indexOf) => {
+				grid.map((x, rowIndex) => {
 					return (
-						<div key={"sequencer-row-" + `${indexOf}`} className="sequencer-row">
+						<div key={"sequencer-row-" + `${rowIndex}`} className="sequencer-row">
 							<button
 								className="button cell-size w-[8rem] min-w-[7rem] m-[1px] mr-[10px]"
 								onClick={() => player?.player(`${x.rowName}` + "_" + `${dynamics}`).start()}
@@ -358,22 +333,22 @@ export default function Home() {
 								{x.rowButtonName}
 							</button>
 
-							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] text-[4px]" onClick={() => fillEntireRow(indexOf)}>
+							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] text-[4px]" onClick={() => fillEntireRow(rowIndex)}>
 								⬛⬛⬛⬛
 							</button>
 							<button
 								className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] font-extrabold text-xl"
-								onClick={() => fillStrongBeats(indexOf)}
+								onClick={() => fillStrongBeats(rowIndex)}
 							>
 								♪
 							</button>
 							<button
 								className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] font-extralight text-xs"
-								onClick={() => fillWeakBeats(indexOf)}
+								onClick={() => fillWeakBeats(rowIndex)}
 							>
 								♪
 							</button>
-							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]" onClick={() => clearRow(indexOf)}>
+							<button className="button cell-size w-[2rem] min-w-[1.5rem] m-[1px] mr-[10px]" onClick={() => clearEntireRow(rowIndex)}>
 								X
 							</button>
 
@@ -385,7 +360,7 @@ export default function Home() {
 											className={
 												(x.rowSteps[i] !== null ? "note active-" + `${x.rowSteps[i]}` : "note inactive") + " " + `${meter}`
 											}
-											onClick={() => toggleNote(i, indexOf)}
+											onClick={() => toggleNote(i, rowIndex)}
 										>
 											<span className="opacity-50">{x.rowSteps[i] ? x.rowSteps[i] : ""}</span>
 										</button>
@@ -421,13 +396,26 @@ export default function Home() {
 				<button className="button main-controls" onClick={clearGrid}>
 					CLEAR
 				</button>
+
 				{/* <button className={"button main-button mr-0 min-w-[5rem]" + (chosenKit === "default" ? " text-amber-600" : "")} onClick={() => setChosenKit("default")}>
                     Default
                 </button>
                 <button className={"button main-button min-w-[5rem]" + (chosenKit === "greenrock" ? " text-amber-600" : "")} onClick={() => setChosenKit("greenrock")}>
                     Greenrock
+
                 </button> */}
 				<span className="controls-group">
+					{["1", "2", "3"].map((elm) => {
+						return (
+							<button
+								key={elm}
+								className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === elm ? " active-font-1" : "")}
+								onClick={() => setDynamics(elm)}
+							>
+								{elm}
+							</button>
+						);
+					})}
 					<button
 						className={"button min-w-[2rem] w-[4rem] h-[2.5rem] " + (dynamics === "1" ? " active-font-1" : "")}
 						onClick={() => setDynamics("1")}
@@ -447,6 +435,7 @@ export default function Home() {
 						3
 					</button>
 				</span>
+
 				<Slider
 					className="w-[300px] min-w-[120px] ml-[10px] mr-[10px] bg-slate-700 hover:bg-gray-600"
 					value={[bpm]}
@@ -456,10 +445,10 @@ export default function Home() {
 					step={1}
 					onValueChange={handleBPMSliderChange}
 				/>
+				<span className="ml-[5px] mr-[5px] w-[70px]">
+					<label htmlFor="BPM">BPM: {bpm ? bpm : <></>}</label>
+				</span>
 
-				<label className="ml-[10px] mr-[10px]" htmlFor="BPM">
-					BPM: {bpm ? bpm : <></>}
-				</label>
 				<Slider
 					className="w-[150px] min-w-[60px] ml-[10px] mr-[10px] bg-slate-700 hover:bg-gray-600"
 					value={[numberOfSteps]}
@@ -469,9 +458,9 @@ export default function Home() {
 					step={1}
 					onValueChange={handleNumberOfStepsChange}
 				/>
-				<label className="ml-[10px] mr-[10px]" htmlFor="BPM">
-					Steps: {numberOfSteps ? numberOfSteps : <></>}
-				</label>
+				<span className="ml-[5px] mr-[5px] w-[70px]">
+					<label htmlFor="BPM">Steps: {numberOfSteps ? numberOfSteps : <></>}</label>
+				</span>
 			</div>
 			<div className="saved-patterns">
 				{DEFAULT_PATTERNS.map((x) => {

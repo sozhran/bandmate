@@ -6,42 +6,42 @@ import { drumkitDefault } from "./kits/default/default";
 
 // Interfaces
 
-export interface DrumkitState {
+interface DrumkitState {
 	drumkit: Drumkit[];
 	setDrumkit: (drumkit: Drumkit[]) => void;
 }
 
-export interface NumberOfStepsState {
+interface NumberOfStepsState {
 	numberOfSteps: Step;
 	setNumberOfSteps: (numberOfSteps: Step) => void;
 }
 
-export interface MeterState {
+interface MeterState {
 	meter: Meter;
 	setMeter: (meter: Meter) => void;
 }
 
-export interface BPMState {
+interface BPMState {
 	bpm: BPM;
 	setBpm: (bpm: BPM) => void;
 }
 
-export interface GridState {
+interface GridState {
 	grid: Grid | null;
 	setGrid: (grid: Grid | null) => void;
 }
 
-export interface IsPlayingState {
+interface IsPlayingState {
 	isPlaying: boolean;
 	setIsPlaying: (isPlaying: boolean) => void;
 }
 
-export interface AddCrashState {
+interface AddCrashState {
 	addCrash: Add;
 	setAddCrash: (addCrash: Add) => void;
 }
 
-export interface AddFillState {
+interface AddFillState {
 	addFill: Add;
 	setAddFill: (addCrash: Add) => void;
 }

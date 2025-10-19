@@ -6,6 +6,7 @@ import cleanLocalStorage from "@/functions/clean-local-storage";
 import { usePathname } from "next/navigation";
 import SaveFile from "@/components/SaveFile";
 import UploadFile from "@/components/UploadFile";
+import Dropzone from "@/components/DropzoneTest";
 
 export default function Header() {
 	const location = usePathname();
@@ -34,8 +35,9 @@ export default function Header() {
 				</span>
 			) : (
 				<span className="logo">
-					{/*<SaveFile />*/}
-					{/*<UploadFile />*/}
+					<SaveFile />
+					<UploadFile />
+					<Dropzone />
 					<Combobox />
 					<a href="/about">
 						<button className="button main-controls">About</button>

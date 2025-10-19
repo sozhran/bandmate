@@ -56,7 +56,6 @@ main {
 	flex-direction: row;
 	justify-content: flex-start;
 	align-items: center;
-	margin-left: var(--margin-general);
 }
 
 .button {
@@ -204,16 +203,6 @@ main {
 .extra-control-title {
 	justify-content: left;
 	align-items: center;
-}
-
-.controls {
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
-	align-items: center;
-	margin-left: var(--margin-general);
-	margin: 20px;
-	gap: 8px;
 }
 
 .about {

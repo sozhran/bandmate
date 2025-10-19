@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { DYNAMICS } from "./global-defaults";
 
-
 export const BPMValidator = z.number().int().min(40).max(300);
 export const StepValidator = z.number().int().positive().max(32);
 
@@ -19,8 +18,9 @@ export interface AdditionsOption {
 
 export type DynamicUnion = typeof DYNAMICS[number];
 
-export type GridRow = (DynamicUnion | null)[];
-export type Grid = { rowName: string; rowButtonName: string; rowSteps: GridRow }[];
+export type RowStep = DynamicUnion | null;
+export type GridRow = { rowName: string; rowButtonName: string; rowSteps: RowStep[] };
+export type Grid = GridRow[];
 
 export interface Drumkit {
 	name: string;

@@ -12,12 +12,12 @@ const fontSans = Inter({
 
 export const metadata: Metadata = {
 	title: "Bandmate",
-	description: "It's a drum machine - and it works in your browser!",
+	description: "A drum machine that works in your browser",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en" className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)} suppressHydrationWarning>
+		<html lang="en" className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
 			<body>{children}</body>
 		</html>
 	);

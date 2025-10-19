@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { DYNAMICS } from "./global-defaults";
+
 
 export const BPMValidator = z.number().int().min(40).max(300);
 export const StepValidator = z.number().int().positive().max(32);
@@ -9,7 +11,9 @@ export type Step = z.infer<typeof StepValidator>;
 export type Meter = "quadruple" | "triple";
 export type Add = 2 | 4 | 8 | null;
 
-export type GridRow = ("1" | "2" | "3" | null)[];
+export type DynamicUnion = typeof DYNAMICS[number];
+
+export type GridRow = (DynamicUnion | null)[];
 export type Grid = { rowName: string; rowButtonName: string; rowSteps: GridRow }[];
 
 export interface Drumkit {

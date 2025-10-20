@@ -93,8 +93,9 @@ export default function Home() {
 					player.player(getSampleName("snare", "2", step)).start(time);
 				} else {
 					grid.forEach((kitElement) => {
-						if (kitElement.rowSteps[step] !== null) {
-							player.player(getSampleName(kitElement.rowName, kitElement.rowSteps[step], step)).start(time);
+						const dynamic = kitElement.rowSteps[step];
+						if (dynamic !== null) {
+							player.player(getSampleName(kitElement.rowName, dynamic, step)).start(time);
 						}
 					});
 				}

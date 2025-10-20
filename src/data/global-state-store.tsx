@@ -1,8 +1,8 @@
 "use client";
 import { create } from "zustand";
-import { Drumkit, Step, Meter, BPM, Grid, Add } from "@/data/interfaces";
+import { Drumkit, Step, Meter, BPM, Grid, AdditionsUnion } from "@/data/interfaces";
 import { DEFAULT_BPM, DEFAULT_STEPS } from "@/data/global-defaults";
-import { drumkitDefault } from "./kits/default/default";
+import { drumkitDefault } from "./kits/default/preloader";
 
 // Interfaces
 
@@ -37,13 +37,13 @@ interface IsPlayingState {
 }
 
 interface AddCrashState {
-	addCrash: Add;
-	setAddCrash: (addCrash: Add) => void;
+	addCrash: AdditionsUnion;
+	setAddCrash: (addCrash: AdditionsUnion) => void;
 }
 
 interface AddFillState {
-	addFill: Add;
-	setAddFill: (addCrash: Add) => void;
+	addFill: AdditionsUnion;
+	setAddFill: (addCrash: AdditionsUnion) => void;
 }
 
 // Stores

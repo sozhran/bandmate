@@ -25,7 +25,7 @@ import BeatMapControl from "@/components/BeatMapControl";
 import DynamicControls from "@/components/DynamicControls";
 import BPMSlider from "@/components/BPMSlider";
 import StepSlider from "@/components/StepSlider";
-import getSampleName from "@/functions/choose-sample";
+import getSampleName from "@/functions/get-sample-name";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);

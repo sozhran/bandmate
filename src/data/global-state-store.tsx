@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { Drumkit, Step, Meter, BPM, Grid, AdditionsUnion } from "@/data/interfaces";
 import { DEFAULT_BPM, DEFAULT_STEPS } from "@/data/global-defaults";
-import { drumkitDefault } from "./kits/default/default";
+import { drumkitDefault } from "./kits/default/preloader";
 
 // Interfaces
 

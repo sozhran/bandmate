@@ -34,7 +34,7 @@ export default function Header() {
 				<span className="logo">
 					<SaveFile />
 					<UploadFile />
-					<Dropzone />
+					{/*<Dropzone />*/}
 					<Combobox />
 					<a href="/about">
 						<button className="button main-controls">About</button>

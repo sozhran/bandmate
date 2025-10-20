@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import { DEFAULT_PATTERNS } from "@/data/global-defaults";
 import { DynamicUnion, RowStep } from "@/data/interfaces";
 import { useDropzone } from "react-dropzone";
-import { drumkitDefault, drumkitPreloader } from "@/data/kits/default/default";
+import { drumkitDefault, drumkitPreloader } from "@/data/kits/default/preloader";
 import {
 	useNumberOfStepsStore,
 	useMeterStore,
@@ -25,6 +25,7 @@ import BeatMapControl from "@/components/BeatMapControl";
 import DynamicControls from "@/components/DynamicControls";
 import BPMSlider from "@/components/BPMSlider";
 import StepSlider from "@/components/StepSlider";
+import getSampleName from "@/functions/choose-sample";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
@@ -66,7 +67,7 @@ export default function Home() {
 		if (emptyGrid) {
 			setGrid(emptyGrid);
 		}
-	}, [drumkit, setDrumkit]);
+	}, [drumkit, setDrumkit, setGrid]);
 
 	React.useEffect(() => {
 		if (!grid || !player) return;
@@ -81,24 +82,19 @@ export default function Home() {
 					setLoopCounter(loopCounter + 1);
 				}
 
+				// play Crash at the first beat if AddCrash enabled and the loop number is correct
 				if (addCrash && loopCounter % addCrash === 0 && step === 0) {
 					player.player("extra_crash").stop();
 					player.player("extra_crash").start();
 				}
 
+				// if AddFill is enabled: replace the last 3 beats with snares; otherwise play the map as programmed
 				if (addFill && loopCounter % addFill === 0 && step > numberOfSteps - 4) {
-					if (grid[0].rowSteps[step] !== null) {
-						player.player(`${grid[0].rowName}` + "_" + `${grid[0].rowSteps[step]}`).start(time);
-					}
-					if (numberOfSteps % step === 0) {
-						player.player("extra_snare").start(time);
-					} else {
-						player.player("snare_2").start(time);
-					}
+					player.player(getSampleName("snare", "2", step)).start(time);
 				} else {
 					grid.forEach((kitElement) => {
 						if (kitElement.rowSteps[step] !== null) {
-							player.player(`${kitElement.rowName}` + "_" + `${kitElement.rowSteps[step]}`).start(time);
+							player.player(getSampleName(kitElement.rowName, kitElement.rowSteps[step], step)).start(time);
 						}
 					});
 				}

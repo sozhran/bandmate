@@ -1,4 +1,6 @@
 "use client";
+import BeatMapControl from "@/components/BeatMapControl";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Slider from "@/components/ui/Slider";
 import { DEFAULT_PATTERNS } from "@/data/global-defaults";
@@ -7,7 +9,7 @@ export default function About() {
 	return (
 		<>
 			<Header />
-			<main>
+			<main className="flex justify-center items-center self-start">
 				<div className="about">
 					<div>
 						<button className={"button main-controls font-bold"} disabled>
@@ -30,8 +32,20 @@ export default function About() {
 						</button>
 					</div>
 					<div>
-						Change between quadruple and triple meter. It's purely cosmetic and does not affect playback. Just changes gaps between cells
-						to make beats in different meters easier to type.
+						Change between quadruple and triple meter. It's purely cosmetic and does not affect playback.
+						Just changes gaps between cells to make beats in different meters easier to type.
+					</div>
+
+					<div>
+						<BeatMapControl label={"⬛⬛⬛⬛"} rowIndex={0} extraCss={"text-[4px]"} disabled={true} />
+						<BeatMapControl label={"♪"} rowIndex={0} extraCss={"font-extrabold text-xl"} disabled={true} />
+						<BeatMapControl label={"♪"} rowIndex={0} extraCss={"font-extralight text-xs"} disabled={true} />
+						<BeatMapControl label={"X"} rowIndex={0} extraCss={""} disabled={true} />
+					</div>
+					<div>
+						These controls allow to manipulate their entire respective rows: to fill them with notes
+						(currently chosen dynamics will be used), fill only strong or weak beats, or clear them,
+						respectively.
 					</div>
 
 					<div>
@@ -40,15 +54,7 @@ export default function About() {
 						</button>
 					</div>
 					<div>
-						<p>
-							Clear the beat map and reset it to default.
-							<br />
-							Or use{" "}
-							<button className="button cell-size w-[2rem]" disabled>
-								X
-							</button>{" "}
-							buttons to only clear the line for one kit element.
-						</p>
+						<p>Clear the whole beat map and reset it to default.</p>
 					</div>
 
 					<div>
@@ -75,12 +81,26 @@ export default function About() {
 					</div>
 
 					<div>
-						BPM <Slider className="w-[75px] bg-slate-700 ml-[10px] mr-[10px]" value={[4]} min={0} max={5} step={1} />
+						BPM{" "}
+						<Slider
+							className="w-[75px] bg-slate-700 ml-[10px] mr-[10px]"
+							value={[4]}
+							min={0}
+							max={5}
+							step={1}
+						/>
 					</div>
 					<div>Change tempo (range: 30-300).</div>
 
 					<div>
-						Steps <Slider className="w-[75px] bg-slate-700 ml-[10px] mr-[10px]" value={[4]} min={0} max={5} step={1} />
+						Steps{" "}
+						<Slider
+							className="w-[75px] bg-slate-700 ml-[10px] mr-[10px]"
+							value={[4]}
+							min={0}
+							max={5}
+							step={1}
+						/>
 					</div>
 					<div>Change the number of steps on the beat map (and the time signature as a result).</div>
 
@@ -93,21 +113,27 @@ export default function About() {
 							Load 1-{DEFAULT_PATTERNS.length}
 						</button>
 					</div>
-					<div>Save preset to your browser's local storage. Use Load buttons to load these presets back in Bandmate.</div>
+					<div>
+						Save preset to your browser's local storage. Use Load buttons to load these presets back in
+						Bandmate.
+					</div>
 
 					<div>
 						<button className={"button w-[120px] h-[2.5rem]"} disabled>
 							Add accent
 						</button>
 					</div>
-					<div>Add a crash cymbal at the start of the first loop, and repeats every 2, 4, or 8 loops.</div>
+					<div>Adds a crash cymbal at the start of the first loop, and repeats every 2, 4, or 8 loops.</div>
 
 					<div>
 						<button className={"button w-[120px] h-[2.5rem]"} disabled>
 							Add fill
 						</button>
 					</div>
-					<div>Add a fill at the end of every 2nd, 4th, or 8th loop by replacing the last 3 steps with 3 snare hits.</div>
+					<div>
+						Adds a fill at the end of every 2nd, 4th, or 8th loop (replaces the last 3 beats with snare
+						hits).
+					</div>
 				</div>
 			</main>
 		</>

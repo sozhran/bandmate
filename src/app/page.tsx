@@ -26,6 +26,7 @@ import DynamicControls from "@/components/DynamicControls";
 import BPMSlider from "@/components/BPMSlider";
 import StepSlider from "@/components/StepSlider";
 import getSampleName from "@/functions/get-sample-name";
+import Footer from "@/components/Footer";
 
 export default function Home() {
 	const [player, setPlayer] = React.useState<Tone.Players | null>(null);
@@ -309,11 +310,34 @@ export default function Home() {
 								>
 									{rowData.rowButtonName}
 								</button>
-
-								<BeatMapControl label={"⬛⬛⬛⬛"} rowIndex={rowIndex} extraCss={"text-[4px]"} action={fillEntireRow} />
-								<BeatMapControl label={"♪"} rowIndex={rowIndex} extraCss={"font-extrabold text-xl"} action={fillStrongBeats} />
-								<BeatMapControl label={"♪"} rowIndex={rowIndex} extraCss={"font-extralight text-xs"} action={fillWeakBeats} />
-								<BeatMapControl label={"X"} rowIndex={rowIndex} extraCss={"mr-[10px]"} action={clearEntireRow} />
+								<BeatMapControl
+									label={"⬛⬛⬛⬛"}
+									rowIndex={rowIndex}
+									extraCss={"text-[4px]"}
+									title="Fill entire row with notes"
+									action={fillEntireRow}
+								/>
+								<BeatMapControl
+									label={"♪"}
+									rowIndex={rowIndex}
+									extraCss={"font-extrabold text-xl"}
+									title="Fill strong beats only"
+									action={fillStrongBeats}
+								/>
+								<BeatMapControl
+									label={"♪"}
+									rowIndex={rowIndex}
+									extraCss={"font-extralight text-xs"}
+									title="Fill weak beats only"
+									action={fillWeakBeats}
+								/>
+								<BeatMapControl
+									label={"X"}
+									rowIndex={rowIndex}
+									extraCss={"mr-[10px]"}
+									title="Clear this row"
+									action={clearEntireRow}
+								/>
 
 								<span className="flex align-center">
 									{[...Array(numberOfSteps)].map((_, cellIndex) => {
@@ -349,7 +373,10 @@ export default function Home() {
 					</span>
 				</div>
 				<div className="flex flex-row flex-start items-center m-[20px] gap-[8px]">
-					<button className={"button main-controls font-bold " + (isPlaying ? " text-amber-600" : "")} onClick={togglePlayButton}>
+					<button
+						className={"button main-controls font-bold " + (isPlaying ? " text-amber-600" : "")}
+						onClick={togglePlayButton}
+					>
 						{isPlaying ? "STOP" : "PLAY"}
 					</button>
 					<button className="button main-controls" onClick={handleMeterChange}>
@@ -373,7 +400,10 @@ export default function Home() {
 									</button>
 								</p>
 								<p>
-									<button className={"button savepattern"} onClick={() => loadPresetFromLocalStorage(x)}>
+									<button
+										className={"button savepattern"}
+										onClick={() => loadPresetFromLocalStorage(x)}
+									>
 										Load <b>({x})</b>
 									</button>
 								</p>

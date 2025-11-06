@@ -24,20 +24,6 @@ body {
 	font-size: var(--font-size);
 }
 
-main {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	align-self: flex-start;
-}
-
-.logo {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 10px;
-}
-
 .header {
 	background-color: #111827;
 	height: 70px;
@@ -51,11 +37,11 @@ main {
 	margin-bottom: 20px;
 }
 
-.sequencer-row {
+.logo {
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-start;
 	align-items: center;
+	gap: 10px;
 }
 
 .button {
